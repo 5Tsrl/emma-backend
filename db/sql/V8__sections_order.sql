@@ -1,0 +1,2 @@
+ALTER TABLE `sections` 
+ADD COLUMN `weight` INT NULL DEFAULT 0 ;

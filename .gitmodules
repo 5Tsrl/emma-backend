@@ -1,0 +1,9 @@
+[submodule "Reports"]
+	path = plugins/Reports
+	url = git@github.com:impronta48/cake-sql-reports.git
+[submodule "Orariscuole"]
+	path = plugins/Orariscuole
+	url = git@github.com:5Tsrl/emma-backend-orariscuole.git
+[submodule "Notifications"]
+	path = plugins/Notifications
+	url = git@github.com:5Tsrl/emma-backend-notifications.git

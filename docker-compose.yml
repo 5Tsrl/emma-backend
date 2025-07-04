@@ -1,0 +1,21 @@
+services:
+  5tapi:
+    build: .
+    container_name: 5tapi
+    working_dir: /var/www/html/
+    # network_mode: "host"
+    ports:
+      - 8084:80
+      - 11302:11300
+    env_file:
+      - ./.env
+    volumes:
+      - type: bind
+        source: ./tmp
+        target: /var/www/html/tmp
+      - type: bind
+        source: ./logs
+        target: /var/www/html/logs
+      - type: bind
+        source: ./webroot/5T
+        target: /var/www/html/webroot/5T

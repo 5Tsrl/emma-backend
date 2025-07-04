@@ -1,0 +1,57 @@
+<?php
+//<editor-fold desc="Preamble">
+/**
+ * EMMA(tm) : Electronic Mobility Management Applications
+ * Copyright (c) 5T Torino, Regione Piemonte, Città Metropolitana di Torino
+ *
+ * SPDX-License-Identifier: EUPL-1.2
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright (c) 5T - https://5t.torino.it
+ * @link      https://emma.5t.torino.it
+ * @author    Massimo INFUNTI - https://github.com/impronta48
+ * @license   https://eupl.eu/1.2/it/ EUPL-1.2 license
+ */
+//</editor-fold>
+
+declare(strict_types=1);
+
+namespace App\Model\Entity;
+
+use Cake\ORM\Entity;
+
+/**
+ * UnionRollback Entity
+ *
+ * @property int $id
+ * @property \Cake\I18n\FrozenTime|null $date
+ * @property int|null $remove_question_id
+ * @property int|null $destination_question_id
+ * @property string|null $questions_survey_id
+ * @property string|null $answers_id
+ *
+ * @property \App\Model\Entity\QuestionsSurvey $questions_survey
+ * @property \App\Model\Entity\Answer $answer
+ */
+class UnionRollback extends Entity
+{
+    /**
+     * Fields that can be mass assigned using newEntity() or patchEntity().
+     *
+     * Note that when '*' is set to true, this allows all unspecified fields to
+     * be mass assigned. For security purposes, it is advised to set '*' to false
+     * (or remove it), and explicitly make individual fields accessible as needed.
+     *
+     * @var array<string, bool>
+     */
+    protected $_accessible = [
+        'date' => true,
+        'remove_question_id' => true,
+        'destination_question_id' => true,
+        'questions_survey_id' => true,
+        'answers_id' => true,
+        'questions_survey' => true,
+        'answer' => true,
+    ];
+}

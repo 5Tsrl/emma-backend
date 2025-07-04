@@ -1,0 +1,43 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "chrome",
+      "runtimeExecutable": "/usr/bin/chromium-browser",
+      "request": "launch",
+      "name": "vuejs: chrome",
+      "url": "https://5t.drupalvm.test:8080",
+      "webRoot": "${workspaceFolder}/src",
+      "breakOnLoad": true,
+      "sourceMapPathOverrides": {
+        "webpack:///src/*": "${webRoot}/*"
+      }
+    },
+    {
+      "name": "Listen for XDebug",
+      "request": "launch",
+      "type": "php",
+      "ignore": [
+        "**/Vendor/**/*.php",
+        "**/vendor/**/*.php"
+      ],
+      "port": 9000,
+      "pathMappings": {
+        "/var/www/html": "${workspaceRoot}/www",
+      },
+    },
+    {
+      "type": "firefox",
+      "request": "launch",
+      "name": "vuejs: firefox",
+      "url": "https://5t.drupalvm.test:8080",
+      "webRoot": "${workspaceFolder}/src",
+      "pathMappings": [
+        {
+          "url": "webpack:///src/",
+          "path": "${webRoot}/"
+        }
+      ]
+    }
+  ]
+}

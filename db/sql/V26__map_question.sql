@@ -1,0 +1,2 @@
+INSERT INTO questions(id,  name,  description,  long_description,  type,  section_id,  creator_id,  compulsory_answer)
+VALUES (324,  'origine-spostamenti',  'Parlaci del tuo spostamento',  'Ci serve sapere come si cene il lavoro',    'map',  1,  '7aab5817-8f9f-4a34-91b2-3c22a0c6e3d7',    1);

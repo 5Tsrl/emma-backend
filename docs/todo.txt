@@ -1,0 +1,63 @@
+# logo
+cambiare il logo #logo
+mandare le specifiche dei loghi necessari #logo
+
+# devops
+mandare in linea demo con loghi nuovi
+x mandare in linea master senza momaarea
+
+# ui
+x spostare coworking e parking management come servizio dentro PSCL
+x togliere il pulsante coworking, spegnere fermate e trasporto pubblico #verificare
+x problema sul logout di emma
+x verificare il ruolo sportello su 5t
+x questionsController.php va in outofmemory nel caricamento della mappa (richiama troppa roba)
+x correggere la cache della mappa per prevedere sedi diverse
+se l'azienda associata allo user è di tipo azienda / scuola nella mappa mostrare solo il tipo di aziende di quel tipo #verificare (impostare il cookie)
+(B) in mappa.vue mostrare i campi delle domande in base a azienda, e questionario (oggi le mostra tutte!) #mappa
+(B) in apertura mappa.vue deve mostrare campi di default validi per fare una query (e salvarli nei cookies) #mappa
+(B) anche i filtri della #mappa vanno filtrati per l'azienda corrispondente (es: ruolo, orario
+(B) caricamento paginato delle origini (se non filtro per azienda ne vengono fuori troppe) #mappa
+(B) nel questionario mostrare i questionari solo delle aziende selezionate (fare un unico component filtro da usare ovunque, aggiungendo anche l'anno)
+
+
+# cruscotto
+x caricare il #cruscotto in maniera async 
+x #cruscotto di riepilogo per azienda
+x # titolo "in regione" (sulla parte alta) #cruscotto
+x # titolo "la tua azienda / scuola" (sulla seconda parte) #cruscotto
+verificare il box emissioni (coerente con box emissioni) #cruscotto
+nel #cruscotto controllare che i numeri siano quelli del moma d'area
+
+# bilancio
+bilancio esternalità: aggiungere spiegazioni / passi per usare il sistema -> destra/sinistra (due parti)
+
+# mapbox
+x attribution di #mapbox
+
+# analytics
+mostrare al moma d'area le domande che appartengono al template #verificare
+distanza totale non mostra la distanza giusta
+se filtro per un campo aggregato (quale-distanza, distanza-totale non prende il range)
+
+# anonimizzazione
+x verificare anonimizzazione #utenti
+
+# pscl
+nella generazione del #pscl non vengono aggregati distanza
+corregere la data nel xls impatti ("2021 per il 2022")
+negli #indicatori separare: numero di utilizzatori e numero di automobilisti che hanno cambiato
+#indicatori indicare nel titolo dell'indicatore di smartworking: numero di automobilisti che fanno smartworking viene proporzionato in base al numero di #indicatori automobilisti (aggiungo la colonna di cui utilizzano l'auto), le emissioni sono per gli automobilisti, mentre i risparmi sono per tutti.
+#indicatori posteggi per biciclette: numero di nuovi utenti del posteggio
+
+# anno
+aggiungere un filtro #anno in analytics
+anno nuovo migrazione #anno
+
+# area
+il numero di dipendenti nella tabella generale non è corretto #verificare
+se crei nuova area cancellare le cache area #area
+x usare server mapbox per gli sfondi @lorenzo manda mail
+x riportare il nome utenti #utenti
+x mostrare tutto #utenti
+x anomimizzare al momento dell'importazione e nel db #utenti

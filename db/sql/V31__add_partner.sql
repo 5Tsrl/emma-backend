@@ -1,0 +1,2 @@
+ALTER TABLE companies
+ADD COLUMN `partner` VARCHAR(45) NULL DEFAULT NULL AFTER `emissions`;

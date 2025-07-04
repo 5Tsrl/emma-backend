@@ -1,0 +1,4 @@
+Contact: mailto:mobilita.sostenibile@5t.torino.it
+Expires: 2024-12-31T11:00:00.000Z
+Preferred-Languages: en, it
+Canonical: https://emma.5t.torino.it/security.txt

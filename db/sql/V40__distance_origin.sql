@@ -1,0 +1,1 @@
+alter table origins add column distance float;

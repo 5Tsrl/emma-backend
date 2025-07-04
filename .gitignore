@@ -1,0 +1,72 @@
+# CakePHP specific files #
+##########################
+/config/app_local.php
+config/sites/api.mobility48.test
+config/sites/api.demo.*
+config/sites/*
+/config/.env
+/config/.env.example
+/logs/*
+/tmp/*
+/vendor/*
+phinx.php
+/webroot/*
+/plugins/*
+composer.lock
+composer_local.json
+
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+.directory
+.~lock*
+
+# Tool specific files #
+#######################
+# PHPUnit
+.phpunit.result.cache
+# vim
+*~
+*.swp
+*.swo
+# sublime text & textmate
+*.sublime-*
+*.stTheme.cache
+*.tmlanguage.cache
+*.tmPreferences.cache
+# Eclipse
+.settings/*
+# JetBrains, aka PHPStorm, IntelliJ IDEA
+.idea/*
+# NetBeans
+nbproject/*
+# Visual Studio Code
+.vscode
+# Sass preprocessor
+.sass-cache/
+## Updater
+update-git-srv.sh
+s*.sh
+##docker
+# env.sample
+env.sample_1
+.env.impronta-local
+docker
+emma-env.env
+*.env
+## protect update files
+private_uploads/*
+## ignore migrations dump
+/config/Migrations/schema-dump-default.lock
+# enable submodules for plugins
+!plugins/Reports
+!plugins/Orariscuole
+!plugins/Notifications

@@ -1,0 +1,25 @@
+# SSO 
+copiare i valori da company_code in additional_data 
+
+# analytics
+migliorie alla pagina domande (@matteo) #verificare
+
+
+# md
+x Genera md in cartella tmp
+x Push md su nextcloud
+x Pull da nextcloud
+x Genera HTML
+x Crea CSS Corretto (Matteo)
+x Genera PDF
+x Salva HTML e PDF su nextcloud
+x crea comando per push e pull
+x schedule in cron il worker di beanstalk
+x aggiungi feature per feedback visivo comandi eseguiti
+x ricevi il feedback lato vue
+
+# generale
+(B) Ammetti admin login solo su nextcloud
+(B) Migrare a cake5
+x Permettere di gestire company_code nella UI
+x Cambiare i loghi di mobilitysquare
