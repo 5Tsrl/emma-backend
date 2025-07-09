@@ -1,4 +1,16 @@
-5T - https://bitbucket.org/mobilitymanagerplatform/
-Massimo INFUNTI (Sw Architect  - https://github.com/impronta48 )
-Marco Toldo (Main Developer - https://github.com/marcotoldo)
-Juan Sebastian Rojas Velandia (https://github.com/xebaxt)
+# List of Contributors of product in
+
+## Regione Piemonte
+Massimo Isaia
+
+## 5T
+Tiziano Schiavon
+
+Lucia Mercaldi
+
+Rafael Aguilar
+
+## Mobility Square
+Massimo Infunti
+
+Juan Sebastian Rojas Velandia
