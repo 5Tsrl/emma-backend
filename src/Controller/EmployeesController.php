@@ -20,6 +20,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Exception\EmployeeImportRowException;
+use Cake\Cache\Cache;
+use Cake\ORM\TableRegistry;
+
 /**
  * Employees Controller
  *
@@ -45,16 +49,18 @@ class EmployeesController extends AppController
         $conditions = [];
         if ($isMomaAzienda) {
             // faccio vedere solo gli impiegati della sua azienda
-            $this->loadModel('Offices');
+            $this->Offices = TableRegistry::getTableLocator()->get('Offices');
             $conditions = ['office_id IN' => $this->Offices->getIdsByCompanyId($company_id)];
         }
 
         $this->paginate = [
             'contain' => [
-                'Users' => ['fields' => ['id','email']],
-                'Offices' => ['fields' => ['id','name'],
-                                'Companies' =>  ['fields' => ['id','name']] ],
-                'Origins' => ['fields' => ['id','address', 'postal_code','city','province','lat','lon']],
+                'Users' => ['fields' => ['id', 'email']],
+                'Offices' => [
+                    'fields' => ['id', 'name'],
+                    'Companies' =>  ['fields' => ['id', 'name']],
+                ],
+                'Origins' => ['fields' => ['id', 'address', 'postal_code', 'city', 'province', 'lat', 'lon']],
             ],
             'conditions' => $conditions,
         ];
@@ -62,7 +68,7 @@ class EmployeesController extends AppController
         $pagination = $this->Paginator->getPagingParams();
 
         $this->set(compact('employees', 'pagination'));
-        $this->viewBuilder()->setOption('serialize', ['employees','pagination']);
+        $this->viewBuilder()->setOption('serialize', ['employees', 'pagination']);
     }
 
     /**
@@ -84,7 +90,7 @@ class EmployeesController extends AppController
         $conditions = [];
         if ($isMomaAzienda) {
             // faccio vedere solo gli impiegati della sua azienda
-            $this->loadModel('Offices');
+            $this->Offices = TableRegistry::getTableLocator()->get('Offices');
             $conditions = ['office_id IN' => $this->Offices->getIdsByCompanyId($company_id)];
         }
 
@@ -194,56 +200,143 @@ class EmployeesController extends AppController
         if ($this->request->is(['post'])) {
             $company_id = $this->request->getData('company_id');
             $year = $this->request->getData('year');
+            $asAdmin = $this->request->getData('asAdmin') ?? false;
+            $office_id = $this->request->getData('office_id');
+            $batchOnly = (bool)($this->request->getData('batchOnly') ?? false);
             $this->allowWhoCanSeeCompanyOnly($company_id);
-
+            $success = true;
             $errorMsg = false;
+
+            if (!empty($office_id)) {
+                $this->Offices = TableRegistry::getTableLocator()->get('Offices');
+                $office = $this->Offices->find()
+                    ->where(['id' => $office_id])
+                    ->first();
+                if (empty($office) || (int)$office->company_id !== (int)$company_id) {
+                    $errorMsg = 'The selected office does not belong to this company';
+                    $success = false;
+                    $count = 0;
+                    $totalDeletedEmployees = 0;
+                    $totalDeletedOrigins = 0;
+                    $totalDeletedUsers = 0;
+                    $totalOldUsers = 0;
+                    $this->set(compact('errorMsg', 'count', 'totalDeletedEmployees', 'totalDeletedOrigins', 'totalDeletedUsers', 'totalOldUsers', 'success'));
+                    $this->viewBuilder()->setOption('serialize', ['errorMsg', 'count', 'totalDeletedEmployees', 'totalDeletedOrigins', 'totalDeletedUsers', 'totalOldUsers', 'success']);
+
+                    return;
+                }
+            }
             try {
-                $this->loadModel('Offices');
-                $this->loadModel('Origins');
-                $this->loadModel('Users');
+                $this->Offices = TableRegistry::getTableLocator()->get('Offices');
+                $this->Origins = TableRegistry::getTableLocator()->get('Origins');
+                $this->Users = TableRegistry::getTableLocator()->get('Users');
                 // $this->loadModel('SurveyParticipants');
                 // $subquery = $this->SurveyParticipants->find()->select('user_id');
                 // 1. Find the latest batch
-                $latestBatch = $this->Users->Batches->find()
-                ->select(['created'])
-                ->where(['user_id' => $this->Authentication->getIdentity()->get('id')])
-                ->order(['created' => 'DESC'])
-                ->first();
-                if (!$latestBatch) {
-                    throw new \Exception('Nessun batch trovato per l\'utente corrente.');
+                $identity = $this->Authentication->getIdentity();
+                $isAdmin = $identity->get('role') === 'admin';
+                if ($asAdmin) {
+                    $isAdmin = true;
                 }
-                // 2. Use the latest batch to filter users
 
-                $users = $this->Users->find()
-                        ->notMatching(
-                            'SurveyParticipants', function ($q) {
-                                return $q;
-                            },
-                        )
-                        ->Matching('Batches', function ($q) use ($latestBatch) {
-                            // Filter users by the latest batch created date
-                            return $q->where([
-                                'Batches.created' => $latestBatch->created,
-                            ]);
+                // Admin: collect all batches associated to the company; otherwise use caller's latest batch
+                if ($isAdmin) {
+                    $companyBatchesQuery = $this->Users->Batches->find()
+                        // ->select(['Batches.user_id'])
+                        ->matching('Users', function ($q) use ($company_id) {
+                            return $q->where(['Users.company_id' => $company_id]);
                         })
-                        ->where([
-                            'role' => 'user',
-                            'company_id' => $company_id,
-                            // 'years IS NOT' => null,
+                        ->order(['Batches.created' => 'DESC']);
+                    if ($batchOnly) {
+                        $companyBatchesQuery = $companyBatchesQuery->limit(1);
+                    }
+                    $companyBatches = $companyBatchesQuery->all();
+
+                    if ($companyBatches->isEmpty()) {
+                        throw new \Exception('Nessun dipendenti e caricato per te, né per la tua azienda. Rimuovi il flag "Elimina tutti gli elenchi di Lavoratori importati in precedenza per questa azienda"');
+                    }
+                    // Use the newest batch as reference for backward compatibility (not used for filtering users when admin)
+                    $latestBatch = $companyBatches;
+                } else {
+                    $latestBatchQuery = $this->Users->Batches->find()
+                        // ->select(['Batches.created'])
+                        ->where(['user_id' => $identity->get('id')])
+                        ->order(['created' => 'DESC']);
+                    if ($batchOnly) {
+                        $latestBatchQuery = $latestBatchQuery->limit(1);
+                    }
+                    $latestBatch = $latestBatchQuery->all();
+                    if ($latestBatch->isEmpty()) {
+                        // throw new \Exception('Nessun batch trovato per l\'utente corrente.');
+                        $companyBatches = $this->Users->Batches->find()
+                        // ->select(['Batches.user_id'])
+                        ->matching('Users', function ($q) use ($company_id) {
+                            return $q->where(['Users.company_id' => $company_id]);
+                        })
+                        ->order(['Batches.created' => 'DESC'])
+                        ->all();
+                        $success = false;
+                        $countBatches = $companyBatches->count();
+                        if ($countBatches == 0) {
+                            $errorMsg = 'Nessun dipendenti e caricato per te, né per la tua azienda. Rmuovi il flag "Elimina tutti gli elenchi di Lavoratori importati in precedenza per questa azienda"';
+                        } else {
+                            $errorMsg = 'Nessun dipendenti e caricato per te, ma ci sono ' . $countBatches . ' dipendenti caricati per la tua azienda.';
+                        }
+                        $this->set(compact('errorMsg', 'countBatches', 'success'));
+                        $this->viewBuilder()->setOption('serialize', ['errorMsg', 'countBatches', 'success']);
+
+                        return;
+                    }
+                }
+                // 2. Use batches to filter users
+
+                $usersConditions = [
+                    'role' => 'user',
+                    'company_id' => $company_id,
+                    // 'years IS NOT' => null,
+                ];
+                if (!empty($office_id)) {
+                    $usersConditions['office_id'] = $office_id;
+                }
+                $users = $this->Users->find()
+                    ->notMatching(
+                        'SurveyParticipants',
+                        function ($q) {
+                            return $q;
+                        },
+                    )
+                    ->where($usersConditions);
+
+                // Non-admin: restrict to the latest batches of the caller
+                    $batchUserIds = $latestBatch->extract('user_id')->toArray();
+                    $users = $users->Matching('Batches', function ($q) use ($batchUserIds) {
+                        return $q->where([
+                            'Batches.user_id IN' => $batchUserIds,
                         ]);
-                if (!(empty($year) || $year == 'TUTTI')) {
+                    });
+
+                // Only admin can delete users across all years; non-admin must specify a year
+                if ($year == 'TUTTI' && !$isAdmin) {
+                    throw new \Exception('Solo gli amministratori possono eliminare utenti di tutti gli anni.');
+                }
+                if (!(empty($year) || $year == 'TUTTI' || $year == 'VUOTI')) {
                     $users = $users->where(function ($exp) {
                         return $exp->add('JSON_CONTAINS(years, :year)');
                     });
-                    $users = $users->bind(':year', '"'.$year.'"');
+                    $users = $users->bind(':year', '"' . $year . '"');
+                } elseif ($year == 'VUOTI') {
+                    // users with empty years array or null
+                    $users = $users->where(function ($exp) {
+                        return $exp->add('(JSON_LENGTH(years) = 0 OR years IS NULL OR JSON_CONTAINS(years, \'"null"\'))');
+                    });
                 }
                 $count = $users->count();
                 // if ($count == 0) {
                 //     throw new \Exception('Nessun utente da cancellare');
                 // }
                 $users->limit(1000); // Limit to 1000 users to avoid memory issues
-                $users = $users->select(['id','years'])
-                ->toArray();
+                $users = $users->select(['id', 'years'])
+                    ->toArray();
                 if (empty($users)) {
                     $count = 0;
                     $totalDeletedEmployees = 0;
@@ -251,10 +344,11 @@ class EmployeesController extends AppController
                     $totalDeletedUsers = 0;
                     $totalOldUsers = 0;
                     $errorMsg = false;
-                    $this->set(compact('errorMsg', 'count', 'totalDeletedEmployees', 'totalDeletedOrigins', 'totalDeletedUsers', 'totalOldUsers'));
-                    $this->viewBuilder()->setOption('serialize', ['errorMsg', 'count', 'totalDeletedEmployees', 'totalDeletedOrigins', 'totalDeletedUsers', 'totalOldUsers']);
-                    return;
+                    $success = false;
+                    $this->set(compact('errorMsg', 'count', 'totalDeletedEmployees', 'totalDeletedOrigins', 'totalDeletedUsers', 'totalOldUsers', 'success'));
+                    $this->viewBuilder()->setOption('serialize', ['errorMsg', 'count', 'totalDeletedEmployees', 'totalDeletedOrigins', 'totalDeletedUsers', 'totalOldUsers', 'success']);
 
+                    return;
                 }
                 // is an array of more than one element
                 $usersManyearsid = array_map(function ($user) {
@@ -280,15 +374,19 @@ class EmployeesController extends AppController
                 // }, $this->Offices->find()->where([
                 //     'company_id' => $company_id,
                 // ])->toArray());
-                $offices = $this->Offices->find()->select('id')->where([
-                    'company_id' => $company_id,
-                ])->toArray();
-
-                if (!empty($offices)) {
+                if (!empty($office_id)) {
+                    $officeIds = [(int)$office_id];
+                } else {
+                    $offices = $this->Offices->find()->select('id')->where([
+                        'company_id' => $company_id,
+                    ])->toArray();
                     // Convert offices to an array of IDs
                     $officeIds = array_map(function ($office) {
                         return $office->id;
                     }, $offices);
+                }
+
+                if (!empty($officeIds)) {
                     $userIds = array_map(function ($user) {
                         return $user->id;
                     }, $users);
@@ -344,16 +442,26 @@ class EmployeesController extends AppController
 
                 // 2. cancella le origin ad essi collegate
                 $totalDeletedOrigins = 0;
-                 // Fetch ORIGINS in batches
+                // Fetch ORIGINS in batches
                 // do {
-                $origins = $this->Origins->find()
+                $originsQuery = $this->Origins->find()
                     ->where([
                         'company_id' => $company_id,
                         'survey_id IS' => null, // this identifies if the origin is related to employee or to an answer to a survey
                         'user_id IN' => $userIds,
-                    ])
-                    ->limit($batchSize)
-                    ->toArray();
+                    ]);
+
+                // Only filter by year if not 'TUTTI'
+                if (!(empty($year) || $year == 'TUTTI' || $year == 'VUOTI')) {
+                    $originsQuery = $originsQuery->where(['year' => $year]);
+                } elseif ($year == 'VUOTI') {
+                    // origins with empty year
+                    $originsQuery = $originsQuery->where(function ($exp) {
+                        return $exp->add('year IS NULL OR year = \'\'');
+                    });
+                }
+
+                $origins = $originsQuery->limit($batchSize)->toArray();
 
                 if (!empty($origins)) {
                     $originIds = array_map(function ($origin) {
@@ -384,30 +492,48 @@ class EmployeesController extends AppController
 
                 $totalDeletedUsers = 0;
                 $batchSize = 1000;
-                 // Fetch ORIGINS in batches
+                // Fetch ORIGINS in batches
                 // do {
+                $usersConditions2 = [
+                    'Users.role' => 'user',
+                    'Users.company_id' => $company_id,
+                    // 'Users.year' => date('Y'),
+                ];
+                if (!empty($office_id)) {
+                    $usersConditions2['Users.office_id'] = $office_id;
+                }
                 $users = $this->Users->find()
-                        ->notMatching(
-                            'SurveyParticipants', function ($q) {
-                                return $q;
-                            },
-                        )
-                        ->Matching('Batches', function ($q) use ($latestBatch) {
-                            return $q->where([
-                                'Batches.created' => $latestBatch->created,
-                            ]);
-                        })
-                        ->where([
-                            'Users.role' => 'user',
-                            'Users.company_id' => $company_id,
-                            // 'Users.year' => date('Y'),
-                        ]);
-                if (!(empty($year) || $year == 'TUTTI')) {
+                    ->notMatching(
+                        'SurveyParticipants',
+                        function ($q) {
+                            return $q;
+                        },
+                    )
+                    ->where($usersConditions2);
+                $batchUserIds = $latestBatch->extract('user_id')->toArray();
+                $users = $users->Matching('Batches', function ($q) use ($batchUserIds) {
+                    return $q->where([
+                        'Batches.user_id IN' => $batchUserIds,
+                    ]);
+                });
+
+                // Only admin can delete users across all years; non-admin must specify a year
+                if ($year == 'TUTTI' && !$isAdmin) {
+                    throw new \Exception('Solo gli amministratori possono eliminare utenti di tutti gli anni.');
+                }
+                if (!(empty($year) || $year == 'TUTTI' || $year == 'VUOTI')) {
                     $users = $users->where(function ($exp) {
                         return $exp->add('JSON_CONTAINS(years, :year)');
                     });
-                    $users = $users->bind(':year', '"'.$year.'"');
+                    $users = $users->bind(':year', '"' . $year . '"');
+                } elseif ($year == 'VUOTI') {
+                    // users with empty years array or null
+                    $users = $users->where(function ($exp) {
+                        return $exp->add('(JSON_LENGTH(years) = 0 OR years IS NULL OR JSON_CONTAINS(years, \'"null"\'))');
+                    });
                 }
+                // // check sql and die
+                // dd($users);
                 $users = $users->limit($batchSize)
                     ->toArray();
 
@@ -422,8 +548,12 @@ class EmployeesController extends AppController
                         $user = $this->Users->find('all', [
                             'conditions' => ['id' => $userId],
                         ])->contain('Batches')->first();
-                        // delete batch row
-                        $this->Users->Batches->delete($user->batches[0]);
+                        // delete batch rows
+                        if (!empty($user->batches)) {
+                            foreach ($user->batches as $batch) {
+                                $this->Users->Batches->delete($batch);
+                            }
+                        }
                         // Check if the user exists before attempting to delete
                         if ($this->Users->delete($user)) {
                             $res_users++;
@@ -434,24 +564,38 @@ class EmployeesController extends AppController
                 }
                 // remove year from old users
                 $totalOldUsers = 0;
+                $batchUserIds = $latestBatch->extract('user_id')->toArray();
                 $oldUsers = $this->Users->find()
-                        ->notMatching(
-                            'SurveyParticipants', function ($q) {
-                                return $q;
-                            },
-                        )
-                        ->where([
-                            'Users.role' => 'user',
-                            'Users.company_id' => $company_id,
-                            // 'Users.year' => date('Y'),
+                    ->notMatching(
+                        'SurveyParticipants',
+                        function ($q) {
+                            return $q;
+                        },
+                    )
+                    ->notMatching('Batches', function ($q) use ($batchUserIds) {
+                        return $q->where([
+                            'Batches.user_id IN' => $batchUserIds,
                         ]);
-                if (!(empty($year) || $year == 'TUTTI')) {
+                    })
+                    ->where($usersConditions2);
+                // Only admin can update users across all years; non-admin must specify a year
+                if ($year == 'TUTTI' && !$isAdmin) {
+                    throw new \Exception('Solo gli amministratori possono eliminare utenti di tutti gli anni.');
+                }
+                if (!(empty($year) || $year == 'TUTTI' || $year == 'VUOTI')) {
                     $oldUsers = $oldUsers->where(function ($exp) {
                         return $exp->add('JSON_CONTAINS(years, :year)');
                     });
-                    $oldUsers = $oldUsers->bind(':year', '"'.$year.'"');
+                    $oldUsers = $oldUsers->bind(':year', '"' . $year . '"');
+                } elseif ($year == 'VUOTI') {
+                    // users with empty years array or null
+                    $oldUsers = $oldUsers->where(function ($exp) {
+                        return $exp->add('(JSON_LENGTH(years) = 0 OR years IS NULL OR JSON_CONTAINS(years, \'"null"\'))');
+                    });
                 }
-                $oldUsers = $oldUsers->select(['id','years'])->limit($batchSize)
+                // // query and die
+                // debug($oldUsers); die;
+                $oldUsers = $oldUsers->select(['id', 'years'])->limit($batchSize)
                     ->toArray();
                 foreach ($oldUsers as $key => $value) {
                     $user = $this->Users->get($value['id']);
@@ -460,18 +604,24 @@ class EmployeesController extends AppController
                     $this->Users->save($user);
                     $totalOldUsers++;
                 }
-                if($totalDeletedEmployees < 1000 && $totalDeletedOrigins < 1000 && $totalDeletedUsers < 1000) {
+                if ($totalDeletedEmployees < 1000 && $totalDeletedOrigins < 1000 && $totalDeletedUsers < 1000) {
                     $count = 0;
-                    }
+                }
                 //     else {
                 //     $count = 1000;
                 // }
             } catch (\Exception $e) {
+                $success = false;
                 $errorMsg = $e->getMessage();
+                $count = 0;
+                $totalDeletedEmployees = 0;
+                $totalDeletedOrigins = 0;
+                $totalDeletedUsers = 0;
+                $totalOldUsers = 0;
             }
-            
-            $this->set(compact('errorMsg', 'count', 'totalDeletedEmployees', 'totalDeletedOrigins', 'totalDeletedUsers', 'totalOldUsers'));
-            $this->viewBuilder()->setOption('serialize', ['errorMsg', 'count', 'totalDeletedEmployees', 'totalDeletedOrigins', 'totalDeletedUsers', 'totalOldUsers']);
+
+            $this->set(compact('errorMsg', 'count', 'totalDeletedEmployees', 'totalDeletedOrigins', 'totalDeletedUsers', 'totalOldUsers', 'success'));
+            $this->viewBuilder()->setOption('serialize', ['errorMsg', 'count', 'totalDeletedEmployees', 'totalDeletedOrigins', 'totalDeletedUsers', 'totalOldUsers', 'success']);
             // $this->set('errorMsg', $errorMsg);
             // $this->viewBuilder()->setOption('serialize', ['errorMsg']);
         }
@@ -482,71 +632,119 @@ class EmployeesController extends AppController
 
     public function import($company_id, $year)
     {
-        $this->allowRolesOnly(['admin']);
+        $this->allowRolesOnly(['admin', 'moma', 'moma_area']);
         $this->allowWhoCanSeeCompanyOnly($company_id);
         $identity = $this->Authentication->getIdentity();
-
 
         if ($this->request->is(['post'])) {
             $employee = $this->request->getData();
             $errorMsg = false;
+            // One entry per failed field on the rejected row: [{field, message}, ...].
+            // Empty on success. `field` is the dot-path field name from
+            // EmployeeImportFields (e.g. "employees.dob", "origins.province"),
+            // `message` is the Italian, human-readable validation message.
+            $errors = [];
             try {
                 $this->Employees->import($employee, $company_id, $identity, $year);
+            } catch (EmployeeImportRowException $e) {
+                $errors = $e->getErrors();
+                $errorMsg = $e->getMessage();
             } catch (\Exception $e) {
                 $errorMsg = $e->getMessage();
+                $errors = [['field' => null, 'message' => $e->getMessage()]];
             }
-            $this->set('errorMsg', $errorMsg);
-            $this->viewBuilder()->setOption('serialize', ['errorMsg']);
+            $this->set(compact('errorMsg', 'errors'));
+            $this->viewBuilder()->setOption('serialize', ['errorMsg', 'errors']);
         }
     }
 
     public function originFilters($company_id)
     {
-        $this->allowRolesOnly(['admin', 'moma','moma_area']);
+        $this->allowRolesOnly(['admin', 'moma', 'moma_area']);
 
         // TODO alcuni filtri dovrebbero dipendere dall'azienda selezionata ma per il momento è troppo complicato
-        $roles = array_map(function ($r) {
-            return $r['role_description'];
-        }, $this->Employees->find()
-            ->matching('Users', function ($q) use ($company_id) {
+        // read cache
+        $cached = Cache::read('employee_origin_filters_' . $company_id, 'hour');
+        if (!$cached) {
+            $roles = array_map(function ($r) {
+                return $r['role_description'];
+            }, $this->Employees->find()
+                ->matching('Users', function ($q) use ($company_id) {
                     return $q->where(['Users.company_id' => $company_id]);
-                    })
-            ->select('role_description')
-            ->distinct('role_description')
-            ->where(['role_description IS NOT' => null])
-            ->orderAsc('role_description')
-            ->toArray());
-        $orari = array_map(function ($r) {
-            return $r['orario'];
-        }, $this->Employees->find()
-            ->matching('Users', function ($q) use ($company_id) {
-                return $q->where(['Users.company_id' => $company_id]);
                 })
-            ->select('orario')
-            ->distinct('orario')
-            ->orderAsc('orario')
-            ->where(['orario IS NOT' => null])
-            ->toArray());
-        $gender = array_map(function ($r) {
-            return $r['gender'];
-        }, $this->Employees->find()
-            ->matching('Users', function ($q) use ($company_id) {
-                return $q->where(['Users.company_id' => $company_id]);
+                ->select('role_description')
+                ->distinct('role_description')
+                ->where(['role_description IS NOT' => null])
+                ->orderAsc('role_description')
+                ->toArray());
+            $orari = array_map(function ($r) {
+                return $r['orario'];
+            }, $this->Employees->find()
+                ->matching('Users', function ($q) use ($company_id) {
+                    return $q->where(['Users.company_id' => $company_id]);
                 })
-            ->select('gender')
-            ->distinct('gender')
-            ->orderAsc('gender')
-            ->where(['gender IS NOT' => null])
-            ->toArray());
-        $cap = array_map(function ($r) {
-            return $r['postal_code'];
-        }, $this->Employees->Origins->find()
-            ->select('postal_code'
-            )->distinct('postal_code')
-            ->orderAsc('postal_code')
-            ->where(['postal_code IS NOT' => null,'postal_code IS NOT' => '', 'company_id' => $company_id])
-            ->toArray());
-
+                ->select('orario')
+                ->distinct('orario')
+                ->orderAsc('orario')
+                ->where(['orario IS NOT' => null])
+                ->toArray());
+            $gender = array_map(function ($r) {
+                return $r['gender'];
+            }, $this->Employees->find()
+                ->matching('Users', function ($q) use ($company_id) {
+                    return $q->where(['Users.company_id' => $company_id]);
+                })
+                ->select('gender')
+                ->distinct('gender')
+                ->orderAsc('gender')
+                ->where(['gender IS NOT' => null])
+                ->toArray());
+            $cap = array_map(function ($r) {
+                return $r['postal_code'];
+            }, $this->Employees->Origins->find()
+                ->select(
+                    'postal_code'
+                )->distinct('postal_code')
+                ->orderAsc('postal_code')
+                ->where(['postal_code IS NOT' => null, 'postal_code IS NOT' => '', 'company_id' => $company_id])
+                ->toArray());
+            // comune
+            $comune = array_map(function ($r) {
+                return $r['city'];
+            }, $this->Employees->Origins->find()
+                ->select(
+                    'city'
+                )->distinct('city')
+                ->orderAsc('city')
+                ->where(['city IS NOT' => null, 'city IS NOT' => '', 'company_id' => $company_id, 'survey_id IS' => null])
+                ->toArray());
+            // district
+            $district = array_map(function ($r) {
+                return $r['district'];
+            }, $this->Employees->Origins->find()
+                ->select(
+                    'district'
+                )->distinct('district')
+                ->orderAsc('district')
+                ->where(['district IS NOT' => null, 'district IS NOT' => '', 'company_id' => $company_id, 'survey_id IS' => null])
+                ->toArray());
+            // cache results
+            Cache::write('employee_origin_filters_' . $company_id, [
+                'roles' => $roles,
+                'orari' => $orari,
+                'gender' => $gender,
+                'cap' => $cap,
+                'comune' => $comune,
+                'district' => $district,
+            ], 'hour');
+        } else {
+            $roles = $cached['roles'];
+            $orari = $cached['orari'];
+            $gender = $cached['gender'];
+            $cap = $cached['cap'];
+            $comune = $cached['comune'];
+            $district = $cached['district'];
+        }
         $filters = [
             [
                 'name' => 'ruolo',
@@ -574,6 +772,16 @@ class EmployeesController extends AppController
                     '55 - 65',
                 ],
             ],
+            [
+                'name' => 'comune',
+                'options' => $comune,
+            ],
+            ...(empty($district) ? [] : [
+                [
+                    'name' => 'quartiere',
+                    'options' => $district,
+                ],
+            ]),
         ];
         $this->set('filters', $filters);
         $this->viewBuilder()->setOption('serialize', ['filters']);
@@ -595,32 +803,56 @@ class EmployeesController extends AppController
         $this->allowRolesOnly(['admin', 'moma']);
 
         $q = $this->Employees->find()
-                ->contain(['Origins'])
-                ->select(['orario','shift','Origins.postal_code'])
-                ->where(['Employees.office_id' => $office_id]);
+            ->contain([
+                'Origins',
+                'Offices' => [
+                    'Companies' => ['fields' => ['id', 'name']],
+                    'fields' => ['id', 'name'],
+                ]])
+            ->select([  'orario',
+                        'shift',
+                        'Origins.postal_code',
+                        'Origins.city',
+                        'Origins.province',
+                        'Origins.district',
+                        'Offices.name',
+                        'Companies.name',
+                    ])
+            ->where(['Employees.office_id' => $office_id]);
+
         if ($year != 'TUTTI') {
-                $q = $q->matching('Users', function ($q) use ($year) {
-                    return $q->where(
-                        function ($exp) {
-                            return $exp->add('JSON_CONTAINS(Users.years, :year)');
+            $q = $q->matching('Users', function ($q) use ($year) {
+                return $q->where(
+                    function ($exp) {
+                        return $exp->add('JSON_CONTAINS(Users.years, :year)');
                         // return $exp->add('Users.years IS NOT NULL');
                         // $conditions[] = $exp->add('JSON_CONTAINS(Users.years, :year)');
                         // return $exp->or_([
                         //     $exp->or_($conditions),
                         //     $exp->isNull('Users.years')
                         // ]);
-                        }
-                    );
-                    // return $q->bind(':year', json_encode($year), 'string');
-                });
-                $q->bind(':year', json_encode($year), 'string');
+                    }
+                );
+                // return $q->bind(':year', json_encode($year), 'string');
+            });
+            $q->bind(':year', json_encode($year), 'string');
         }
         // print_r($q->sql());
         // debug($q);
         // die();
+        //$q = $q->toArray();
         $q = $q->all();
 
-        $this->set('columns', ['orario','shift','origin.postal_code']);
+        $this->set('columns', [
+            'orario',
+            'shift',
+            'origin.postal_code',
+            'origin.city',
+            'origin.province',
+            'origin.district',
+            'office.name',
+            'office.company.name',
+        ]);
         $this->set('result', $q);
         $this->viewBuilder()->setOption('serialize', ['result']);
     }
@@ -630,17 +862,28 @@ class EmployeesController extends AppController
         $this->allowRolesOnly(['admin', 'moma']);
         $year = $this->request->getQuery('year');
 
-        //Get all offices for a company
-        $offices = $this->Employees->Offices->find()->where(['company_id' => $company_id])->toArray();
+        $cacheKey = "stats_{$company_id}_" . ($year !== null && $year !== '' ? $year : 'all');
+        $res = Cache::remember($cacheKey, function () use ($company_id, $year) {
+            $offices = $this->Employees->Offices->find()
+                ->select(['id', 'name', 'office_code'])
+                ->where(['company_id' => $company_id])
+                ->toArray();
 
-        $res = [];
-        foreach ($offices as $office) {
-            $res[] =
-            ['name' => $office->name] +
-            ['code' => $office->office_code] +
-            ['id' => $office->id] +
-             $this->Employees->getStats($office->id, $year);
-        }
+            $officeIds = array_map(fn($o) => (int)$o->id, $offices);
+            $stats = $this->Employees->getStatsBatch($officeIds, $year);
+
+            $out = [];
+            foreach ($offices as $office) {
+                $oid = (int)$office->id;
+                $out[] =
+                    ['name' => $office->name] +
+                    ['code' => $office->office_code] +
+                    ['id' => $office->id] +
+                    ($stats[$oid] ?? $this->Employees->emptyStats());
+            }
+
+            return $out;
+        }, 'employee_stats');
 
         $this->set('result', $res);
         $this->viewBuilder()->setOption('serialize', ['result']);

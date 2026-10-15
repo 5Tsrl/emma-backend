@@ -207,7 +207,7 @@ use Cake\Core\Configure;
           <td class="full-width-image">
             <hr>
             <small>
-              <?= $this->cell('Footer',[$id ?? null]); ?>
+              <?= $this->cell('Footer', [$id ?? null, $footerLogoCid ?? null]); ?>
             </small>
           </td>
         </tr>

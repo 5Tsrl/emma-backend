@@ -18,6 +18,7 @@ declare(strict_types=1);
 //</editor-fold>
 namespace App\Geocoder;
 
+use App\Model\Entity\Origin;
 use Cake\Cache\Cache;
 use Cake\Http\Client;
 use Cake\Log\Log;
@@ -35,8 +36,11 @@ class komootGeocoder extends Geocoder
         }
     }
 
-    public function geocode($origin, $focusLat = null, $focusLon = null)
+    public function geocodeNoHash($origin, $focusLat = null, $focusLon = null): array|false
     {
+        if ($origin instanceof Origin) {
+            $origin = $origin->toArray();
+        }
         try {
             $q = $this->composeAddress($origin);
 
@@ -61,7 +65,7 @@ class komootGeocoder extends Geocoder
         }
     }
 
-    private function komootGeoCode($address, $focusLat = null, $focusLon = null)
+    private function komootGeoCode($address, $focusLat = null, $focusLon = null): array|false
     {
         $http = new Client();
         $origin = [];

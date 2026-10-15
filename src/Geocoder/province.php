@@ -64,6 +64,7 @@ $province = [
     'NO' => 'Novara',
     'NU' => 'Nuoro',
     'OR' => 'Oristano',
+    'OT' => 'Olbia-Tempio',
     'PD' => 'Padova',
     'PA' => 'Palermo',
     'PR' => 'Parma',
@@ -110,3 +111,12 @@ $province = [
     'VI' => 'Vicenza',
     'VT' => 'Viterbo',
 ];
+
+// Additive: allows this file to also be consumed via
+// `require __DIR__ . '/../../Geocoder/province.php'` as a return value
+// (e.g. EmployeesTable::import()'s origins.province validator), reusing this
+// exact 110-entry ISTAT list as the single source of truth instead of
+// duplicating it. Does not affect Geocoder::__construct()'s pre-existing bare
+// `require` usage, which ignores the return value and reads the in-scope
+// $province variable directly.
+return $province;

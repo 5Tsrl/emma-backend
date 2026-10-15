@@ -1,0 +1,529 @@
+{
+  "_comment": "German (de) translations for QuestionsSurveys.id rows whose description/long_description/options diverge from their parent Questions row of the Brescia database (emma_brescia, bresciafe.drupalvm.test). Italian source text of each row in `_it` (verified by the import command, never stored). Generated for review before running: HTTP_HOST=bresciafe.drupalvm.test ./bin/cake import_questions_translations config/Seeds/EMMA_BRESCIA-de-questions-translations-overrides.json --locale de --dry-run --verbose",
+  "questions_surveys": {
+    "15": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "18": {
+      "description": "Welche Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzi utilizzi per recarti al lavoro"
+    },
+    "19": {
+      "options": "Hauptstandort Vorlage",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "72921": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "72924": {
+      "description": "Welche Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzi utilizzi per recarti al lavoro"
+    },
+    "72925": {
+      "options": "Standort 2|Hauptstandort|zweiter Standort",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "73110": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "73113": {
+      "description": "Welche Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzi utilizzi per recarti al lavoro"
+    },
+    "73114": {
+      "options": "Hauptstandort Vorlage",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "73236": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "73239": {
+      "description": "Welche Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzi utilizzi per recarti al lavoro"
+    },
+    "73240": {
+      "options": "Palazzo Loggia|Standort Marconi",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "73362": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "73365": {
+      "description": "Welche Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzi utilizzi per recarti al lavoro"
+    },
+    "73366": {
+      "options": "Hauptstandort Vorlage",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "73425": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "73428": {
+      "description": "Welche Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzi utilizzi per recarti al lavoro"
+    },
+    "73429": {
+      "options": "Hauptstandort Vorlage",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "73475": {
+      "options": "Führungskraft|Angestellte/r|Arbeiter/in",
+      "_it": "Qual'è il tuo inquadramento?"
+    },
+    "73488": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "73491": {
+      "description": "Welche Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzi utilizzi per recarti al lavoro"
+    },
+    "73492": {
+      "options": "BUFFALORA - SEDE PRINCIPALE|POLIZIA MUNICIPALE|POLIZIA PROVINCIALE BRESCIA|PROVINCIA DI BRESCIA|TRE TORRI|TRIBUNALE|TRIBUNALE MINORI|VERZIANO",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "73505": {
+      "options": "Variabel je nach Wochenschicht|zwischen 7:30 und 8:00 Uhr|zwischen 8:00 und 8:30 Uhr|zwischen 8:30 und 9:00 Uhr|zwischen 9:00 und 10:00 Uhr|zwischen 12:00 und 13:00 Uhr|zwischen 13:00 und 14:00 Uhr|zwischen 14:00 und 15:00 Uhr|nach 15:00 Uhr",
+      "_it": "Abitualmente a che ora arrivi al lavoro?"
+    },
+    "73510": {
+      "options": "Variabel je nach Wochenschicht|vor 12:00 Uhr|zwischen 12:00 und 12:30 Uhr|zwischen 12:30 und 13:00 Uhr|zwischen 13:00 und 13:30 Uhr|zwischen 13:30 und 14:00 Uhr|zwischen 14:00 und 14:30 Uhr|zwischen 14:30 und 15:30 Uhr|zwischen 15:30 und 16:30 Uhr|zwischen 16:30 und 17:00 Uhr|zwischen 17:00 und 17:30 Uhr|nach 17:30 Uhr",
+      "_it": "Abitualmente a che ora esci dal lavoro?"
+    },
+    "73551": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "73554": {
+      "description": "Welche Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzi utilizzi per recarti al lavoro"
+    },
+    "73555": {
+      "options": "Cooperativa Sociale Nikolajewka Onlus",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "73614": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "73617": {
+      "description": "Welche Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzi utilizzi per recarti al lavoro"
+    },
+    "73618": {
+      "options": "Hauptstandort Vorlage",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "73677": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "73680": {
+      "description": "Welche Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzi utilizzi per recarti al lavoro"
+    },
+    "73681": {
+      "options": "Hauptstandort Vorlage",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "73739": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "73742": {
+      "description": "Welche Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzi utilizzi per recarti al lavoro"
+    },
+    "73743": {
+      "options": "marconi|Hauptstandort|zweiter Standort",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "73872": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "73875": {
+      "description": "Welche Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzi utilizzi per recarti al lavoro"
+    },
+    "73876": {
+      "options": "Hauptstandort",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "73935": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "73938": {
+      "description": "Welche Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzi utilizzi per recarti al lavoro"
+    },
+    "73939": {
+      "options": "Lager Via del Serpente|Hauptstandort",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "73985": {
+      "options": "Leitende/r Angestellte/r|Führungskraft|Angestellte/r",
+      "_it": "Qual'è il tuo inquadramento?"
+    },
+    "73987": {
+      "options": "Nie oder gelegentlich, nicht öfter als 2 oder 3 Mal pro Monat|Häufig, einige Tage pro Woche|In bestimmten Zeiten des Jahres",
+      "_it": "Con che frequenza, abitualmente, ricorri allo Smart Working?"
+    },
+    "73988": {
+      "options": "Ja|Nein, ich arbeite für NPL Studio Legale Associato",
+      "_it": "Sei dipendente dell’azienda per cui stai compilando il questionario?"
+    },
+    "73998": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "74001": {
+      "description": "Welche Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzi utilizzi per recarti al lavoro"
+    },
+    "74002": {
+      "options": "Archiv|Rechtssitz|Standort Milano",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "74014": {
+      "options": "5 Tage / Woche|4 Tage / Woche|3 Tage / Woche|2 Tage / Woche|1 Tag / Woche",
+      "_it": "Abitualmente, con quale frequenza ti rechi al lavoro presso la sede indicata?"
+    },
+    "74015": {
+      "options": "zwischen 7:00 und 7:15 Uhr|zwischen 7:15 und 7:30 Uhr|zwischen 7:30 und 7:45 Uhr|zwischen 7:45 und 8:00 Uhr|zwischen 8:00 und 8:15 Uhr|zwischen 8:15 und 8:30 Uhr|zwischen 8:30 und 8:45 Uhr|zwischen 8:45 und 9:00 Uhr|nach 9:00 Uhr",
+      "_it": "Abitualmente a che ora arrivi al lavoro?"
+    },
+    "74018": {
+      "options": "Ich bleibe vor Ort (z. B. Betriebskantine)|Mittagessen außer Haus|Ich fahre nach Hause",
+      "_it": "Abitualmente, durante la pausa pranzo:"
+    },
+    "74020": {
+      "options": "zwischen 13:00 und 13:30 Uhr|zwischen 13:30 und 14:00 Uhr|zwischen 14:00 und 14:30 Uhr|zwischen 14:30 und 15:00 Uhr|zwischen 15:00 und 15:30 Uhr|zwischen 15:30 und 16:00 Uhr|zwischen 16:00 und 16:30 Uhr|zwischen 16:30 und 17:00 Uhr|zwischen 17:00 und 17:30 Uhr|zwischen 17:30 und 18:00 Uhr|zwischen 18:00 und 18:30 Uhr|zwischen 18:30 und 19:00 Uhr|zwischen 19:00 und 19:30 Uhr|zwischen 19:30 und 20:00 Uhr",
+      "_it": "Abitualmente a che ora esci dal lavoro?"
+    },
+    "74037": {
+      "options": "Ziel in der Stadt|Ziel außerhalb der Stadt|Standort Milano",
+      "_it": "Dove ti rechi più frequentemente per motivi di servizio?"
+    },
+    "74061": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "74064": {
+      "description": "Welche Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzi utilizzi per recarti al lavoro"
+    },
+    "74065": {
+      "options": "Hauptstandort Vorlage",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "74124": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "74127": {
+      "description": "Welche Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzi utilizzi per recarti al lavoro"
+    },
+    "74128": {
+      "options": "Hauptstandort Vorlage",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "74187": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "74190": {
+      "description": "Welche Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzi utilizzi per recarti al lavoro"
+    },
+    "74191": {
+      "options": "Hauptstandort Vorlage",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "74250": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "74253": {
+      "description": "Welche Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzi utilizzi per recarti al lavoro"
+    },
+    "74254": {
+      "options": "Hauptstandort Vorlage",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "74313": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "74316": {
+      "description": "Welche Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzi utilizzi per recarti al lavoro"
+    },
+    "74317": {
+      "options": "Hauptstandort Vorlage",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "74376": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "74379": {
+      "description": "Welche Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzi utilizzi per recarti al lavoro"
+    },
+    "74380": {
+      "options": "Hauptstandort Vorlage",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "74439": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "74442": {
+      "description": "Welche Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzi utilizzi per recarti al lavoro"
+    },
+    "74443": {
+      "options": "Hauptstandort Vorlage",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "74502": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "74505": {
+      "description": "Welche Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzi utilizzi per recarti al lavoro"
+    },
+    "74506": {
+      "options": "Hauptstandort Vorlage",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "74565": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "74568": {
+      "description": "Welche Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzi utilizzi per recarti al lavoro"
+    },
+    "74569": {
+      "options": "Hauptstandort Vorlage",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "74678": {
+      "options": "Führungskraft|Sachbearbeiter/in / Führungskraft mittlerer Ebene|Angestellte/r|Mitarbeiter/in / Bediener/in|Lehrkraft|Forscher/in|Forschungsstipendiat/in / Stipendiat/in / Facharztanwärter/in|Student/in / Doktorand/in|Sonstiges",
+      "_it": "Qual'è il tuo inquadramento?"
+    },
+    "74691": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "74694": {
+      "description": "Welche Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzi utilizzi per recarti al lavoro"
+    },
+    "74695": {
+      "options": "GARZETTA|VIA TRIESTE",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "74708": {
+      "options": "Variabel je nach Wochenschicht|vor 6:30 Uhr|zwischen 6:30 und 6:45 Uhr|zwischen 6:45 und 7:00 Uhr|zwischen 7:00 und 7:15 Uhr|zwischen 7:15 und 7:30 Uhr|zwischen 7:30 und 7:45 Uhr|zwischen 7:45 und 8:00 Uhr|zwischen 8:00 und 8:15 Uhr|zwischen 8:15 und 8:30 Uhr|zwischen 8:30 und 8:45 Uhr|zwischen 8:45 und 9:00 Uhr|zwischen 9:15 und 9:30 Uhr|zwischen 9:30 und 9:45 Uhr|zwischen 9:45 und 10:00 Uhr|zwischen 10:00 und 10:15 Uhr|zwischen 10:15 und 10:30 Uhr|zwischen 10:30 und 11:00 Uhr|nach 11:00 Uhr",
+      "_it": "Abitualmente a che ora arrivi al lavoro?"
+    },
+    "74722": {
+      "options": "Veranstaltungen zu den Strategien für nachhaltige städtische Mobilität|Schulungsveranstaltungen zum Verkehrsangebot von Brescia|Informationsveranstaltungen zu den betrieblichen Strategien für den Arbeitsweg|Treffen, Führungen, Fahrradtouren usw. zum Thema nachhaltige Mobilität|Eco-Driving-Kurse|Communities und Gruppen für die Nutzung der verschiedenen Dienste|Förderung der Nutzung öffentlicher Verkehrsmittel durch Vergünstigungen oder Firmenabonnements|„Bike to Work“-Projekte mit Anreizen oder Zusatzleistungen|Betriebliche Bikesharing- oder E-Scooter-Sharing-Dienste|Betriebliche oder zwischenbetriebliche Shuttle-Dienste zu Knotenpunkten des öffentlichen Verkehrs|Betriebliche Parkplätze für Personen, die ihr Auto teilen|Workshops zu Wohlbefinden und Sicherheit auf dem Arbeitsweg|Challenges und Preise für alle, die nachhaltige Verkehrsmittel nutzen|Schalter für individuelle Mobilitätsberatung|Betriebliche Thementage (Bike Day, Mobility Day, Car Free Day)|Rabatte beim Kauf von Ausrüstung oder nachhaltigen Verkehrsmitteln (z. B. Fahrrad, E-Scooter)|Vereinbarungen mit Unternehmen oder betrieblichen Bikesharing- bzw. E-Scooter-Sharing-Diensten|Rabatte beim Kauf nachhaltiger Verkehrsmittel (z. B. Fahrrad, E-Scooter) oder Ausrüstung|Vereinbarungen und Ermäßigungen mit Sportanlagen (z. B. Fitnessstudio, Schwimmbad) für Eintritte oder Sportkurse|Initiativen für das körperliche und geistige Wohlbefinden|Programme zu Ernährungsbildung und gesundem Lebensstil|Outdoor-Aktivitäten, Treffen, Führungen, Fahrradtouren usw. zum Thema nachhaltige Mobilität (Wanderungen, Trekking oder Laufen, Turniere oder sportliche Gruppenaktivitäten)|Treffen mit Experten für Sport, Gesundheit und Wohlbefinden|Sonstiges",
+      "_it": "A quali iniziative saresti interessato/a?"
+    },
+    "74730": {
+      "options": "Anderer Standort in der Stadt|Anderer Standort außerhalb der Stadt|Ziel in der Stadt|Ziel außerhalb der Stadt|Büros/Orte, die schwer zugänglich sind",
+      "_it": "Dove ti rechi più frequentemente per motivi di servizio?"
+    },
+    "74754": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "74757": {
+      "description": "Welche Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzi utilizzi per recarti al lavoro"
+    },
+    "74758": {
+      "options": "Hauptstandort Vorlage",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "74817": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "74820": {
+      "description": "Welche Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzi utilizzi per recarti al lavoro"
+    },
+    "74821": {
+      "options": "Hauptstandort",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "74943": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "74946": {
+      "description": "Welche Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzi utilizzi per recarti al lavoro"
+    },
+    "74947": {
+      "options": "Hauptstandort Vorlage",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "75069": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "75072": {
+      "description": "Welche Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzi utilizzi per recarti al lavoro"
+    },
+    "75073": {
+      "options": "Hauptstandort Vorlage",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "75132": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "75135": {
+      "description": "Welche Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzi utilizzi per recarti al lavoro"
+    },
+    "75136": {
+      "options": "Hauptstandort Vorlage",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "75195": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "75198": {
+      "description": "Welche Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzi utilizzi per recarti al lavoro"
+    },
+    "75199": {
+      "options": "Magnolini|San Donino",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "75258": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "75261": {
+      "description": "Welche Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzi utilizzi per recarti al lavoro"
+    },
+    "75262": {
+      "options": "Hauptstandort Vorlage",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "75278": {
+      "options": "Ich bleibe vor Ort|Mittagessen außer Haus|Ich fahre nach Hause|Ich mache keine Mittagspause",
+      "_it": "Abitualmente, durante la pausa pranzo:"
+    },
+    "75310": {
+      "options": "Wenn eine betriebliche Flotte von E-Bikes verfügbar wäre|Wenn eine betriebliche Flotte von elektrischen Lastenrädern verfügbar wäre|Wenn ich ein Abonnement für öffentliche Verkehrsdienste zur Verfügung hätte|Wenn mich das Unternehmen bei der Planung der Fahrt mit öffentlichen Verkehrsmitteln unterstützen würde|Wenn es ein System zur Verwaltung / Buchung / Organisation der Fahrten mit Kollegen gäbe (betriebliches Carpooling)|Wenn ich eine angemessene oder größere zeitliche Flexibilität nutzen könnte|Wenn mir die Möglichkeit, das Auto zu nutzen, untersagt würde|Ich bin nicht bereit, meine Gewohnheiten zu ändern",
+      "_it": "A quali condizioni saresti disponibile a cambiare le tue abitudini per gli spostamenti di servizio?"
+    },
+    "75611": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "75614": {
+      "description": "Welche Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzi utilizzi per recarti al lavoro"
+    },
+    "75615": {
+      "options": "Palazzo Loggia|Standort Marconi",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "75631": {
+      "options": "Ich bleibe vor Ort|Mittagessen außer Haus|Ich fahre nach Hause|Ich mache keine Mittagspause",
+      "_it": "Abitualmente, durante la pausa pranzo:"
+    },
+    "75657": {
+      "options": "Wenn eine betriebliche Flotte von E-Bikes verfügbar wäre|Wenn eine betriebliche Flotte von elektrischen Lastenrädern verfügbar wäre|Wenn ich ein Abonnement für öffentliche Verkehrsdienste zur Verfügung hätte|Wenn mich das Unternehmen bei der Planung der Fahrt mit öffentlichen Verkehrsmitteln unterstützen würde|Wenn es ein System zur Verwaltung / Buchung / Organisation der Fahrten mit Kollegen gäbe (betriebliches Carpooling)|Wenn ich eine angemessene oder größere zeitliche Flexibilität nutzen könnte|Wenn mir die Möglichkeit, das Auto zu nutzen, untersagt würde|Ich bin nicht bereit, meine Gewohnheiten zu ändern",
+      "_it": "A quali condizioni saresti disponibile a cambiare le tue abitudini per gli spostamenti di servizio?"
+    }
+  }
+}

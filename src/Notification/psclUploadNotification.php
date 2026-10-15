@@ -14,7 +14,6 @@
  * @license   https://eupl.eu/1.2/it/ EUPL-1.2 license
  */
 //</editor-fold>
-
 declare(strict_types=1);
 
 namespace App\Notification;
@@ -27,7 +26,8 @@ class psclUploadNotification extends baseNotification
     public function __construct($toUser, $office_id, $fname, $token, $company, $year)
     {
         parent::__construct();
-        $this->to = Configure::read('MailAdmin');
+        $this->to = $toUser;
+        $this->cc = Configure::read('MailAdmin');
         $this->subject = "Nuovo PSCL Caricato da $toUser";
         $this->vars = [
                 'user' => $toUser,

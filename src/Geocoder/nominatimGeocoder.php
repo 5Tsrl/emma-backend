@@ -18,6 +18,7 @@ declare(strict_types=1);
 //</editor-fold>
 namespace App\Geocoder;
 
+use App\Model\Entity\Origin;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Http\Client;
@@ -36,8 +37,11 @@ class nominatimGeoCoder extends Geocoder
         }
     }
 
-    public function geocode($origin, $focusLat = null, $focusLon = null)
+    public function geocodeNoHash($origin, $focusLat = null, $focusLon = null): array|false
     {
+        if ($origin instanceof Origin) {
+            $origin = $origin->toArray();
+        }
         try {
             $coords = $this->nominatimGeoCode($origin);
             if (isset($coords['lat']) && isset($coords['lon'])) {
@@ -69,7 +73,7 @@ class nominatimGeoCoder extends Geocoder
         }
     }
 
-    private function nominatimGeoCode($origin)
+    private function nominatimGeoCode($origin): array | false
     {
         $http = new Client();
         $address = $this->composeAddress($origin);

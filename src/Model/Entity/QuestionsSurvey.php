@@ -47,6 +47,13 @@ class QuestionsSurvey extends Entity
      */
     protected $_accessible = [
     '*' => true,
+    // Belt-and-suspenders (see QuestionsController::editFromSurvey()): these two
+    // fields must ONLY ever be settable via the dedicated
+    // SurveysController::toggleQuestionOptionsPermission()/setQuestionDisabledOptions()
+    // endpoints (which write with a raw connection->update(), bypassing mass
+    // assignment entirely) — never through the general question-edit save.
+    'moma_can_edit_options' => false,
+    'disabled_options' => false,
     ];
 
     use TranslateTrait;

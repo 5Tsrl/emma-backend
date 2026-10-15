@@ -28,6 +28,11 @@ return [
         'salt' => env('SECURITY_SALT', '__SALT__'),
     ],
 
+    'SecretField' => [
+        // Example: base64:0fo7... generated with `php -r "echo base64_encode(random_bytes(32)), PHP_EOL;"`
+        'key' => env('SECRET_FIELD_KEY', ''),
+    ],
+
     /*
      * Connection information used by the ORM to connect
      * to your application's datastores.

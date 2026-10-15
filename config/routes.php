@@ -46,7 +46,7 @@ use Cake\Routing\Router;
 
 /** @var \Cake\Routing\RouteBuilder $routes */
 $routes->setRouteClass(DashedRoute::class);
-$routes->setExtensions(['xls', 'json', 'kml', 'csv', 'doc', 'xlsx']);
+$routes->setExtensions(['xls', 'json', 'kml', 'csv', 'doc', 'xlsx', 'pdf']);
 
 $routes->scope('/', function (RouteBuilder $builder) {
     /*

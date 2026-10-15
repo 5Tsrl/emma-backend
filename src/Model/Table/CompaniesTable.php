@@ -61,20 +61,34 @@ class CompaniesTable extends Table
         $this->setPrimaryKey('id');
 
         $this->hasMany('Surveys', [
-        'foreignKey' => 'company_id',
-        'dependent' => true,
+            'foreignKey' => 'company_id',
+            'dependent' => true,
         ]);
         $this->hasMany('Offices', [
-        'foreignKey' => 'company_id',
-        'dependent' => true,
+            'foreignKey' => 'company_id',
+            'dependent' => true,
         ]);
         $this->hasMany('Users', [
-        'foreignKey' => 'company_id',
-        'dependent' => true,
+            'foreignKey' => 'company_id',
+            'dependent' => true,
+        ]);
+        $this->hasMany('CompanySurveyHistory', [
+            'foreignKey' => 'company_id',
+            'dependent' => true,
         ]);
         $this->belongsTo('CompanyTypes', [
-        'className' => 'CompanyTypes',
-        'foreignKey' => 'type',
+            'className' => 'CompanyTypes',
+            'foreignKey' => 'type',
+        ]);
+        // Template di piano PSCL usato automaticamente alla creazione di un
+        // nuovo PSCL per questa azienda (vedi PsclController::edit()). Alias
+        // dedicato ('PsclTemplate') perché punta alla STESSA tabella `pscl`
+        // già associata altrove (es. Offices/Surveys belongsTo Pscl) con un
+        // significato diverso (righe con version_tag='template', non un
+        // piano reale) — nessun conflitto d'alias nel locator.
+        $this->belongsTo('PsclTemplate', [
+            'className' => 'Pscl',
+            'foreignKey' => 'pscl_template_id',
         ]);
     }
 
@@ -87,47 +101,51 @@ class CompaniesTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-        ->integer('id')
-        ->allowEmptyString('id', null, 'create');
+            ->integer('id')
+            ->allowEmptyString('id', null, 'create');
 
         $validator
-        ->scalar('name')
-        ->maxLength('name', 255)
-        ->allowEmptyString('name');
+            ->scalar('name')
+            ->maxLength('name', 255)
+            ->allowEmptyString('name');
 
         $validator
-        ->scalar('address')
-        ->maxLength('address', 255)
-        ->allowEmptyString('address');
+            ->scalar('address')
+            ->maxLength('address', 255)
+            ->allowEmptyString('address');
 
         $validator
-        ->scalar('cap')
-        ->maxLength('cap', 5)
-        ->allowEmptyString('cap');
+            ->scalar('cap')
+            ->maxLength('cap', 5)
+            ->allowEmptyString('cap');
 
         $validator
-        ->scalar('city')
-        ->maxLength('city', 45)
-        ->allowEmptyString('city');
+            ->scalar('city')
+            ->maxLength('city', 45)
+            ->allowEmptyString('city');
 
         $validator
-        ->scalar('province')
-        ->maxLength('province', 2)
-        ->allowEmptyString('province');
+            ->scalar('province')
+            ->maxLength('province', 2)
+            ->allowEmptyString('province');
 
         $validator
-        ->scalar('country')
-        ->maxLength('country', 2)
-        ->allowEmptyString('country');
+            ->scalar('country')
+            ->maxLength('country', 2)
+            ->allowEmptyString('country');
 
         $validator
-        ->nonNegativeInteger('num_employees')
-        ->allowEmptyString('num_employees');
+            ->nonNegativeInteger('num_employees')
+            ->allowEmptyString('num_employees');
 
         $validator
-        ->scalar('ateco')
-        ->maxLength('ateco', 20)
-        ->allowEmptyString('ateco');
+            ->scalar('ateco')
+            ->maxLength('ateco', 20)
+            ->allowEmptyString('ateco');
+
+        $validator
+            ->integer('pscl_template_id')
+            ->allowEmptyString('pscl_template_id');
 
         return $validator;
     }
@@ -142,8 +160,38 @@ class CompaniesTable extends Table
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->existsIn(['type'], 'CompanyTypes'));
+        $rules->add($rules->existsIn(['pscl_template_id'], 'PsclTemplate'), [
+            'errorField' => 'pscl_template_id',
+            'message' => __('Il template PSCL selezionato non esiste'),
+        ]);
+        $rules->add([$this, 'isValidPsclTemplate'], 'isValidPsclTemplate', [
+            'errorField' => 'pscl_template_id',
+            'message' => __('Il template PSCL selezionato non è valido'),
+        ]);
 
         return $rules;
+    }
+
+    /**
+     * Verifica che `pscl_template_id`, se valorizzato, punti a una riga
+     * `pscl` con `version_tag='template'` — existsIn() da solo verifica solo
+     * che l'id esista nella tabella `pscl`, non che sia effettivamente un
+     * template (potrebbe essere un piano reale di un'altra azienda).
+     *
+     * @param \App\Model\Entity\Company $entity Entità in salvataggio.
+     * @return bool
+     */
+    public function isValidPsclTemplate($entity): bool
+    {
+        if (empty($entity->pscl_template_id)) {
+            return true;
+        }
+
+        $exists = $this->PsclTemplate->find()
+            ->where(['id' => $entity->pscl_template_id, 'version_tag' => 'template'])
+            ->count();
+
+        return $exists > 0;
     }
 
     //Generate slug from company name and store it in company_code

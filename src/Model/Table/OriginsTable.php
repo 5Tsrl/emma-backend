@@ -19,9 +19,9 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use App\Model\Entity\Origin;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
-use Cake\Http\Client;
 use Cake\I18n\FrozenTime;
 use Cake\Log\Log;
 use Cake\ORM\RulesChecker;
@@ -29,10 +29,11 @@ use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
 use Exception;
+use Sk\Geohash\Geohash;
 
 class OriginsTable extends Table
 {
-    private $geocodingEngine;
+    private string $geocodingEngine;
 
     public function initialize(array $config): void
     {
@@ -42,12 +43,61 @@ class OriginsTable extends Table
         $this->setPrimaryKey('id');
 
         $this->belongsTo('Companies');
-        $this->belongsTo('Surveys');
+        $this->belongsTo('Surveys', [
+            'foreignKey' => 'survey_id',
+        ]);
         $this->belongsTo('Users');
         $this->hasOne('Employees');
-        
+
         //Imposto il geocoder di default che sarà usato per geocodificare le origins
-        $this->geocodingEngine = Configure::read('Geocoding.Engine', 'komootGeocoder');
+        // ⚠️ `Configure::read('Geocoding.Engine', 'komootGeocoder')`'s default argument
+        // never actually applies: config/app.php always DEFINES the key
+        // (`'Geocoding.Engine' => env('GEOCODING_ENGINE', false)`), it's just `false`
+        // when the env var is unset — `Configure::read()`'s fallback only kicks in when
+        // the key is entirely ABSENT, not when it resolves to a falsy value. On any
+        // site/env without `GEOCODING_ENGINE` set (e.g. `config/sites/default`, used by
+        // CLI/tests with no `HTTP_HOST`) this assigned `false` to the typed `string`
+        // property below, throwing a TypeError the moment `OriginsTable` was
+        // instantiated — breaking the whole Origins feature outright on that site, not
+        // just a specific action. Coerce defensively instead of trusting the default arg.
+        $configuredEngine = Configure::read('Geocoding.Engine', 'komootGeocoder');
+        $this->geocodingEngine = is_string($configuredEngine) && $configuredEngine !== ''
+            ? $configuredEngine
+            : 'komootGeocoder';
+    }
+
+    /**
+     * Encode incoming lat/lon into geohash on save and clean the
+     * non-persisted fields off the in-memory entity.
+     *
+     * The `lat` and `lon` columns no longer exist on the `origins` table —
+     * they were removed by the cleanup migration
+     * `20260508100000_CleanupOriginsLatLon`. The null assignments below are
+     * an in-memory cleanup for entities that still carry those legacy keys
+     * (e.g. payloads from older clients); the database itself only stores
+     * `geohash`.
+     *
+     * `address` is intentionally not persisted on new origin rows for
+     * privacy reasons: the column exists for legacy data but every save
+     * nulls it. Downstream consumers must derive a human-readable address
+     * from `city` / `postal_code` / `province` (still persisted) or reverse
+     * geocode the geohash when needed.
+     *
+     * @param \Cake\Event\EventInterface $event The save event.
+     * @param \App\Model\Entity\Origin $entity The entity being saved.
+     * @param \ArrayObject $options Save options.
+     * @return void
+     */
+    public function beforeSave($event, $entity, $options)
+    {
+        //Per la privacy, solo se ci sono coordinate valide, tolgo le coordinate e l'indirizzo - @impronta48 - 8/5/2026
+        if (!empty($entity->lat) || !empty($entity->lon)) {
+            $h = new Geohash();
+            $entity->geohash = $h->encode($entity->lat, $entity->lon, Configure::read('Geohash.precision', 7));
+            $entity->lat = null;
+            $entity->lon = null;
+            $entity->address = null;
+        }
     }
 
     /**
@@ -58,7 +108,9 @@ class OriginsTable extends Table
      */
     public function validationDefault(Validator $validator): Validator
     {
-        // TODO
+        $validator
+            ->integer('year')
+            ->allowEmptyString('year');
 
         return $validator;
     }
@@ -77,10 +129,30 @@ class OriginsTable extends Table
         $or = $this->find()
             ->select(['id'])
             ->where([
-                'OR' => [['lat IS' => null], ['lat' => -1]],
-                'OR' => [['lon IS' => null], ['lon' => -1]],
+                //Tolto il controllo su lat/lon per passare a geohash
+                //'OR' => [['lat IS' => null], ['lat' => -1], ['lon IS' => null], ['lon' => -1]],
+                'Origins.geohash IS' => null,
                 'Origins.company_id' => $company_id,
-                // 'Origins.survey_id IS' => NULL,
+            ])
+            ->toArray();
+
+        return array_map(function ($origin) {
+            return $origin['id'];
+        }, $or);
+    }
+
+    public function getAllMissingDistrict($company_id, $city)
+    {
+        $or = $this->find()
+            ->select(['id'])
+            ->where([
+                //Tolto il controllo su lat/lon per passare a geohash
+                //['lat IS NOT' => null],
+                //['lon IS NOT' => null],
+                'Origins.geohash IS NOT' => null,
+                'Origins.company_id' => $company_id,
+                'Origins.district IS' => null,
+                'Origins.city' => $city,
             ])
             ->toArray();
 
@@ -107,11 +179,19 @@ class OriginsTable extends Table
         }, $q->toArray());
     }
 
-    public function geocode($id)
+    public function geocode($id, $force = false)
     {
         $origin = $this->get($id);
         if (!$origin) {
             return false;
+        }
+
+        //Se l'origin ha già un geohash e force non è true, non la geocodifico.
+        //L'unica colonna che persiste le coordinate è geohash: appoggiarsi a
+        //lat/lon (rimosse dalla migrazione 20260508100000) rendeva la guardia
+        //sempre falsa e ogni save rieseguiva il geocoder.
+        if (!$force && !empty($origin['geohash'])) {
+            return $this->save($origin);
         }
 
         //Creo dinamicamente l'oggetto geocoder, in base al parametro di configurazione
@@ -120,8 +200,9 @@ class OriginsTable extends Table
         $geocoderClass = new $geocoderName();
         $coords = [];
 
-        if (empty($origin['city'] && empty($origin['province']))) {
-            Log::write('debug', "] Geocoding failed empty address");
+        if (empty($origin['city']) && empty($origin['province'])) {
+            Log::write('debug', '] Geocoding failed empty address');
+
             return false;
         }
 
@@ -135,10 +216,10 @@ class OriginsTable extends Table
             $focusLon = 45.05011899322459;
             if ($origin['city']) {
                 $q = $origin['city'] . ($origin['province'] ? ", {$origin['province']}" : '');
-                $focusOrigin = [
+                $focusOrigin = new Origin([
                     'city' => $origin['city'],
                     'province' => $origin['province'],
-                ];
+                ]);
                 $coords = Cache::read($q);
                 if (!isset($coords['lon']) || !isset($coords['lat']) || $coords === null || $coords['lon'] == -1 || $coords['lat'] == -1) {
                     $coords = $geocoderClass->geocode($focusOrigin);
@@ -182,15 +263,23 @@ class OriginsTable extends Table
         }
 
         $id = $origin->id;
-        $origin['lat'] = $coords['lat'] ?? 0;
-        $origin['lon'] = $coords['lon'] ?? 0;
+        // lat/lon columns no longer exist (migration 20260508100000); persist
+        // coordinates exclusively via the geohash column. If the geocoder
+        // didn't already provide a geohash, encode it from lat/lon here.
         $origin['geocoded_at'] =  FrozenTime::now();
         $origin['province'] = $coords['province'] ?? null;
         $origin['city'] = $coords['city'] ?? null;
-        if ($coords['postal_code']){
+        if (!empty($coords['geohash'])) {
+            $origin['geohash'] = $coords['geohash'];
+        } elseif (isset($coords['lat']) && isset($coords['lon'])) {
+            $origin['geohash'] = \App\Geocoder\GeohashHelper::encode(
+                (float)$coords['lat'],
+                (float)$coords['lon']
+            );
+        }
+        if ($coords['postal_code']) {
             $origin['postal_code'] = $coords['postal_code'] ?? null;
         }
-        
 
         if ($this->save($origin)) {
             Log::write('debug', "] Geocoding $id SAVE OK");
@@ -203,38 +292,10 @@ class OriginsTable extends Table
         return false;
     }
 
-    private function nominatimGeoCode($address, $focusLat = null, $focusLon = null)
-    {
-        $http = new Client();
-        $origin = [];
-        if (is_null($focusLat) && is_null($focusLon)) {
-            $response = $http->get("https://nominatim.geocoding.ai/search.php?q=$address&format=jsonv2&limit=1");
-        } else {
-            $response = $http->get("https://photon.komoot.io/api/?q=$address&lat=$focusLat&lon=$focusLon&limit=1");
-        }
-
-        if ($response->isOk()) {
-            $res = $response->getJson();
-            if (isset($res['features']) && !empty($res['features'])) {
-                $origin['lon'] = $res['features'][0]['geometry']['coordinates'][0];
-                $origin['lat'] = $res['features'][0]['geometry']['coordinates'][1];
-                Log::write('debug', "] Geocoding success $address ({$origin['lon']},{$origin['lat']})");
-                //var_dump("Geocoding success ({$origin['lon']},{$origin['lat']})");
-                return $origin;
-            } else {
-                Log::write('debug', "] Geocoding failed $address, empty features");
-                //var_dump("Geocoding failed, empty features");
-                return $origin;
-            }
-        } else {
-            Log::write('debug', "Geocoding failed $address http error");
-            //var_dump("Geocoding failed http error");
-            throw new Exception("Geocoding $address failed - http error");
-        }
-    }
-
     //Calcola la distanza di una origin dalla sede dell'azienda
-    public function updateDistance($id){
+
+    public function updateDistance($id)
+    {
         $origin = $this->get($id);
         if (!$origin) {
             return false;
@@ -256,12 +317,11 @@ class OriginsTable extends Table
             return -1;
         }
 
-
         $officeT = TableRegistry::getTableLocator()->get('Offices');
         $office = $officeT->find()
             ->where(['id' => $user['office_id']])
             ->first();
-            
+
         if (empty($office['lat']) || empty($office['lon'])) {
             return -1;
         }

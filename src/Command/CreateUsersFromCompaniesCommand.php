@@ -22,6 +22,7 @@ use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
+use Cake\ORM\TableRegistry;
 
 class CreateUsersFromCompaniesCommand extends Command
 {
@@ -53,8 +54,8 @@ class CreateUsersFromCompaniesCommand extends Command
 
     public function execute(Arguments $args, ConsoleIo $io)
     {
-        $this->loadModel('Companies');
-        $this->loadModel('Users');
+        $this->Companies = TableRegistry::getTableLocator()->get('Companies');
+        $this->Users = TableRegistry::getTableLocator()->get('Users');
         $company_type_id = (int)$args->getOption('company_type_id');
 
         //$company_type_id = 4;   //Scuole Superiori
@@ -86,10 +87,14 @@ class CreateUsersFromCompaniesCommand extends Command
                 'email' => $c->email,
                 'password' => $pwd,
                 'active' => true,
+                'expiration_date' => date('Y-m-d', strtotime('+365 days')),
                 'role' => $role,
                 'company_id' => $self == 1 ? $c->id : null,
                 'first_name' => substr($c->name, 49),
                 'last_name' => $c->city,
+                ], [
+                    // Flusso fidato (command): l'entity blocca questi campi al mass-assignment lato UI.
+                    'accessibleFields' => ['role' => true, 'company_id' => true, 'password' => true],
                 ]);
                 $action = 'creato';
             } else {
@@ -102,6 +107,9 @@ class CreateUsersFromCompaniesCommand extends Command
                 'company_id' => $self == 1 ? $c->id : null,
                 'first_name' => substr($c->name, 49),
                 'last_name' => $c->city,
+                ], [
+                    // Flusso fidato (command): l'entity blocca questi campi al mass-assignment lato UI.
+                    'accessibleFields' => ['role' => true, 'company_id' => true, 'password' => true],
                 ]);
                 $action = 'aggiornato';
             }

@@ -19,6 +19,7 @@ declare(strict_types=1);
 namespace App\Indicator;
 
 use Cake\Datasource\ConnectionManager;
+use Cake\ORM\TableRegistry;
 use Exception;
 
 class emissioniIndicator extends baseIndicator
@@ -26,7 +27,7 @@ class emissioniIndicator extends baseIndicator
     public function __construct($survey_id = null)
     {
         //Carico la query corretta per questo indicatore
-        $this->loadModel('Reports');
+        $this->Reports = TableRegistry::getTableLocator()->get('Reports');
         $r = $this->Reports->findByName('coIndicator')->first();
         if (empty($r)) {
             throw new Exception("L'indircatore $survey_id non è definito nella tabella reports", 1);

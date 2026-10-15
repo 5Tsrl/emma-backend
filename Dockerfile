@@ -59,15 +59,6 @@ RUN a2enmod rewrite
 WORKDIR /var/www/html/webroot/js
 RUN npm install
 WORKDIR /var/www/html/webroot/
-RUN wget -O download.zip https://cloud.mobilitysquare.eu/s/dZEPebD3a7YkEHe/download
-RUN unzip download.zip -d .
-RUN rm download.zip
-RUN wget -O download.zip https://cloud.mobilitysquare.eu/s/4pkJbTQKBP8df3x/download
-RUN unzip download.zip -d .
-RUN rm download.zip
-RUN wget -O download.zip https://cloud.mobilitysquare.eu/s/oKeeweMdNcF7PoA/download
-RUN unzip download.zip -d .
-RUN rm download.zip
 WORKDIR /var/www/html
 RUN chmod -R 777 webroot
 

@@ -24,10 +24,11 @@ use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
 use Cake\I18n\I18n;
+use Cake\ORM\TableRegistry;
 // HTTP_HOST=demo.api.5t.impronta48.it bin/cake update_questions
-// HTTP_HOST=demo.api.mobility48.it bin/cake update_questions
+// HTTP_HOST=api.example.test bin/cake update_questions
 // HTTP_HOST=api.5t.impronta48.it bin/cake update_questions
-// HTTP_HOST=api.mobility48.it bin/cake update_questions
+// HTTP_HOST=api.example.test bin/cake update_questions
 
 class UpdateQuestionsCommand extends Command
 {
@@ -38,7 +39,7 @@ class UpdateQuestionsCommand extends Command
 
     public function execute(Arguments $args, ConsoleIo $io)
     {
-        $this->loadModel('Questions');
+        $this->Questions = TableRegistry::getTableLocator()->get('Questions');
         $this->deleteQuestionsSurveys($io);
         $io->out('QuestionsSurveys deleted');
         $this->addQuestionsSpos($io);
@@ -136,7 +137,7 @@ class UpdateQuestionsCommand extends Command
                 if (!is_array($conditions)) {
                     $conditions = json_decode($conditions, true);
                 }
-                $question_condition = $this->Questions->find()->where(['id' => $conditions['question']]);
+                $question_condition = $this->Questions->find()->where(['Questions.id' => $conditions['question']]);
                 $options = $question_condition->first()->options;
                 $values = $conditions['value'];
                 // from arrays options and values find indexes
@@ -191,7 +192,7 @@ class UpdateQuestionsCommand extends Command
             ]);
             $count = 0;
             foreach ($questions_surveys as $qs) {
-                    $question = $this->Questions->find('translations')->where(['id' => $qs['question_id']])->first();
+                    $question = $this->Questions->find('translations')->where(['Questions.id' => $qs['question_id']])->first();
                 if (!empty($question['options'])) {
                     $qs['options'] = $question['options'];
                 }
@@ -267,7 +268,7 @@ class UpdateQuestionsCommand extends Command
                 $survey_id = $question->survey_id;
                 // find Questions_spos that are not in the survey
                 foreach ($q_maps as $q_map_id) {
-                    $question_map = $this->Questions->find('translations')->where(['id' => $q_map_id])->contain([
+                    $question_map = $this->Questions->find('translations')->where(['Questions.id' => $q_map_id])->contain([
                         'QuestionsSurveys' => function ($query) use ($survey_id) {
                             return $query->find('translations')->where(['survey_id' => $survey_id]);
                         },
@@ -275,7 +276,6 @@ class UpdateQuestionsCommand extends Command
                     if (empty($question_map['questions_surveys'][0])) {
                         // $question_map = $this->Questions->find('translations')->where(['id'=>$q_map_id])->first();
                         $question_map['questions_surveys'][0] = $this->Questions->QuestionsSurveys->newEmptyEntity();
-                        $question_map['questions_surveys'][0]['section_id'] = $question['section_id'];
                         $question_map['questions_surveys'][0]['survey_id'] = $survey_id;
                         $question_map['questions_surveys'][0]['weight'] = empty($question['questions_surveys'][0]['weight']) ? -100 : $question['questions_surveys'][0]['weight'];
                         $question_map['questions_surveys'][0]['hidden'] = 1;
@@ -286,7 +286,6 @@ class UpdateQuestionsCommand extends Command
                         }
                         $count++;
                     } else {
-                        $question_map['questions_surveys'][0]['section_id'] = $question['section_id'];
                         $question_map['questions_surveys'][0]['survey_id'] = $survey_id;
                         $question_map['questions_surveys'][0]['weight'] = empty($question['questions_surveys'][0]['weight']) ? -100 : $question['questions_surveys'][0]['weight'];
                         if (!$this->Questions->QuestionsSurveys->save($question_map['questions_surveys'][0])) {

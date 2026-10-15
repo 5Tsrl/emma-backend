@@ -2,15 +2,17 @@
 
 # Project Description
 EMMA is a web-based application designed and developed by 5T on behalf of Regione Piemonte: it helps the Mobility Manager to draw up the "Sustainable Mobility Plan" which aims to reduce the negative impacts of commuting trips.
-It is a web application, composed by a backend (this repository - written in PHP using the CakePHP frameworkd) and a frontend (EMMA-Vue, written in Vue.js 2.0).
+It is a web application, composed by a backend (this repository - written in PHP using the CakePHP frameworkd) and a frontend (EMMA-Vue, written in Vue.js 3).
 The backend is a REST API, which provides all the necessary functions to run the application.
 The frontend is a Single Page Application, which consumes the REST API.
 
 
 # Prerequisites
-You need a running LAMPP server with PHP 7.2+, MySQL or MariaDB, Apache or Nginx
+You need a running LAMPP server with PHP 8.2+, MySQL or MariaDB, Apache or Nginx
 
 # Configurations
+- The plugins in /plugins are git submodules: clone with ``git clone --recurse-submodules`` (or run ``git submodule update --init`` after cloning).
+- ``SECURITY_SALT`` (a long random value, e.g. ``openssl rand -hex 32``) is mandatory: it signs the authentication tokens, and the application refuses to start without it. ``SECRET_FIELD_KEY`` is the key used by the SecretField plugin to encrypt sensitive fields. Both are read from the environment (see .env.sample).
 - The software is multidomain and multiconfiguration (following the Drupal convention).
 - Copy a settings_example.php in settings.php, and adapt it to your settings (in particular username and passwords of the db)
 - The basic configuration is in the folder /config/sites/default/settings.php
@@ -34,7 +36,7 @@ You need a running LAMPP server with PHP 7.2+, MySQL or MariaDB, Apache or Nginx
 - use docker-run.sh to run the docker container
 
 # Versioning
-1.25.0701
+1.25.0729
 
 # Authors
 Regione Piemonte - Settore Mobilità  e Trasporti

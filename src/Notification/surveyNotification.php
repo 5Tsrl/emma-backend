@@ -32,8 +32,9 @@ class surveyNotification extends mustacheNotification
         $survey_link = Router::url("$frontEnd/questionari/fill/{$survey['id']}/{$participant['id']}", true);
 
         $prefix = $is_invitation ? 'invitation' : 'reminder';
+        $nome = $participant['user']['first_name'] ?? $participant['user']['name'] ?? 'Collega';
         $vars = [
-            'nome' => "<b>{$participant['user']['first_name']}</b>",
+            'nome' => "<b>{$nome}</b>",
             'titolo' => "<b>{$survey['name']}</b>",
             'link' => "<a href=\"{$survey_link}\">{$survey_link}</a>",
             'id' => $survey['id'],

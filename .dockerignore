@@ -1,10 +1,8 @@
 Dockerfile
 .dockerignore
 docker-compose.yml
-config/sites/api.mobility48.test
 config/sites/api.demo.5t.drupalvm.test
 config/sites/api.demo.5t.drupalvm.test
-config/sites/api.demo.mobility48.test
 config/sites/default/backup
 config/sites/default/__settings.php
 /config/.env
@@ -26,7 +24,6 @@ webroot/5T
 webroot/Piemonte
 webroot/Demo5T
 webroot/img
-webroot/Mobility48
 webroot/Moma
 webroot/js/node_modules
 *.env

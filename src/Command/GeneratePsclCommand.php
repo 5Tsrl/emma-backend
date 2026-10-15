@@ -10,7 +10,7 @@ use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
 
 /**
- * HTTP_HOST=api.mobility48.test bin/cake generate_pscl --company_id=1624 --office_id=946 --survey_id=49 --format=md
+ * HTTP_HOST=api.example.test bin/cake generate_pscl --company_id=1624 --office_id=946 --survey_id=49 --format=md
  *
  * @package App\Command
  */

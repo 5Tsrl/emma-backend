@@ -28,6 +28,7 @@ use Authentication\Authenticator\ResultInterface;
 use Authentication\Authenticator\TokenAuthenticator;
 use Authentication\Authenticator\UnauthenticatedException;
 use Authentication\Identifier\IdentifierInterface;
+use Cake\Log\Log;
 use Cake\Utility\Security;
 use Exception;
 use Psr\Http\Message\ServerRequestInterface;
@@ -85,6 +86,8 @@ class Auth0Authenticator extends TokenAuthenticator
         try {
             $result = $this->getPayload($request);
         } catch (Exception $e) {
+            Log::write('warning', 'Auth0: token JWT non valido - ' . $e->getMessage(), ['scope' => ['login']]);
+
             return new Result(
                 null,
                 Result::FAILURE_CREDENTIALS_INVALID,
@@ -101,6 +104,12 @@ class Auth0Authenticator extends TokenAuthenticator
 
         $subjectKey = $this->getConfig('subjectKey');
         if (empty($result[$subjectKey])) {
+            Log::write(
+                'warning',
+                "Auth0: claim '$subjectKey' assente nel token (controlla AUTH0_USERIDFIELD)",
+                ['scope' => ['login']]
+            );
+
             return new Result(null, Result::FAILURE_CREDENTIALS_MISSING);
         }
 
@@ -115,6 +124,13 @@ class Auth0Authenticator extends TokenAuthenticator
         ]);
 
         if (empty($user)) {
+            Log::write(
+                'warning',
+                "Auth0: token valido ma nessun utente trovato per $subjectKey='{$result[$subjectKey]}' " .
+                '(utente assente o SECRET_FIELD_KEY non allineata alla cifratura del db)',
+                ['scope' => ['login']]
+            );
+
             return new Result(null, Result::FAILURE_IDENTITY_NOT_FOUND, $this->_identifier->getErrors());
         }
 
@@ -177,7 +193,7 @@ class Auth0Authenticator extends TokenAuthenticator
             return $this->tokenInfo;
         } catch (InvalidTokenException $e) {
             // Handle invalid JWT exception ...
-            throw new UnauthenticatedException('Token JWT non valido');
+            throw new UnauthenticatedException(__('Token JWT non valido'));
         }
     }
 }

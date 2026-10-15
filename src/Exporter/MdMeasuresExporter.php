@@ -22,15 +22,15 @@ class MdMeasuresExporter extends MdExporter implements ExporterInterface
      * @throws \App\Exporter\BadMethodCallException
      */
     public function generatePSCL($response)
-    {                
+    {
         $resultPath = $this->resultPath($this->year);
-        
+
         //Genera il PSCL
         //Devo generare un file md per ogni misura del PSCL
         //Devo generare un file che includa tutte le misure (index.htmls)
-        if ($this->office->PSCL) {
+        if ($this->hasOfficeAllYearsPscl()) {
             $this->fillPSCLBlock();
-            $this->dumpMisure($resultPath);
+            $this->dumpMisure($resultPath, true);
         }
 
         // Return response object to prevent controller from trying to render

@@ -62,12 +62,23 @@ class QuestionsTable extends Table
         $this->setPrimaryKey('id');
         //NB: Le options non le posso tradurre così, se no poi non ho risposte consistenti
         //devo usare la funzione __() in modo da memorizzare il valore giusto e mostrare quello tradotto
-        $this->addBehavior('Translate', ['fields' => ['description', 'long_description','options']]);
+        // allowEmptyTranslations=false: an empty-content en/fr i18n row must NOT
+        // shadow the canonical base column on read (EavStrategy adds a
+        // `content != ''` condition to the translation join when this is false,
+        // so an empty translation simply doesn't join instead of overriding with
+        // ""). Fixes map-question `long_description.mapqs` disappearing under
+        // Accept-Language: fr/en — see CLAUDE.md "Part 15" for the full story.
+        $this->addBehavior('Translate', [
+            'fields' => ['description', 'long_description', 'options'],
+            'allowEmptyTranslations' => false,
+        ]);
 
         $this->hasMany('Answers', [
             'foreignKey' => 'question_id',
         ]);
-        $this->belongsTo('Sections');
+        // Sections are no longer a separate model: a section is a display-only
+        // Question of type='section', ordered inline by questions_surveys.weight.
+        // The old belongsTo('Sections') association has been removed.
 
         //https://book.cakephp.org/4/en/orm/associations.html#using-the-through-option
         $this->belongsToMany('Surveys', [
@@ -275,17 +286,16 @@ class QuestionsTable extends Table
         $results = $connection->execute('SELECT question_id as id FROM questions_surveys WHERE survey_id = :survey_id', [
             'survey_id' => $survey_id,
         ])->fetchAll('assoc');
-        $conditions = ['name IS NOT' => null];
+        $conditions = ['Questions.name IS NOT' => null];
         $special = array_merge(Configure::read('Questions_spos'), Configure::read('Questions'));
-        if (!empty($results)) {
-            $conditions['id NOT IN'] = array_merge(array_map(function ($row) {
-                return $row['id'];
-            }, $results), $special);
-        }
+
+        $conditions['Questions.id NOT IN'] = array_merge(array_map(function ($row) {
+            return $row['id'];
+        }, $results), $special);
 
         return $this->find('translations')->where($conditions)->contain([
             'QuestionsSurveys' => function ($query) use ($survey_id) {
-                return $query->find('translations')->where(['survey_id' => $survey_id]);
+                return $query->find('translations')->where(['QuestionsSurveys.survey_id' => $survey_id]);
             },
         ])->limit(1000)->toArray();
     }
@@ -296,18 +306,18 @@ class QuestionsTable extends Table
         $results = $connection->execute('SELECT question_id as id FROM questions_surveys WHERE survey_id = :survey_id', [
             'survey_id' => $survey_id,
         ])->fetchAll('assoc');
-        $conditions = ['name IS NOT' => null];
+        $conditions = ['Questions.name IS NOT' => null];
         // $special= array_merge(Configure::read("Questions_spos"),Configure::read("Questions"));
         if (!empty($results)) {
-            $conditions['id NOT IN'] = array_merge(array_map(function ($row) {
+            $conditions['Questions.id NOT IN'] = array_merge(array_map(function ($row) {
                 return $row['id'];
             }, $results));
         }
-        $conditions['id IN'] = Configure::read('Questions');
+        $conditions['Questions.id IN'] = Configure::read('Questions');
 
         return $this->find('translations')->where($conditions)->contain([
             'QuestionsSurveys' => function ($query) use ($survey_id) {
-                return $query->find('translations')->where(['survey_id' => $survey_id]);
+                return $query->find('translations')->where(['QuestionsSurveys.survey_id' => $survey_id]);
             },
         ])->toArray();
     }
@@ -336,12 +346,37 @@ class QuestionsTable extends Table
 
         return !empty($results);
     }
+
     // change state moma_area field
+
     public function changeState($id, $state)
     {
         $question = $this->get($id);
         $question->moma_area = $state;
         $this->save($question);
+
         return $question;
+    }
+
+    // Restituisce le domande di tipo mappa per un questionario
+    public function getMapQuestions($survey_id)
+    {
+        //TODO: Rendere parametrico questo valore
+        $map_types = ['map','map-gal'];
+
+        $query = $this->QuestionsSurveys->find()
+                ->where(['survey_id' => $survey_id]);
+
+        $query->matching('Questions', function ($q) use ($map_types) {
+                return $q->where(['type IN' => $map_types]);
+        });
+
+        $res = $query->select([
+            'id' => 'Questions.id',
+            'name' => 'Questions.name',
+            'description' => 'Questions.description',
+            ]);
+
+        return $res;
     }
 }

@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 //<editor-fold desc="Preamble">
@@ -23,11 +22,12 @@ use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
-use Exception;
+use Cake\ORM\TableRegistry;
 
 class GeocodeOriginsCommand extends Command
 {
     // HTTP_HOST=api.5t.drupalvm.test bin/cake geocode_origins 99999 --redo=1  --survey=1
+
     protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
         $parser
@@ -41,6 +41,7 @@ class GeocodeOriginsCommand extends Command
             ->addOption('survey', [
                 'help' => 'se survey=1 vengono ri-geocodificati solo i risultati del questionario',
             ]);
+
         return $parser;
     }
 
@@ -50,8 +51,8 @@ class GeocodeOriginsCommand extends Command
         $redo = $args->getOption('redo');
         $survey_id = (int)$args->getOption('survey');
 
-        $this->loadModel('Companies');
-        $this->loadModel('Origins');
+        $this->Companies = TableRegistry::getTableLocator()->get('Companies');
+        $this->Origins = TableRegistry::getTableLocator()->get('Origins');
 
         //Se hai passato -1 ricordifico tutte le aziende
 
@@ -70,7 +71,7 @@ class GeocodeOriginsCommand extends Command
             }
 
             //$originIds = [205113] ;
-            foreach ($originIds as $originId) {                
+            foreach ($originIds as $originId) {
                 $io->out("Geocoding origin # $originId");
                 $this->Origins->geocode($originId);
                 $io->out("Update distance for # $originId");

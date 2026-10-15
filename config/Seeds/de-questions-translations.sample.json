@@ -1,0 +1,23 @@
+{
+  "_comment": "Sample input file for ImportQuestionsTranslationsCommand. Usage: ./bin/cake import_questions_translations /path/to/file.json [--locale de] [--dry-run] [--verbose]. CRITICAL: The 'options' field must be in the EXACT FORMAT stored in the base column for that row (pipe-delimited string for legacy questions, or JSON string/array — do NOT reformat). Only fields present in the input are written; omitted fields are untouched. Unknown IDs are skipped. Idempotent: re-running produces the same end state.",
+  "questions": {
+    "1": {
+      "description": "German description for question 1",
+      "long_description": "German long description for question 1",
+      "options": "option1|option2|option3"
+    },
+    "2": {
+      "description": "German description for question 2"
+    }
+  },
+  "questions_surveys": {
+    "10": {
+      "description": "German description for questions_surveys 10",
+      "long_description": "German long description for questions_surveys 10",
+      "options": "{\"0\":\"option1\",\"1\":\"option2\"}"
+    },
+    "20": {
+      "description": "German description for questions_surveys 20"
+    }
+  }
+}

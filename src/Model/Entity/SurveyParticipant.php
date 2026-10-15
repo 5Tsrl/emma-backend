@@ -14,11 +14,11 @@
  * @license   https://eupl.eu/1.2/it/ EUPL-1.2 license
  */
 //</editor-fold>
-
 declare(strict_types=1);
 
 namespace App\Model\Entity;
 
+use App\Model\Table\SurveyDeliveryConfigsTable;
 use App\Notification\surveyNotification;
 use Cake\Log\Log;
 use Cake\ORM\Entity;
@@ -60,6 +60,13 @@ class SurveyParticipant extends Entity
                 throw new Exception('Participant has no user');
             }
 
+            // Senza configurazione di invio non si puo' costruire la notifica (surveyNotification la dereferenzia):
+            // l'errore va registrato sul partecipante, non esplodere come PHP Error.
+            $deliveryConfig = $survey->survey_delivery_config ?? null;
+            if (empty($deliveryConfig)) {
+                throw new Exception('no delivery config');
+            }
+
             //Devo controllare che la mail sia valida e che non sia un segnaposto creato durante
             //l'importazione
             $email = trim($this->user['email']);
@@ -69,12 +76,14 @@ class SurveyParticipant extends Entity
                     $this->toArray(),
                     $type == 'invitation'
                 );
-                $n->setFrom($survey->survey_delivery_config->sender_email, $survey->survey_delivery_config->sender_name);
-                if (empty($survey->survey_delivery_config->mailer_config)) {
-                    $survey->survey_delivery_config->mailer_config = 'default';
+                // Mittente forzato a runtime (es. Brescia): vale anche per dati già salvati prima del forzamento
+                $senderEmail = SurveyDeliveryConfigsTable::effectiveSenderEmail($deliveryConfig->sender_email ?? null);
+                $n->setFrom($senderEmail, $deliveryConfig->sender_name ?? null);
+                if (empty($deliveryConfig->mailer_config)) {
+                    $deliveryConfig->mailer_config = 'default';
                 }
                 Log::write('debug', "Pronto all'invio di $email");
-                $res = $n->toEmailQueue($survey->survey_delivery_config->mailer_config);
+                $res = $n->toEmailQueue($deliveryConfig->mailer_config);
                 Log::write('debug', "Accodata l' $email");
                 if ($type == 'reminder') {
                     $participantData["first_{$type}_delivered_at"] = date('Y-m-d H:i:s');

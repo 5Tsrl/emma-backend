@@ -18,6 +18,7 @@ declare(strict_types=1);
 //</editor-fold>
 namespace App\Geocoder;
 
+use App\Model\Entity\Origin;
 use Cake\Cache\Cache;
 use Cake\Http\Client;
 use Cake\Log\Log;
@@ -35,8 +36,11 @@ class peliasGeocoder extends Geocoder
         }
     }
 
-    public function geocode($origin, $focusLat = null, $focusLon = null)
+    public function geocodeNoHash($origin, $focusLat = null, $focusLon = null): array|false
     {
+        if ($origin instanceof Origin) {
+            $origin = $origin->toArray();
+        }
         try {
             $coords = $this->peliasGeoCode($origin, $focusLat, $focusLon);
             if (isset($coords['lat']) && isset($coords['lon'])) {
@@ -59,7 +63,7 @@ class peliasGeocoder extends Geocoder
         }
     }
 
-    private function peliasGeoCode($origin, $focusLat = null, $focusLon = null, $structured = true)
+    private function peliasGeoCode($origin, $focusLat = null, $focusLon = null, $structured = true): array|false
     {
         $http = new Client();
         $q_st = [

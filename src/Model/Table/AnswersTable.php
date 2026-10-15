@@ -21,7 +21,10 @@ namespace App\Model\Table;
 
 use App\Model\Entity\Answer;
 use App\Model\Entity\Question;
+use Cake\Cache\Cache;
 use Cake\Database\Schema\TableSchemaInterface;
+use Cake\Datasource\EntityInterface;
+use Cake\Event\EventInterface;
 use Cake\Log\Log;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -67,26 +70,26 @@ class AnswersTable extends Table
         $this->addBehavior('Timestamp');
 
         $this->belongsTo('Questions', [
-        'foreignKey' => 'question_id',
-        'className' => 'Questions',
+            'foreignKey' => 'question_id',
+            'className' => 'Questions',
         ]);
         $this->belongsTo('Surveys', [
-        'foreignKey' => 'survey_id',
-        'className' => 'Surveys',
+            'foreignKey' => 'survey_id',
+            'className' => 'Surveys',
         ]);
         $this->belongsTo('Users', [
-        'foreignKey' => 'user_id',
-        'className' => 'Users',
+            'foreignKey' => 'user_id',
+            'className' => 'Users',
         ]);
         //TODO: Devo creare un'associazione tra Answers e Origins
         //left join origins o on (o.survey_id = a.survey_id and o.user_id = a.user_id)
         $this->belongsTo('Origins', [
-        'foreignKey' => false,
-        'className' => 'Origins',
-        'conditions' => [
-        'Answers.user_id = Origins.user_id',
-        'Answers.survey_id = Origins.survey_id',
-        ],
+            'foreignKey' => false,
+            'className' => 'Origins',
+            'conditions' => [
+                'Answers.user_id = Origins.user_id',
+                'Answers.survey_id = Origins.survey_id',
+            ],
         ]);
     }
 
@@ -108,8 +111,8 @@ class AnswersTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-        ->integer('id')
-        ->allowEmptyString('id', null, 'create');
+            ->integer('id')
+            ->allowEmptyString('id', null, 'create');
 
         return $validator;
     }
@@ -127,6 +130,16 @@ class AnswersTable extends Table
         $rules->add($rules->existsIn(['survey_id'], 'Surveys'));
 
         return $rules;
+    }
+
+    public function afterSaveCommit(EventInterface $event, EntityInterface $entity, \ArrayObject $options): void
+    {
+        Cache::clearGroup('dashboard');
+    }
+
+    public function afterDeleteCommit(EventInterface $event, EntityInterface $entity, \ArrayObject $options): void
+    {
+        Cache::clearGroup('dashboard');
     }
 
     private function normalizeQ($q)
@@ -154,9 +167,9 @@ class AnswersTable extends Table
                 $last_q = $q;
                 //Cerco  nel db la domanda solo se è diversa
                 $qEntity = $this->Questions
-                ->findByName($q)
-                ->cache("question-$q")
-                ->first();
+                    ->findByName($q)
+                    ->cache("question-$q")
+                    ->first();
             }
 
             if (!empty($qEntity)) {
@@ -166,27 +179,27 @@ class AnswersTable extends Table
                 switch ($qType) {
                     case 'multiple':
                         if (!empty($answers[$ai[$i]])) {
-                    //Estraggo l'opzione dalla domanda, per comporre la risposta come opzione => risposta
-                    //Es: 'Vieni in auto' => sì
+                            //Estraggo l'opzione dalla domanda, per comporre la risposta come opzione => risposta
+                            //Es: 'Vieni in auto' => sì
                             $o = $this->Questions->splitQuestionOption($q_descr[$ai[$i]])['option'];
-                    //Se la risposta ha opzione vuota assegno 0 come chiave
+                            //Se la risposta ha opzione vuota assegno 0 come chiave
                             if (empty($o)) {
-                                      $o = '0';
+                                $o = '0';
                             }
-                    //Ricarico la risposta precedente
-                    //Estraggo l'opzione dalla descrizione della domanda corrente
-                    //Cerco l'opzione tra le opzioni della domanda corrente
-                    //Segno come risposta: Opzione: valore
-                    //TODO: eventualmente risolvere come una molti-molti
+                            //Ricarico la risposta precedente
+                            //Estraggo l'opzione dalla descrizione della domanda corrente
+                            //Cerco l'opzione tra le opzioni della domanda corrente
+                            //Segno come risposta: Opzione: valore
+                            //TODO: eventualmente risolvere come una molti-molti
                             if ($i == 0 || $q != $this->normalizeQ($questions[$ai[$i - 1]])) {
-                                  //E la prima risposta di una domanda multipla
-                                  $existingAnswer = [];
-                                  unset($aEntity);
-                                  $aEntity = new Answer([
-                                'question_id' => $qid,
-                                'user_id' => sprintf('%02d:%04d', $survey_id, $user_id),
-                                'survey_id' => $survey_id,
-                                      ]);
+                                //E la prima risposta di una domanda multipla
+                                $existingAnswer = [];
+                                unset($aEntity);
+                                $aEntity = new Answer([
+                                    'question_id' => $qid,
+                                    'user_id' => sprintf('%02d:%04d', $survey_id, $user_id),
+                                    'survey_id' => $survey_id,
+                                ]);
                             }
 
                             $existingAnswer[$o] = $answers[$ai[$i]];
@@ -195,12 +208,12 @@ class AnswersTable extends Table
                         break;
                     default:
                         unset($aEntity);
-                      //Preparo l'entity con la risposta
+                        //Preparo l'entity con la risposta
                         $aEntity = new Answer([
-                        'question_id' => $qid,
-                        'user_id' => sprintf('%02d:%04d', $survey_id, $user_id),
-                        'survey_id' => $survey_id,
-                        'answer' => $answers[$ai[$i]],
+                            'question_id' => $qid,
+                            'user_id' => sprintf('%02d:%04d', $survey_id, $user_id),
+                            'survey_id' => $survey_id,
+                            'answer' => $answers[$ai[$i]],
                         ]);
                 }
                 //Salvo e ciclo su tutte le colonne con le risposte di questo utente
@@ -212,9 +225,4 @@ class AnswersTable extends Table
             }
         }
     }
-
-    /* public function findComplete(Query $query, array $options)
-    {
-      $query
-    } */
 }

@@ -45,12 +45,15 @@ class FooterCell extends Cell
     /**
      * Default display method.
      *
+     * @param mixed $id The survey ID or null.
+     * @param string $footerLogoCid The footer logo CID or null.
      * @return void
      */
-    public function display($id)
+    public function display($id = null, $footerLogoCid = null)
     {
         if (empty($id)) {
             $this->set('footer', null);
+            $this->set('footerLogoCid', $footerLogoCid);
 
             return;
         }
@@ -63,5 +66,6 @@ class FooterCell extends Cell
         } else {
             $this->set('footer', null);
         }
+        $this->set('footerLogoCid', $footerLogoCid);
     }
 }

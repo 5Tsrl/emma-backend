@@ -165,14 +165,16 @@ class SurveyParticipantsTable extends Table
           [
             'username' => $participant['email'],
           ],
-          ['email' => $participant['email']],
+          // email è cifrato a riposo (SecretField deterministico): cifro il
+          // termine di ricerca per fare il match ciphertext-vs-ciphertext.
+          ['email' => $this->Users->emailSearchValue($participant['email'])],
         ],
         ])->first();
 
         $this->Surveys = TableRegistry::get('Surveys');
         $survey = $this->Surveys
         ->find()
-        ->where(['id' => $survey_id])
+        ->where(['Surveys.id' => $survey_id])
         ->first();
         if (empty($survey)) {
             throw new NotFoundException("Survey $survey not found");
@@ -195,11 +197,23 @@ class SurveyParticipantsTable extends Table
             'company_id' => $survey['company_id'],
             // years è un campo json che contiene gli anni in cui l'utente ha partecipato alle survey
             'years' => [(string)$survey['year']],
+            ], [
+                // Flusso fidato: l'entity blocca questi campi al mass-assignment lato UI.
+                'accessibleFields' => [
+                    'id' => true,
+                    'role' => true,
+                    'company_id' => true,
+                    'password' => true,
+                ],
             ]);
 
             if (!$this->Users->save($user)) {
                 Log::write('debug', "Errore salvataggio utente {$participant["email"]}");
-                throw new \Exception('Errore salvataggio utente');
+                $errors = $user->getErrors();
+                $flatErrors = $this->flattenErrors($errors);
+                $msg = "{$participant['email']} ERRORE durante la creazione: " . (empty($flatErrors) ? 'Errore di validazione' : implode('; ', $flatErrors));
+
+                throw new \Exception($msg);
             }
             Log::write('debug', "Utente Mancante, creato {$participant['email']} - {$user->id}");
         }
@@ -283,7 +297,7 @@ class SurveyParticipantsTable extends Table
         $this->Surveys = $this->getTableLocator()->get('Surveys');
         $survey = $this->Surveys
         ->find()
-        ->where(['id' => $survey_id])
+        ->where(['Surveys.id' => $survey_id])
         ->first();
         if (empty($survey)) {
             throw new NotFoundException("Survey $survey not found");
@@ -317,6 +331,14 @@ class SurveyParticipantsTable extends Table
             'role' => 'user',
             'company_id' => $company_id,
             'years' => [(string)$survey['year']],
+            ], [
+                // Flusso fidato: l'entity blocca questi campi al mass-assignment lato UI.
+                'accessibleFields' => [
+                    'id' => true,
+                    'role' => true,
+                    'company_id' => true,
+                    'password' => true,
+                ],
             ]);
             $users[] = $user;
         }
@@ -333,5 +355,62 @@ class SurveyParticipantsTable extends Table
         $w = hash('crc32', serialize($where));
         $w = "count-$survey_id-$w";
         $count = Cache::delete($w, 'hour');
+    }
+
+    public function countAllByOffice($survey_id, $office_id, $where = [])
+    {
+        $w = hash('crc32', serialize($where) . $office_id);
+        $w = "count-office-$survey_id-$w";
+        $count = Cache::read($w, 'hour');
+        if (empty($count)) {
+            $count = $this->getAllByOffice($survey_id, $office_id, $where)->count();
+            Cache::write($w, $count, 'hour');
+        }
+
+        return $count;
+    }
+
+    public function getAllByOffice($survey_id, $office_id, $where = [])
+    {
+        if ($where == null) {
+            $where = [];
+        }
+        $where['survey_id'] = $survey_id;
+
+        return $this->find()
+            ->where($where)
+            ->matching('Users', function ($q) use ($office_id) {
+                return $q->where(['Users.office_id' => $office_id]);
+            })
+            ->contain('Users');
+    }
+
+    /**
+     * Flatten CakePHP validation errors into readable strings
+     *
+     * @param array $errors
+     * @return array<string>
+     */
+    private function flattenErrors(array $errors): array
+    {
+        $out = [];
+        $walker = function ($val, $key) use (&$out) {
+            if (is_array($val)) {
+                foreach ($val as $rule => $msg) {
+                    if (is_string($msg)) {
+                        $out[] = "$key: $msg";
+                    } elseif (is_array($msg)) {
+                        foreach ($msg as $m) {
+                            if (is_string($m)) {
+                                $out[] = "$key: $m";
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        array_walk($errors, $walker);
+
+        return array_values(array_unique($out));
     }
 }

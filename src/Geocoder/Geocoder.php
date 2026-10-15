@@ -18,133 +18,38 @@ declare(strict_types=1);
 //</editor-fold>
 namespace App\Geocoder;
 
+use App\Model\Entity\Origin;
 use Cake\Core\Configure;
+use Sk\Geohash\Geohash;
 
 //Classe base da cui ereditano i vari geocoder
-class Geocoder
+abstract class Geocoder
 {
-    protected $url;
+    protected string|null $url;
 
-    protected $province = [
-        'AG' => 'Agrigento',
-        'AL' => 'Alessandria',
-        'AN' => 'Ancona',
-        'AO' => 'Aosta',
-        'AR' => 'Arezzo',
-        'AP' => 'Ascoli Piceno',
-        'AT' => 'Asti',
-        'AV' => 'Avellino',
-        'BA' => 'Bari',
-        'BT' => 'Barletta-Andria-Trani',
-        'BL' => 'Belluno',
-        'BN' => 'Benevento',
-        'BG' => 'Bergamo',
-        'BI' => 'Biella',
-        'BO' => 'Bologna',
-        'BZ' => 'Bolzano',
-        'BS' => 'Brescia',
-        'BR' => 'Brindisi',
-        'CA' => 'Cagliari',
-        'CL' => 'Caltanissetta',
-        'CB' => 'Campobasso',
-        'CE' => 'Caserta',
-        'CT' => 'Catania',
-        'CZ' => 'Catanzaro',
-        'CH' => 'Chieti',
-        'CO' => 'Como',
-        'CS' => 'Cosenza',
-        'CR' => 'Cremona',
-        'KR' => 'Crotone',
-        'CN' => 'Cuneo',
-        'EN' => 'Enna',
-        'FM' => 'Fermo',
-        'FE' => 'Ferrara',
-        'FI' => 'Firenze',
-        'FG' => 'Foggia',
-        'FC' => 'Forlì-Cesena',
-        'FR' => 'Frosinone',
-        'GE' => 'Genova',
-        'GO' => 'Gorizia',
-        'GR' => 'Grosseto',
-        'IM' => 'Imperia',
-        'IS' => 'Isernia',
-        'SP' => 'La Spezia',
-        'AQ' => 'L\'Aquila',
-        'LT' => 'Latina',
-        'LE' => 'Lecce',
-        'LC' => 'Lecco',
-        'LI' => 'Livorno',
-        'LO' => 'Lodi',
-        'LU' => 'Lucca',
-        'MC' => 'Macerata',
-        'MN' => 'Mantova',
-        'MS' => 'Massa-Carrara',
-        'MT' => 'Matera',
-        'ME' => 'Messina',
-        'MI' => 'Milano',
-        'MO' => 'Modena',
-        'MB' => 'Monza e della Brianza',
-        'NA' => 'Napoli',
-        'NO' => 'Novara',
-        'NU' => 'Nuoro',
-        'OR' => 'Oristano',
-        'PD' => 'Padova',
-        'PA' => 'Palermo',
-        'PR' => 'Parma',
-        'PV' => 'Pavia',
-        'PG' => 'Perugia',
-        'PU' => 'Pesaro e Urbino',
-        'PE' => 'Pescara',
-        'PC' => 'Piacenza',
-        'PI' => 'Pisa',
-        'PT' => 'Pistoia',
-        'PN' => 'Pordenone',
-        'PZ' => 'Potenza',
-        'PO' => 'Prato',
-        'RG' => 'Ragusa',
-        'RA' => 'Ravenna',
-        'RC' => 'Reggio Calabria',
-        'RE' => 'Reggio Emilia',
-        'RI' => 'Rieti',
-        'RN' => 'Rimini',
-        'RM' => 'Roma',
-        'RO' => 'Rovigo',
-        'SA' => 'Salerno',
-        'SS' => 'Sassari',
-        'SV' => 'Savona',
-        'SI' => 'Siena',
-        'SR' => 'Siracusa',
-        'SO' => 'Sondrio',
-        'SU' => 'Sud Sardegna',
-        'TA' => 'Taranto',
-        'TE' => 'Teramo',
-        'TR' => 'Terni',
-        'TO' => 'Torino',
-        'TP' => 'Trapani',
-        'TN' => 'Trento',
-        'TV' => 'Treviso',
-        'TS' => 'Trieste',
-        'UD' => 'Udine',
-        'VA' => 'Varese',
-        'VE' => 'Venezia',
-        'VB' => 'Verbano-Cusio-Ossola',
-        'VC' => 'Vercelli',
-        'VR' => 'Verona',
-        'VV' => 'Vibo Valentia',
-        'VI' => 'Vicenza',
-        'VT' => 'Viterbo',
-    ];
+    protected array $province = [];
 
     public function __construct()
     {
         $this->url = Configure::read('Geocoding.Url');
+        require __DIR__ . '/province.php';
+        $this->province = $province;
     }
 
-    public function geocode($origin, $focusLat = null, $focusLon = null)
+    abstract public function geocodeNoHash(Origin $origin, $focusLat = null, $focusLon = null): array|false;
+
+    public function geocode(Origin $origin, $focusLat = null, $focusLon = null): array | false
     {
+        $coords = $this->geocodeNoHash($origin, $focusLat, $focusLon);
+        if ($coords !== false) {
+            $h = new Geohash();
+            $coords['geohash'] = $h->encode($coords['lat'], $coords['lon'], Configure::read('Geohash.precision', 7));
+        }
+
+        return $coords;
     }
 
-    protected function throttler($requestsInSeconds, $throttlerID)
+    protected function throttler(int $requestsInSeconds, int $throttlerID)
     {
 
         // Use FLOCK() to create a system global lock (it's crash-safe:))

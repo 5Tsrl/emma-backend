@@ -31,6 +31,19 @@ foreach ($origins as $data) {
         $columns = $data->getVisible();
     }
 
+    $lat = $data['lat'] ?? null;
+    $lon = $data['lon'] ?? null;
+    if ((!is_numeric($lat) || !is_numeric($lon)) && !empty($data['geohash'])) {
+        $decoded = \App\Geocoder\GeohashHelper::decode((string)$data['geohash']);
+        if ($decoded !== null) {
+            $lat = $decoded['lat'];
+            $lon = $decoded['lon'];
+        }
+    }
+    if (!is_numeric($lat) || !is_numeric($lon)) {
+        continue;
+    }
+
     # Remove kml and geometry fields from data
     $kml[] = '<Placemark id="placemark' . $data['gid'] . '">';
     $kml[] = '<name>' . htmlentities($data['gid']) . '</name>';
@@ -47,7 +60,7 @@ foreach ($origins as $data) {
 
     $kml[] = '<styleUrl>#generic</styleUrl>';
     $kml[] = '<Point>';
-    $kml[] = "<coordinates>{$data['lon']},{$data['lat']}</coordinates>";
+    $kml[] = "<coordinates>{$lon},{$lat}</coordinates>";
     $kml[] = '</Point>';
     $kml[] = '</Placemark>';
 }

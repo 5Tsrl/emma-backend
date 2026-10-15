@@ -1,4 +1,4 @@
--- database Mobility48 
+-- database (brand) 
 UPDATE answers
 SET answer = TRIM(BOTH '"' FROM REPLACE(answer, '\\', ''))
 WHERE `question_id` = 302

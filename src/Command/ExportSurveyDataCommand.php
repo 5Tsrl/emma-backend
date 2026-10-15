@@ -7,6 +7,7 @@ use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
+use Cake\ORM\TableRegistry;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -83,22 +84,40 @@ class ExportSurveyDataCommand extends Command
             $log = "ExportSurveyDataCommand started\n";
             // set_time_limit(180);
             $this->Answers = $this->fetchTable();
-            $log=$log."Answers fetched\n";
-            $questions_id = array_map('intval', explode(',', $args->getOption('questions_id')));
-            $survey_id = array_map('intval', explode(',', $args->getOption('survey_id')));
-            // $all = (bool)$args->getOption('all');
-            $all = filter_var($args->getOption('all'), FILTER_VALIDATE_BOOLEAN);
-            $office_id = (int)$args->getOption('office_id');
-            $company_id = (int)$args->getOption('company_id');
-            $subcompany = (int)$args->getOption('subcompany');
-            // $allAnswers = (bool)$args->getOption('allAnswers');
-            $allAnswers = filter_var($args->getOption('allAnswers'), FILTER_VALIDATE_BOOLEAN);
+            $log = $log . "Answers fetched\n";
+            $argv = array_values($args->getArguments());
+
+            if (!empty($argv)) {
+                $allRaw = $argv[0] ?? null;
+                $allAnswersRaw = $argv[1] ?? null;
+                $surveyIdRaw = $argv[2] ?? null;
+                $questionsIdRaw = $argv[3] ?? null;
+                $companyIdRaw = $argv[4] ?? null;
+                $officeIdRaw = $argv[5] ?? null;
+                $subcompanyRaw = $argv[6] ?? null;
+            } else {
+                $allRaw = $args->getOption('all');
+                $allAnswersRaw = $args->getOption('allAnswers');
+                $surveyIdRaw = $args->getOption('survey_id');
+                $questionsIdRaw = $args->getOption('questions_id');
+                $companyIdRaw = $args->getOption('company_id');
+                $officeIdRaw = $args->getOption('office_id');
+                $subcompanyRaw = $args->getOption('subcompany');
+            }
+
+            $questions_id = $this->parseIntListOption($questionsIdRaw);
+            $survey_id = $this->parseIntListOption($surveyIdRaw);
+            $all = filter_var((string)$allRaw, FILTER_VALIDATE_BOOLEAN);
+            $office_id = $this->parseNullableInt($officeIdRaw);
+            $company_id = $this->parseNullableInt($companyIdRaw);
+            $subcompany = $this->parseNullableInt($subcompanyRaw);
+            $allAnswers = filter_var((string)$allAnswersRaw, FILTER_VALIDATE_BOOLEAN);
 
             $spreadsheet = new Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();
             $sheet->getColumnDimension('A')->setWidth(38);
             $sheet->getColumnDimension('B')->setWidth(20);
-            $log=$log."spreadsheet created\n";
+            $log = $log . "spreadsheet created\n";
             $users = $this->Answers->find()
                 ->select(['Answers.user_id','Answers.survey_id'])
                 ->contain(['Surveys', 'Questions'])
@@ -106,7 +125,7 @@ class ExportSurveyDataCommand extends Command
                 //->limit(100)
                 ->distinct()
                 ->order(['survey_id']);
-            $log=$log."users fetched \n";
+            $log = $log . "users fetched \n";
             //Filtro solo per gli utenti che hanno i miei attributi
             if ($office_id) {
                 $users->matching('Users', function ($q) use ($office_id) {
@@ -124,146 +143,161 @@ class ExportSurveyDataCommand extends Command
                 });
             }
 
-            $this->loadModel('Questions_surveys');
-            $this->loadModel('Sections');
+            $this->Questions_surveys = TableRegistry::getTableLocator()->get('Questions_surveys');
 
-            $sections_weight = $this->Sections->find()
-                ->select(['id', 'weight'])
-                ->toList();
+            // Sections are no longer a separate model: question ordering is driven
+            // purely by QuestionsSurveys.weight (NULL coerced to 0), then question id.
+            // type='section' rows are display-only headers and must NOT become columns.
             if ($all) {
                 $questions_used = $this->getExportQuestions($survey_id, $all);
             } else {
-                $questions_in_survey = $this->Questions_surveys->find()
-                ->select(['question_id', 'weight', 'section_id', 'options'])
-                ->where(['survey_id IN' => $survey_id, 'question_id IN' => $questions_id])
-                ->distinct()
-                ->toList();
-
                 $questions_used = $this->Answers->Questions->QuestionsSurveys->find()
-                    ->select(['Questions.section_id', 'Questions.id', 'Questions.name', 'Questions.description', 'Questions.type'
-                    ,'QuestionsSurveys.weight','QuestionsSurveys.options','QuestionsSurveys.section_id'])
+                    ->select(['Questions.id', 'Questions.name', 'Questions.description', 'Questions.type'
+                    ,'QuestionsSurveys.weight','QuestionsSurveys.options'])
                     ->contain(['Questions'])
                     ->where(['QuestionsSurveys.survey_id IN' => $survey_id, 'QuestionsSurveys.question_id IN' => $questions_id])
                     ->distinct()
                     ->toList();
-
-                // $questions_used = $this->questions_used_in_survey($questions, $questions_in_survey);
             }
 
             $questions_name = [];
             $questions_description = [];
             $questions_options = ['id', 'Completato','Survey'];
 
-            usort($sections_weight, function ($a, $b) {
-                return $a->weight - $b->weight;
+            // Order all the used questions by weight (NULL -> 0), then by question id,
+            // so the spreadsheet columns keep the canonical questionnaire order.
+            usort($questions_used, function ($a, $b) {
+                $wa = $a->weight ?? 0;
+                $wb = $b->weight ?? 0;
+                if ($wa !== $wb) {
+                    return $wa <=> $wb;
+                }
+
+                return ($a->question->id ?? 0) <=> ($b->question->id ?? 0);
             });
 
-            $sections = $sections_weight;
-
-            foreach ($sections as $section) {
-                $section_questions = array_filter($questions_used, function ($question) use ($section) {
-                    return $question->section_id === $section->id;
-                });
-
-                if (empty($section_questions)) {
+            $flag_for_array_questions = 0;
+            foreach ($questions_used as $question) {
+                // Skip display-only section headers: they must not become columns.
+                if (isset($question->question->type) && strtolower((string)$question->question->type) === 'section') {
                     continue;
                 }
 
-                usort($section_questions, function ($a, $b) {
-                    return $a->weight - $b->weight;
-                });
-
-                $flag_for_array_questions = 0;
-                foreach ($section_questions as $question) {
-                    if (
+                if (
                         strtolower($question->question->type) != 'multiple' &&
                             strtolower($question->question->type) != 'array' &&
-                            strtolower($question->question->type) != 'map'
-                    ) {
+                            strtolower($question->question->type) != 'map' &&
+                            strtolower($question->question->type) != 'map-gal' &&
+                            strtolower($question->question->type) != 'likert'
+                ) {
+                    array_push($questions_name, $question->question->name);
+                    array_push($questions_description, $question->question->description);
+                    array_push($questions_options, $question->question->name);
+                } elseif (strtolower($question->question->type) == 'map') { //Risposta mappa
+                    //TODO: Qui devo esplodere i titoli della mappa
+                    array_push($questions_name, $question->question->name);
+                    array_push($questions_description, 'o/d del dipendente');
+                    array_push($questions_options, 'citta');
+
+                    array_push($questions_name, $question->question->name);
+                    array_push($questions_description, 'o/d del dipendente');
+                    array_push($questions_options, 'cap');
+
+                    array_push($questions_name, $question->question->name);
+                    array_push($questions_description, 'o/d del dipendente');
+                    array_push($questions_options, 'provincia');
+
+                    array_push($questions_name, $question->question->name);
+                    array_push($questions_description, 'o/d del dipendente');
+                    array_push($questions_options, 'geohash-origine');
+
+                    array_push($questions_name, $question->question->name);
+                    array_push($questions_description, 'o/d del dipendente');
+                    array_push($questions_options, 'sede');
+
+                    array_push($questions_name, $question->question->name);
+                    array_push($questions_description, 'o/d del dipendente');
+                    array_push($questions_options, 'lat-sede');
+
+                    array_push($questions_name, $question->question->name);
+                    array_push($questions_description, 'o/d del dipendente');
+                    array_push($questions_options, 'lon-sede');
+
+                    array_push($questions_name, $question->question->name);
+                    array_push($questions_description, 'o/d del dipendente');
+                    array_push($questions_options, 'subcompany');
+                } elseif (strtolower($question->question->type) == 'map-gal') { //Risposta map-gal
+                    array_push($questions_name, $question->question->name);
+                    array_push($questions_description, 'risposta map-gal');
+                    array_push($questions_options, 'address');
+
+                    array_push($questions_name, $question->question->name);
+                    array_push($questions_description, 'risposta map-gal');
+                    array_push($questions_options, 'geohash');
+                } elseif (strtolower($question->question->type) == 'likert') {
+                    $likertOptions = [];
+                    if (is_array($question->options)) {
+                        $likertOptions = $question->options;
+                    } elseif (isset($question->question->options) && is_array($question->question->options)) {
+                        $likertOptions = $question->question->options;
+                    }
+
+                    if (empty($likertOptions)) {
                         array_push($questions_name, $question->question->name);
                         array_push($questions_description, $question->question->description);
                         array_push($questions_options, $question->question->name);
-                    } elseif (strtolower($question->question->type) == 'map') { //Risposta mappa
-                        //TODO: Qui devo esplodere i titoli della mappa
-                        array_push($questions_name, $question->question->name);
-                        array_push($questions_description, 'o/d del dipendente');
-                        array_push($questions_options, 'citta');
+                        continue;
+                    }
+
+                    foreach ($likertOptions as $option) {
+                        $optionLabel = $this->normalizeLikertOption($option);
+                        if ($optionLabel === null) {
+                            continue;
+                        }
 
                         array_push($questions_name, $question->question->name);
-                        array_push($questions_description, 'o/d del dipendente');
-                        array_push($questions_options, 'cap');
-
-                        array_push($questions_name, $question->question->name);
-                        array_push($questions_description, 'o/d del dipendente');
-                        array_push($questions_options, 'provincia');
-
-                        array_push($questions_name, $question->question->name);
-                        array_push($questions_description, 'o/d del dipendente');
-                        array_push($questions_options, 'lat-origine');
-
-                        array_push($questions_name, $question->question->name);
-                        array_push($questions_description, 'o/d del dipendente');
-                        array_push($questions_options, 'lon-origine');
-
-                        array_push($questions_name, $question->question->name);
-                        array_push($questions_description, 'o/d del dipendente');
-                        array_push($questions_options, 'sede');
-
-                        array_push($questions_name, $question->question->name);
-                        array_push($questions_description, 'o/d del dipendente');
-                        array_push($questions_options, 'lat-sede');
-
-                        array_push($questions_name, $question->question->name);
-                        array_push($questions_description, 'o/d del dipendente');
-                        array_push($questions_options, 'lon-sede');
-
-                        array_push($questions_name, $question->question->name);
-                        array_push($questions_description, 'o/d del dipendente');
-                        array_push($questions_options, 'subcompany');
-                    } else { //Risposta multipla o array
-                        $flag_for_array_questions = 0;
-                        foreach ($question->options as $option) {
-                            if (is_array($option) && $question->question->type === 'array') {
-                                $flag_for_array_questions = 1;
-                                foreach ($option as $group_option) {
-                                    array_push($questions_name, $question->question->name);
-                                    array_push($questions_description, $question->question->description);
-                                    if (isset($group_option['label'])) {
-                                        array_push($questions_options, $group_option['label']);     //original
-                                    } else {
-                                        array_push($questions_options, $group_option);  // change
-                                    }
-                                }
+                        array_push($questions_description, $question->question->description);
+                        array_push($questions_options, $optionLabel);
+                    }
+                } else { //Risposta multipla o array
+                    $flag_for_array_questions = 0;
+                    foreach ($question->options as $option) {
+                        if (is_array($option) && $question->question->type === 'array') {
+                            $flag_for_array_questions = 1;
+                            foreach ($option as $group_option) {
                                 array_push($questions_name, $question->question->name);
                                 array_push($questions_description, $question->question->description);
-                                array_push($questions_options, 'Altro');
-                            } else { //risposta multipla
-                                if ($flag_for_array_questions == 1) {
-                                    $flag_for_array_questions = 0;
-                                    continue;
+                                if (isset($group_option['label'])) {
+                                    array_push($questions_options, $group_option['label']);     //original
+                                } else {
+                                    array_push($questions_options, $group_option);  // change
                                 }
-                                if (is_array($option)) {
-                                    $question_option_to_string = implode(', ', $option);
-                                    array_push($questions_name, $question->question->name);
-                                    array_push($questions_description, $question->question->description);
-                                    array_push($questions_options, $question_option_to_string);
-                                    continue;
-                                }
-                                //TODO: Verificare perchè in mezzi_motivo si disallineano name, description e options
-                                array_push($questions_name, $question->question->name);
-                                array_push($questions_description, $question->question->description);
-                                array_push($questions_options, $option);
                             }
+                            array_push($questions_name, $question->question->name);
+                            array_push($questions_description, $question->question->description);
+                            array_push($questions_options, 'Altro');
+                        } else { //risposta multipla
+                            if ($flag_for_array_questions == 1) {
+                                $flag_for_array_questions = 0;
+                                continue;
+                            }
+                            if (is_array($option)) {
+                                $question_option_to_string = implode(', ', $option);
+                                array_push($questions_name, $question->question->name);
+                                array_push($questions_description, $question->question->description);
+                                array_push($questions_options, $question_option_to_string);
+                                continue;
+                            }
+                            //TODO: Verificare perchè in mezzi_motivo si disallineano name, description e options
+                            array_push($questions_name, $question->question->name);
+                            array_push($questions_description, $question->question->description);
+                            array_push($questions_options, $option);
                         }
                     }
                 }
             }
 
-            $sheet->fromArray(
-                $questions_name,
-                null,
-                'D1'
-            );
+            $sheet->fromArray($questions_name, null, 'D1');
 
             $row = 3;
             $col = 'A';
@@ -300,9 +334,9 @@ class ExportSurveyDataCommand extends Command
             }
 
             $writer = new Xlsx($spreadsheet);
-            $log=$log.'writer created /n';
+            $log = $log . "writer created\n";
             $pr = $writer->save(TMP . 'out.xlsx');
-            $log=$log.'pr= '.$pr.'/n';
+            $log = $log . 'pr= ' . $pr . "\n";
             // if survey_id is array, then the name of the file is all_surveys.xlsx
             if (is_array($survey_id)) {
                 $survey_id = 'all_surveys';
@@ -317,13 +351,70 @@ class ExportSurveyDataCommand extends Command
             // );
 
             // return $response;
-            $io->createFile(LOGS.'errorexport.log', $log, true);
+            // Append (don't overwrite) so errorexport.log accumulates as a normal, rotatable log.
+            file_put_contents(LOGS . 'errorexport.log', date('Y-m-d H:i:s') . ' ' . $log . PHP_EOL, FILE_APPEND);
         } catch (\Exception $e) {
             $errorMsg = $e->getMessage();
             $this->log($errorMsg, 'error');
-            $log=$log.' '.$errorMsg;
-            $io->createFile(LOGS.'errorexport.log', $log, true);
+            $log = $log . ' ' . $errorMsg;
+            file_put_contents(LOGS . 'errorexport.log', date('Y-m-d H:i:s') . ' ' . $log . PHP_EOL, FILE_APPEND);
         }
+    }
+
+    private function firstNotNull(...$values)
+    {
+        foreach ($values as $value) {
+            if ($value !== null) {
+                return $value;
+            }
+        }
+
+        return null;
+    }
+
+    private function parseIntListOption($value): array
+    {
+        if ($value === null) {
+            return [];
+        }
+
+        if (is_array($value)) {
+            $list = $value;
+        } else {
+            $valueString = trim((string)$value);
+            if ($valueString === '' || strtolower($valueString) === 'null') {
+                return [];
+            }
+            $list = explode(',', $valueString);
+        }
+
+        $ints = [];
+        foreach ($list as $item) {
+            if (!is_scalar($item)) {
+                continue;
+            }
+            $itemString = trim((string)$item);
+            if ($itemString === '' || strtolower($itemString) === 'null') {
+                continue;
+            }
+            $ints[] = (int)$itemString;
+        }
+
+        return $ints;
+    }
+
+    private function parseNullableInt($value): ?int
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        $valueString = trim((string)$value);
+        if ($valueString === '' || strtolower($valueString) === 'null') {
+            return null;
+        }
+
+        return (int)$valueString;
     }
 
     /**
@@ -337,10 +428,10 @@ class ExportSurveyDataCommand extends Command
     {
         if ($survey_id == null) {
             // $survey_id = $this->request->getData();
-            $this->loadModel('Questions_surveys');
+            $this->Questions_surveys = TableRegistry::getTableLocator()->get('Questions_surveys');
         }
         $questions_in_survey = $this->Questions_surveys->find()
-                    ->select(['question_id', 'weight', 'section_id','options'])
+                    ->select(['question_id', 'weight', 'options'])
                     ->where(['survey_id IN' => $survey_id])
                     ->distinct();
         if (!$all) {
@@ -353,14 +444,10 @@ class ExportSurveyDataCommand extends Command
             // $this->viewBuilder()->setOption('serialize', ['questions']);
             // $this->render('export_questions');
         } else {
-            // $questions = $this->Answers->find()
-            // ->select(['Questions.section_id', 'Questions.id', 'Questions.name', 'Questions.description', 'Questions.type'])
-            // ->contain(['Surveys', 'Questions'])
-            // ->where(['survey_id IN' => $survey_id])
-            // ->distinct();
+            // Sections are gone: ordering is driven by QuestionsSurveys.weight only.
             $questions = $this->Answers->Questions->QuestionsSurveys->find()
-                    ->select(['Questions.section_id', 'Questions.id', 'Questions.name', 'Questions.description', 'Questions.type'
-                    ,'QuestionsSurveys.weight','QuestionsSurveys.options','QuestionsSurveys.section_id'])
+                    ->select(['Questions.id', 'Questions.name', 'Questions.description', 'Questions.type'
+                    ,'QuestionsSurveys.weight','QuestionsSurveys.options'])
                     ->contain(['Questions'])
                     ->where(['QuestionsSurveys.survey_id IN' => $survey_id])
                     ->distinct()
@@ -378,8 +465,6 @@ class ExportSurveyDataCommand extends Command
         foreach ($questions_in_survey as $question_weight) {
             foreach ($questions as $question) {
                 if ($question_weight->question_id == $question->question->id) {
-                    $question->question['section_id'] = $question_weight->section_id;
-
                     if ($question_weight->weight != null) {
                         $question->question['weight'] = $question_weight->weight;
                     } else {
@@ -394,16 +479,102 @@ class ExportSurveyDataCommand extends Command
         return $questions_used;
     }
 
+    private function normalizeLikertOption($option)
+    {
+        if (is_array($option)) {
+            if (isset($option['label']) && is_scalar($option['label'])) {
+                return (string)$option['label'];
+            }
+
+            return null;
+        }
+
+        if (is_scalar($option)) {
+            return (string)$option;
+        }
+
+        return null;
+    }
+
+    private function resolveLikertAnswerValue($value, array $options)
+    {
+        if (is_scalar($value) && is_numeric($value)) {
+            $idx = (int)$value;
+            if (array_key_exists($idx, $options)) {
+                return $this->normalizeLikertOption($options[$idx]);
+            }
+        }
+
+        if (!is_scalar($value)) {
+            return null;
+        }
+
+        $normalizedValue = trim(mb_strtolower((string)$value));
+        foreach ($options as $option) {
+            $optionLabel = $this->normalizeLikertOption($option);
+            if ($optionLabel === null) {
+                continue;
+            }
+
+            if (trim(mb_strtolower($optionLabel)) === $normalizedValue) {
+                return $optionLabel;
+            }
+        }
+
+        return null;
+    }
+
+    private function extractLikertOptions($question): array
+    {
+        if (isset($question->questions_surveys) && is_iterable($question->questions_surveys)) {
+            foreach ($question->questions_surveys as $questionSurvey) {
+                if (isset($questionSurvey->options) && is_array($questionSurvey->options) && !empty($questionSurvey->options)) {
+                    return $questionSurvey->options;
+                }
+            }
+        }
+
+        if (isset($question->options) && is_array($question->options)) {
+            return $question->options;
+        }
+
+        return [];
+    }
+
+    private function extractQuestionOptions($question): array
+    {
+        if (isset($question->questions_surveys) && is_iterable($question->questions_surveys)) {
+            foreach ($question->questions_surveys as $questionSurvey) {
+                if (isset($questionSurvey->options) && is_array($questionSurvey->options) && !empty($questionSurvey->options)) {
+                    return $questionSurvey->options;
+                }
+            }
+        }
+
+        if (isset($question->options) && is_array($question->options)) {
+            return $question->options;
+        }
+
+        return [];
+    }
+
     private function surveyDataHelper($survey_id, $questions_name, $questions_options, $user_id, $sheet, $current_row, $allAnswers)
     {
         try {
             $user_answers = $this->Answers->find()
-                ->select(['Answers.user_id', 'Answers.created', 'Answers.answer',
-                    'Questions.name', 'Questions.options', 'Questions.type',
+                ->select(['Answers.user_id', 'Answers.question_id', 'Answers.created', 'Answers.answer',
+                    'Questions.id', 'Questions.name', 'Questions.options', 'Questions.type',
                     'Users.email', 'Users.subcompany'])
                 ->contain([
                     'Questions' => [
-                        'fields' => ['name','type','options'],
+                        'fields' => ['id', 'name', 'type', 'options'],
+                        'QuestionsSurveys' => function ($q) use ($survey_id) {
+                            return $q
+                                ->select(['question_id', 'survey_id', 'options', 'hidden'])
+                                ->where([
+                                    'QuestionsSurveys.survey_id' => $survey_id,
+                                ]);
+                        },
                     ],
                     'Users' => [
                         'fields' => ['id','email','subcompany','role'],
@@ -415,6 +586,11 @@ class ExportSurveyDataCommand extends Command
                     'Answers.survey_id' => $survey_id,
                     'Answers.user_id' => $user_id,
                 ]);
+            $user_answers = $user_answers->matching('Questions.QuestionsSurveys', function ($q) use ($survey_id) {
+                return $q->where([
+                    'QuestionsSurveys.survey_id' => $survey_id,
+                ]);
+            });
                 // log the allAnswers value
                 // $this->log((string)$allAnswers, 'info');
             if (!$allAnswers) {
@@ -506,16 +682,12 @@ class ExportSurveyDataCommand extends Command
                             $question_column++;
                         }
 
-                        //Lat-origine
-                        if (isset($dec['origin']['lat'])) {
-                            $sheet->setCellValue([$question_column++, $current_row], $dec['origin']['lat']);
-                        } else {
-                            $question_column++;
-                        }
-
-                        //Lon-origine
-                        if (isset($dec['origin']['lon'])) {
-                            $sheet->setCellValue([$question_column++, $current_row], $dec['origin']['lon']);
+                        // Geohash-origine: the coarse origin cell now travels directly in the
+                        // answer payload (OriginPayloadHelper::stripOriginPii() injects
+                        // origin.geohash before stripping address/lat/lon) — no Origins lookup
+                        // needed anymore.
+                        if (isset($dec['origin']['geohash'])) {
+                            $sheet->setCellValue([$question_column++, $current_row], $dec['origin']['geohash']);
                         } else {
                             $question_column++;
                         }
@@ -553,6 +725,33 @@ class ExportSurveyDataCommand extends Command
                         } else {
                             $question_column++;
                         } */
+                        break;
+
+                    case 'map-gal':
+                        $dec = $answer->answer;
+                        if (!is_array($dec) && is_string($dec)) {
+                            $decoded = json_decode($dec, true);
+                            if (is_array($decoded)) {
+                                $dec = $decoded;
+                            }
+                        }
+
+                        if (!is_array($dec)) {
+                            $question_column += 2;
+                            break;
+                        }
+
+                        if (isset($dec['address'])) {
+                            $sheet->setCellValue([$question_column++, $current_row], $dec['address']);
+                        } else {
+                            $question_column++;
+                        }
+
+                        if (isset($dec['geohash'])) {
+                            $sheet->setCellValue([$question_column++, $current_row], $dec['geohash']);
+                        } else {
+                            $question_column++;
+                        }
                         break;
 
                     case 'array':
@@ -593,20 +792,66 @@ class ExportSurveyDataCommand extends Command
                         }
                         break;
 
-                    default:
-                        $options_length = 0;
-                        if (is_array($answer->question->options)) {
-                            $options_length = count($answer->question->options);
+                    case 'likert':
+                        $likertOptions = $this->extractLikertOptions($answer->question);
+                        if (empty($likertOptions)) {
+                            break;
                         }
+
+                        $resolvedValues = [];
+                        if (is_array($answer->answer)) {
+                            foreach ($answer->answer as $value) {
+                                $resolved = $this->resolveLikertAnswerValue($value, $likertOptions);
+                                if ($resolved !== null) {
+                                    $resolvedValues[] = $resolved;
+                                }
+                            }
+                        } else {
+                            $resolved = $this->resolveLikertAnswerValue($answer->answer, $likertOptions);
+                            if ($resolved !== null) {
+                                $resolvedValues[] = $resolved;
+                            }
+                        }
+
+                        if (empty($resolvedValues)) {
+                            break;
+                        }
+
+                        foreach ($resolvedValues as $resolvedValue) {
+                            $temp_col = $question_column;
+                            foreach ($likertOptions as $option) {
+                                $optionLabel = $this->normalizeLikertOption($option);
+                                if ($optionLabel !== null && trim(mb_strtolower($optionLabel)) === trim(mb_strtolower($resolvedValue))) {
+                                    $sheet->setCellValue([$temp_col, $current_row], $resolvedValue);
+                                    break;
+                                }
+                                $temp_col++;
+                            }
+                        }
+                        break;
+
+                    default:
+                        $questionOptions = $this->extractQuestionOptions($answer->question);
+                        $options_length = is_array($questionOptions) ? count($questionOptions) : 0;
                         $count = 0;
 
-                        if (!is_array($answer->answer)) {
+                        $decodedAnswer = $answer->answer;
+                        if (!is_array($decodedAnswer) && is_string($decodedAnswer)) {
+                            $decoded = json_decode($decodedAnswer, true);
+                            if (is_array($decoded)) {
+                                $decodedAnswer = $decoded;
+                            }
+                        }
+
+                        if (!is_array($decodedAnswer)) {
                             $no_ans = 1;
                             $temp_col = $question_column;
                             for ($i = $index + 2; $i < $index + 2 + $options_length; $i++) {
                                 $user_chose = $questions_options[$i];
-                                if (substr($user_chose, 0, 6) === substr($answer->answer, 0, 6)) {
-                                    $sheet->setCellValue([$temp_col, $current_row], $answer->answer);
+                                $userChosePrefix = is_scalar($user_chose) ? substr((string)$user_chose, 0, 6) : '';
+                                $answerPrefix = is_scalar($decodedAnswer) ? substr((string)$decodedAnswer, 0, 6) : '';
+                                if ($userChosePrefix !== '' && $userChosePrefix === $answerPrefix) {
+                                    $sheet->setCellValue([$temp_col, $current_row], $decodedAnswer);
                                     $count++;
                                     if ($count == $no_ans) {
                                         break;
@@ -615,8 +860,8 @@ class ExportSurveyDataCommand extends Command
                                 $temp_col++;
                             }
                         } else {
-                            $no_ans = count($answer->answer);
-                            foreach ($answer->answer as $ans) {
+                            $no_ans = count($decodedAnswer);
+                            foreach ($decodedAnswer as $ans) {
                                 $temp_col = $question_column;
                                 for (
                                     $i = $index + 3;
@@ -624,7 +869,9 @@ class ExportSurveyDataCommand extends Command
                                     $i++
                                 ) {
                                     $user_chose = $questions_options[$i];
-                                    if (!is_null($user_chose) && !is_null($ans) && strtolower(substr($user_chose, 0, 107)) === strtolower(substr($ans, 0, 107))) {
+                                    $userChoseValue = is_scalar($user_chose) ? strtolower(substr((string)$user_chose, 0, 107)) : null;
+                                    $answerValue = is_scalar($ans) ? strtolower(substr((string)$ans, 0, 107)) : null;
+                                    if (!is_null($userChoseValue) && !is_null($answerValue) && $userChoseValue === $answerValue) {
                                         $sheet->setCellValue([$temp_col, $current_row], $ans);
                                         $count++;
                                         if (

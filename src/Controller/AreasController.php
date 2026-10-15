@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Model\Table\AdhesionRequestsTable;
+
 /**
  * Areas Controller
  *
@@ -38,6 +40,27 @@ class AreasController extends AppController
 
         $this->set(compact('areas'));
         $this->viewBuilder()->setOption('serialize', ['areas']);
+    }
+
+    /**
+     * Territori statici (province RER e comuni ISTAT) per le select di MoMa Area.
+     *
+     * GET /areas/territories.json - solo admin e moma_area. Non crea né legge Areas:
+     * la fonte è config/data/comuni_emilia_romagna.php (vedi bin/generate-comuni-er.php).
+     *
+     * @return void
+     */
+    public function territories(): void
+    {
+        $this->request->allowMethod(['get']);
+        $this->allowRolesOnly(['admin', 'moma_area']);
+
+        $comuni = require CONFIG . 'data' . DS . 'comuni_emilia_romagna.php';
+        $this->set([
+            'provinces' => AdhesionRequestsTable::RER_PROVINCES,
+            'comuni' => $comuni,
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['provinces', 'comuni']);
     }
 
     /**
@@ -92,13 +115,28 @@ class AreasController extends AppController
             // $values['polygon']=$geometryObject;
             $area = $this->Areas->patchEntity($area, $this->request->getData());
             if ($this->Areas->save($area)) {
-                $this->Flash->success(__('The area has been saved.'));
-
                 if (!$this->request->is('json')) {
+                    $this->Flash->success(__('The area has been saved.'));
+
                     return $this->redirect(['action' => 'index']);
                 }
+            } else {
+                if ($this->request->is('json')) {
+                    // Bug fix: previously fell through to the 200 serialize below on
+                    // save failure, so a JSON consumer (Momarea add.vue) could never
+                    // tell a failed save from a successful one. Mirrors the
+                    // UsersController::edit() convention: 422 + msg/errors, return
+                    // early so a JSON caller's promise rejects.
+                    $errors = $this->flattenErrors($area->getErrors());
+                    $msg = __('The area could not be saved. Please, try again.');
+                    $this->response = $this->response->withStatus(422);
+                    $this->set(compact('msg', 'errors'));
+                    $this->viewBuilder()->setOption('serialize', ['msg', 'errors']);
+
+                    return;
+                }
+                $this->Flash->error(__('The area could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__('The area could not be saved. Please, try again.'));
         }
         $users = $this->Areas->Users->find('list', ['limit' => 200])->where([
             'role = "moma_area"',
@@ -126,12 +164,24 @@ class AreasController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $area = $this->Areas->patchEntity($area, $this->request->getData());
             if ($this->Areas->save($area)) {
-                $this->Flash->success(__('The area has been saved.'));
                 if (!$this->request->is('json')) {
+                    $this->Flash->success(__('The area has been saved.'));
+
                     return $this->redirect(['action' => 'index']);
                 }
+            } else {
+                if ($this->request->is('json')) {
+                    // Same bug fix and convention as add() above.
+                    $errors = $this->flattenErrors($area->getErrors());
+                    $msg = __('The area could not be saved. Please, try again.');
+                    $this->response = $this->response->withStatus(422);
+                    $this->set(compact('msg', 'errors'));
+                    $this->viewBuilder()->setOption('serialize', ['msg', 'errors']);
+
+                    return;
+                }
+                $this->Flash->error(__('The area could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__('The area could not be saved. Please, try again.'));
         }
         $users = $this->Areas->Users->find('list', ['limit' => 200])->where([
             'role = "moma_area"',
@@ -166,5 +216,37 @@ class AreasController extends AppController
 
         $this->set(compact('area'));
         $this->viewBuilder()->setOption('serialize', ['area']);
+    }
+
+    /**
+     * Flatten CakePHP validation errors into readable strings.
+     *
+     * Same helper as UsersController::flattenErrors() (kept private there, so
+     * duplicated here rather than introducing a shared trait for one method).
+     *
+     * @param array $errors Entity validation errors, as returned by getErrors().
+     * @return array<string>
+     */
+    private function flattenErrors(array $errors): array
+    {
+        $out = [];
+        $walker = function ($val, $key) use (&$out) {
+            if (is_array($val)) {
+                foreach ($val as $rule => $msg) {
+                    if (is_string($msg)) {
+                        $out[] = "$key: $msg";
+                    } elseif (is_array($msg)) {
+                        foreach ($msg as $m) {
+                            if (is_string($m)) {
+                                $out[] = "$key: $m";
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        array_walk($errors, $walker);
+
+        return array_values(array_unique($out));
     }
 }

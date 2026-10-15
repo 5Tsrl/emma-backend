@@ -21,31 +21,92 @@ $sheet = $spreadsheet->getActiveSheet();
 
 $row = '1';
 $col = 'A';
+$columns = [];
+
+// Define the column headers we want to display
+$headers = [
+    'id' => 'ID',    
+    'postal_code' => 'Postal Code',
+    'city' => 'City',
+    'province' => 'Province',
+    'district' => 'District',
+    'geohash' => 'Geohash',
+    'lat' => 'Approx Latitude',
+    'lon' => 'Approx Longitude',    
+    'modified' => 'Modified',
+    'user_id' => 'User ID',
+    'company_id' => 'Company ID',
+    'company.name' => 'Company Name',
+    'company.id' => 'Company DB ID',
+    'company.company_code' => 'Company Code',
+    'company.city' => 'Company City',
+    'company.province' => 'Company Province',
+    'company.type' => 'Company Type',
+    'user.email' => 'User Email',
+    'user.id' => 'User DB ID',
+    'employee.user_id' => 'Employee User ID',
+    'employee.gender' => 'Gender',
+    'employee.dob' => 'Date of Birth',
+    'employee.shift' => 'Shift',
+    'employee.office_id' => 'Office ID',
+    'employee.role_description' => 'Role Description'
+];
+
 foreach ($origins as $p) {
     if ($row == 1) {
-        //https://api.cakephp.org/4.0/trait-Cake.Datasource.EntityTrait.html#getVisible
-        //Restituisce l'elenco dei campi visibili della query
-        $columns = $p->getVisible();
-        foreach ($columns as $c) {
-            $sheet->setCellValue("$col$row", $c);
+        // Write headers
+        foreach ($headers as $key => $header) {
+            $sheet->setCellValue("$col$row", $header);
             $col++;
         }
+        $columns = array_keys($headers);
     }
     $row++;
     $col = 'A';
-    foreach ($columns as $c) {
-        //Se il nome contiene un punto devo generare un'array
-        $ex = explode('.', $c);
-        if (isset($ex[2])) {
-            $value = $p[$ex[0]][$ex[1]][$ex[2]];
-        } elseif (isset($ex[1])) {
-            $value = $p[$ex[0]][$ex[1]];
-        } else {
-            $value = $p[$c];
+    
+    foreach ($columns as $columnKey) {
+        $value = '';
+        
+        // First, try direct key access (for flattened keys like 'company.name')
+        if (isset($p[$columnKey])) {
+            $value = $p[$columnKey];
+        }
+        // If not found and key contains dot, try nested access
+        elseif (strpos($columnKey, '.') !== false) {
+            $parts = explode('.', $columnKey);
+            $tempValue = $p;
+            
+            foreach ($parts as $part) {
+                if (is_array($tempValue) && isset($tempValue[$part])) {
+                    $tempValue = $tempValue[$part];
+                } else {
+                    $tempValue = '';
+                    break;
+                }
+            }
+            $value = $tempValue;
+        }
+
+        // Convert objects to string representation
+        if (is_object($value)) {
+            if (method_exists($value, '__toString')) {
+                $value = (string) $value;
+            } else {
+                $value = json_encode($value, JSON_UNESCAPED_UNICODE);
+            }
+        }
+        
+        // Ensure the value is a scalar for Excel
+        if (is_array($value)) {
+            $value = json_encode($value, JSON_UNESCAPED_UNICODE);
+        }
+        
+        // Convert null to empty string
+        if (is_null($value)) {
+            $value = '';
         }
 
         $sheet->setCellValue("$col$row", $value);
-
         $col++;
     }
 }

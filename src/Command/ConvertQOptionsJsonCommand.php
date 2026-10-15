@@ -23,6 +23,7 @@ use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Datasource\ConnectionManager;
+use Cake\ORM\TableRegistry;
 
 class ConvertQOptionsJsonCommand extends Command
 {
@@ -37,7 +38,7 @@ class ConvertQOptionsJsonCommand extends Command
         $sql = 'ALTER TABLE questions ADD joptions json NULL;';
         //$connection->execute($sql);
 
-        $this->loadModel('Questions');
+        $this->Questions = TableRegistry::getTableLocator()->get('Questions');
 
         $questions = $this->Questions->find();
 

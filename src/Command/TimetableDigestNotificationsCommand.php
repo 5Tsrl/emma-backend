@@ -25,6 +25,7 @@ use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
+use Cake\ORM\TableRegistry;
 
 class TimetableDigestNotificationsCommand extends Command
 {
@@ -43,7 +44,7 @@ class TimetableDigestNotificationsCommand extends Command
 
     public function execute(Arguments $args, ConsoleIo $io)
     {
-        $this->loadModel('Timetables');
+        $this->Timetables = TableRegistry::getTableLocator()->get('Timetables');
         $test = $args->getOption('test');
         $no_reset = $args->getOption('no-reset');
 
@@ -60,7 +61,7 @@ class TimetableDigestNotificationsCommand extends Command
         }
 
         if (!$test) {
-            $this->loadModel('Users');
+            $this->Users = TableRegistry::getTableLocator()->get('Users');
             $users = $this->Users->find()
             ->where([
             'Users.email IS NOT' => null,

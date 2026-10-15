@@ -22,18 +22,22 @@ namespace App\Controller;
 
 use App\Indicator\baseIndicator;
 use App\Indicator\RangeIndicator;
+use App\Indicator\splitBSIndicator;
 use App\Model\Entity\Answer;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
+use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Log\Log;
+use Cake\ORM\TableRegistry;
+use Cake\Utility\Text;
 use Pheanstalk\Exception;
 use Pheanstalk\Pheanstalk;
 use Pheanstalk\Values\JobId;
 use Pheanstalk\Values\TubeName;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use Cake\Utility\Text;
+use Sk\Geohash\Geohash;
 
 /**
  * Answers Controller
@@ -46,7 +50,6 @@ class AnswersController extends AppController
     public function initialize(): void
     {
         parent::initialize();
-        $this->Authorization->skipAuthorization();
         $this->Authentication->allowUnauthenticated(['update']);
         if ($this->components()->has('Security')) {
             $this->Security->setConfig(
@@ -56,6 +59,45 @@ class AnswersController extends AppController
                 ]
             );
         }
+    }
+
+    /**
+     * Safely return the first non-null property value from an object/array.
+     * Prevents undefined property warnings by checking existence before access.
+     *
+     * @param mixed $obj Object or array where to look up properties
+     * @param array<int,string> $names Candidate property names in priority order
+     * @return mixed|null
+     */
+    private function getFirstPropertyValue($obj, array $names)
+    {
+        if (is_array($obj)) {
+            // Allow array access too
+            foreach ($names as $name) {
+                if (array_key_exists($name, $obj)) {
+                    $val = $obj[$name];
+                    if ($val !== null) {
+                        return $val;
+                    }
+                }
+            }
+
+            return null;
+        }
+        if (!is_object($obj)) {
+            return null;
+        }
+        foreach ($names as $name) {
+            // isset suppresses notices and ensures readability; still allows falsy 0 values
+            if (isset($obj->$name) || property_exists($obj, $name)) {
+                $val = $obj->$name;
+                if ($val !== null) {
+                    return $val;
+                }
+            }
+        }
+
+        return null;
     }
 
     public function index()
@@ -106,7 +148,12 @@ class AnswersController extends AppController
         }
 
         $answer = $this->Answers->find()
-            ->contain(['Users', 'Questions'])
+            ->contain([
+                'Users',
+                'Questions.QuestionsSurveys' => function ($q) use ($survey_id) {
+                    return $q->where(['QuestionsSurveys.survey_id' => $survey_id]);
+                },
+            ])
             ->where([
                 'survey_id' => $survey_id,
                 'user_id' => $user_id,
@@ -150,7 +197,7 @@ class AnswersController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $errorMsg = false;
             try {
-                $this->loadModel('SurveyParticipants');
+                $this->SurveyParticipants = TableRegistry::getTableLocator()->get('SurveyParticipants');
                 $participant = $this->SurveyParticipants->find()
                     ->where([
                         'id' => $participant_id,
@@ -175,17 +222,21 @@ class AnswersController extends AppController
 
                         if (empty($a)) {
                             $a = new Answer([
-                                'question_id' => $qid, 'survey_id' => $survey_id, 'user_id' => $user_id,
+                                'question_id' => $qid,
+                                'survey_id' => $survey_id,
+                                'user_id' => $user_id,
                             ]);
                         }
                         $a->answer = $r;
 
                         if ($qid == Configure::read('Questions.origine_spostamenti')) {
-                            $a->answer = json_decode($r);
+                            // $a->answer is set further down (after the Origins row
+                            // is built from this unstripped $res), via
+                            // OriginPayloadHelper::stripOriginPii() — see below.
                             $res = json_decode($r);
-                            $this->loadModel('Users');
+                            $this->Users = TableRegistry::getTableLocator()->get('Users');
                             $a_user = $this->Users->find()
-                                ->where([ 'id' => $user_id])
+                                ->where(['id' => $user_id])
                                 ->first();
                             if (is_null($a_user->office_id)) {
                                 $a_user->office_id = $res->destination->office_id;
@@ -199,24 +250,32 @@ class AnswersController extends AppController
 
                             //TODO: Gestire la insert/update di origin
                             //Cerco se c'è già una origin per questo utente e questo questionario
-                            $this->loadModel('Origins');
+                            $this->Origins = TableRegistry::getTableLocator()->get('Origins');
                             $origin = $this->Origins->find()
-                                        ->where([
-                                            'user_id' => $user_id,
-                                            'survey_id' => $survey_id,
-                                            'company_id' => $a_user->company_id,
-                                            ])
-                                        ->first();
+                                ->where([
+                                    'user_id' => $user_id,
+                                    'survey_id' => $survey_id,
+                                    'company_id' => $a_user->company_id,
+                                ])
+                                ->first();
                             //Se non c'è già una origin la creo vuota
                             if (empty($origin)) {
                                 $origin = $this->Origins->newEmptyEntity();
                             }
-                            $origin->address = $res->origin->address;
-                            $origin->postal_code = $res->origin->postal_code;
-                            $origin->city = $res->origin->city;
-                            $origin->province = $res->origin->province;
-                            $origin->lon = $res->origin->lon;
-                            $origin->lat = $res->origin->lat;
+                            // address/lat/lon are read here only to build the Origins
+                            // row (geohash-encoded below); they are never persisted
+                            // on `origin` itself (OriginsTable::beforeSave() nulls
+                            // address/lat/lon). They are also stripped from the
+                            // stored answer further down via
+                            // OriginPayloadHelper::stripOriginPii() — which, in their
+                            // place, adds the same coarse geohash to the stored
+                            // answer's `origin` sub-object too (in addition to the
+                            // Origins row built here), so the answer keeps an
+                            // approximate location even without lat/lon/address.
+                            $origin = $this->Origins->patchEntity(
+                                $origin,
+                                \App\Geocoder\OriginPayloadHelper::extractOriginRowData($res->origin)
+                            );
                             $origin->user_id = $user_id;
                             $origin->survey_id = $survey_id;
                             $origin->company_id = $a_user->company_id;
@@ -229,12 +288,20 @@ class AnswersController extends AppController
                                 Log::write('error', $msg);
                             }
 
+                            // Strip address/lat/lon from the answer that actually gets
+                            // persisted to `answers.answer` — the precise Origins row
+                            // built above is the source of truth for positional data,
+                            // but stripOriginPii() also copies a coarse origin.geohash
+                            // into the stored answer itself before removing lat/lon.
+                            $a->answer = \App\Geocoder\OriginPayloadHelper::stripOriginPii($res);
+
                             $modes = $res->modes;
                             $n_modes = count($modes);
                             $distance = 0;
                             $cost = 0;
                             $max = 0;
                             $mezzi = [];
+                            $theme_brescia = Configure::read('VUE_APP_THEME_BRESCIA');
                             foreach ($modes as $mode) {
                                 $distance += $mode->distance;
                                 $cost += $mode->cost;
@@ -253,14 +320,14 @@ class AnswersController extends AppController
                                     }
                                 }
                                 if ($mode->selTransportmean == 'Auto') {
-                                    if ($mode->type_auto == 'Personale' || $mode->type_auto == 'Personal') {
+                                    // if ($mode->type_auto == 'Personale' || $mode->type_auto == 'Personal') {
                                         array_push($mezzi, $mode->selTransportmean);
                                         $auto = array_filter($modes, function ($mode) {
                                             return $mode->selTransportmean == 'Auto';
                                         });
-                                    } else {
-                                        array_push($mezzi, $mode->type_auto);
-                                    }
+                                    // } else {
+                                    //     array_push($mezzi, $mode->type_auto);
+                                    // }
                                 } elseif ($mode->selTransportmean == 'Moto') {
                                     if ($mode->type_moto == 'Personale' || $mode->type_moto == 'Personal') {
                                         array_push($mezzi, $mode->selTransportmean);
@@ -292,7 +359,7 @@ class AnswersController extends AppController
                                     } else {
                                         array_push($mezzi, $mode->type_mono);
                                     }
-                                } elseif ($mode->selTransportmean == 'Train') {
+                                } elseif ($mode->selTransportmean == 'Train' && $theme_brescia == 0) {
                                     if (
                                         $mode->type_treno == 'Servizio ferroviario Trenitalia' ||
                                         $mode->type_treno == 'Servizio ferroviario Trenitalia/GTT' ||
@@ -323,11 +390,13 @@ class AnswersController extends AppController
                             $q_sede_id = Configure::read('Questions_spos.sede_mappa');
                             if (!is_null($q_sede_id)) {
                                 $a_q_sede = $this->Answers->find()
-                                ->where(['survey_id' => $survey_id, 'user_id' => $user_id, 'question_id' => $q_sede_id])
-                                ->first();
+                                    ->where(['survey_id' => $survey_id, 'user_id' => $user_id, 'question_id' => $q_sede_id])
+                                    ->first();
                                 if (empty($a_q_sede)) {
                                     $a_q_sede  = new Answer([
-                                        'question_id' => $q_sede_id, 'survey_id' => $survey_id, 'user_id' => $user_id,
+                                        'question_id' => $q_sede_id,
+                                        'survey_id' => $survey_id,
+                                        'user_id' => $user_id,
                                     ]);
                                 }
                                 $a_q_sede->answer = $res->destination->office_name;
@@ -344,11 +413,13 @@ class AnswersController extends AppController
                             }
                             if (!is_null($q_d_id)) {
                                 $a_q_d = $this->Answers->find()
-                                ->where(['survey_id' => $survey_id, 'user_id' => $user_id, 'question_id' => $q_d_id])
-                                ->first();
+                                    ->where(['survey_id' => $survey_id, 'user_id' => $user_id, 'question_id' => $q_d_id])
+                                    ->first();
                                 if (empty($a_q_d)) {
                                     $a_q_d  = new Answer([
-                                        'question_id' => $q_d_id, 'survey_id' => $survey_id, 'user_id' => $user_id,
+                                        'question_id' => $q_d_id,
+                                        'survey_id' => $survey_id,
+                                        'user_id' => $user_id,
                                     ]);
                                 }
                                 $a_q_d->answer = $distance;
@@ -364,11 +435,13 @@ class AnswersController extends AppController
                             }
                             if (!is_null($c_s_id)) {
                                 $a_c_s = $this->Answers->find()
-                                ->where(['survey_id' => $survey_id, 'user_id' => $user_id, 'question_id' => $c_s_id])
-                                ->first();
+                                    ->where(['survey_id' => $survey_id, 'user_id' => $user_id, 'question_id' => $c_s_id])
+                                    ->first();
                                 if (empty($a_c_s)) {
                                     $a_c_s = new Answer([
-                                        'question_id' => $c_s_id, 'survey_id' => $survey_id, 'user_id' => $user_id,
+                                        'question_id' => $c_s_id,
+                                        'survey_id' => $survey_id,
+                                        'user_id' => $user_id,
                                     ]);
                                 }
                                 $a_c_s->answer = $cost;
@@ -384,11 +457,13 @@ class AnswersController extends AppController
                             }
                             if (!is_null($nr_modes_id)) {
                                 $a_nr = $this->Answers->find()
-                                ->where(['survey_id' => $survey_id, 'user_id' => $user_id, 'question_id' => $nr_modes_id])
-                                ->first();
+                                    ->where(['survey_id' => $survey_id, 'user_id' => $user_id, 'question_id' => $nr_modes_id])
+                                    ->first();
                                 if (empty($a_nr)) {
                                     $a_nr = new Answer([
-                                        'question_id' => $nr_modes_id, 'survey_id' => $survey_id, 'user_id' => $user_id,
+                                        'question_id' => $nr_modes_id,
+                                        'survey_id' => $survey_id,
+                                        'user_id' => $user_id,
                                     ]);
                                 }
                                 $a_nr->answer = $n_modes;
@@ -404,11 +479,13 @@ class AnswersController extends AppController
                             }
                             if (!is_null($q_m_id)) {
                                 $a_m = $this->Answers->find()
-                                ->where(['survey_id' => $survey_id, 'user_id' => $user_id, 'question_id' => $q_m_id])
-                                ->first();
+                                    ->where(['survey_id' => $survey_id, 'user_id' => $user_id, 'question_id' => $q_m_id])
+                                    ->first();
                                 if (empty($a_m)) {
                                     $a_m = new Answer([
-                                        'question_id' => $q_m_id, 'survey_id' => $survey_id, 'user_id' => $user_id,
+                                        'question_id' => $q_m_id,
+                                        'survey_id' => $survey_id,
+                                        'user_id' => $user_id,
                                     ]);
                                 }
                                 $a_m->answer = $max_mode;
@@ -425,11 +502,13 @@ class AnswersController extends AppController
                             }
                             if (!is_null($q_am_id)) {
                                 $a_am = $this->Answers->find()
-                                ->where(['survey_id' => $survey_id, 'user_id' => $user_id, 'question_id' => $q_am_id])
-                                ->first();
+                                    ->where(['survey_id' => $survey_id, 'user_id' => $user_id, 'question_id' => $q_am_id])
+                                    ->first();
                                 if (empty($a_am)) {
                                     $a_am = new Answer([
-                                        'question_id' => $q_am_id, 'survey_id' => $survey_id, 'user_id' => $user_id,
+                                        'question_id' => $q_am_id,
+                                        'survey_id' => $survey_id,
+                                        'user_id' => $user_id,
                                     ]);
                                 }
                                 $a_am->answer = $mezzi;
@@ -446,44 +525,50 @@ class AnswersController extends AppController
                             }
 
                             if (!empty($auto)) {
-                                $q_auto_ids = ['emissioni_auto' => Configure::read('Questions_spos.emissioni_auto'),
-                                'cilindrata_auto' => Configure::read('Questions_spos.cilindrata_auto'),
-                                'alimentazione_auto' => Configure::read('Questions_spos.alimentazione_auto'),
-                                'quale_distanza_auto' => Configure::read('Questions_spos.quale_distanza_auto'),
-                                'tipo_auto' => Configure::read('Questions_spos.tipo_auto'),
+                                $q_auto_ids = [
+                                    'emissioni_auto' => Configure::read('Questions_spos.emissioni_auto'),
+                                    'cilindrata_auto' => Configure::read('Questions_spos.cilindrata_auto'),
+                                    'alimentazione_auto' => Configure::read('Questions_spos.alimentazione_auto'),
+                                    'quale_distanza_auto' => Configure::read('Questions_spos.quale_distanza_auto'),
+                                    'tipo_auto' => Configure::read('Questions_spos.tipo_auto'),
                                 ];
 
                                 foreach ($q_auto_ids as $name_auto => $q_auto_id) {
                                     if (!is_null($q_auto_id)) {
                                         $a_auto = $this->Answers->find()
-                                        ->where(['survey_id' => $survey_id, 'user_id' => $user_id, 'question_id' => $q_auto_id])
-                                        ->first();
+                                            ->where(['survey_id' => $survey_id, 'user_id' => $user_id, 'question_id' => $q_auto_id])
+                                            ->first();
                                         if (empty($a_auto)) {
                                             $a_auto  = new Answer([
-                                                'question_id' => $q_auto_id, 'survey_id' => $survey_id, 'user_id' => $user_id,
+                                                'question_id' => $q_auto_id,
+                                                'survey_id' => $survey_id,
+                                                'user_id' => $user_id,
                                             ]);
                                         }
+                                        // Use the first 'Auto' mode entry and safely read possible property names
+                                        $firstAuto = is_array($auto) ? reset($auto) : (is_object($auto) ? $auto : null);
+                                        $value = null;
                                         switch ($q_auto_id) {
                                             case Configure::read('Questions_spos.emissioni_auto'):
-                                                $a_auto->answer = reset($auto)->emissioni_auto;
-                                                $result[$q_auto_id] = reset($auto)->emissioni_auto;
+                                                $value = $this->getFirstPropertyValue($firstAuto, ['emissioni_auto', 'emissioniAuto']);
                                                 break;
                                             case Configure::read('Questions_spos.cilindrata_auto'):
-                                                $a_auto->answer = reset($auto)->cilindratauto;
-                                                $result[$q_auto_id] = reset($auto)->cilindratauto;
+                                                $value = $this->getFirstPropertyValue($firstAuto, ['cilindrata_auto', 'cilindratauto', 'cilindrataAuto']);
                                                 break;
                                             case Configure::read('Questions_spos.alimentazione_auto'):
-                                                $a_auto->answer = reset($auto)->alimentazioneauto;
-                                                $result[$q_auto_id] = reset($auto)->alimentazioneauto;
+                                                $value = $this->getFirstPropertyValue($firstAuto, ['alimentazione_auto', 'alimentazioneauto', 'alimentazioneAuto']);
                                                 break;
                                             case Configure::read('Questions_spos.quale_distanza_auto'):
-                                                $a_auto->answer = reset($auto)->distance;
-                                                $result[$q_auto_id] = reset($auto)->distance;
+                                                $value = $this->getFirstPropertyValue($firstAuto, ['distance']);
                                                 break;
                                             case Configure::read('Questions_spos.tipo_auto'):
-                                                $a_auto->answer = reset($auto)->type_auto;
-                                                $result[$q_auto_id] = reset($auto)->type_auto;
+                                                $value = $this->getFirstPropertyValue($firstAuto, ['type_auto', 'tipo_auto']);
                                                 break;
+                                        }
+
+                                        if ($value !== null) {
+                                            $a_auto->answer = $value;
+                                            $result[$q_auto_id] = $value;
                                         }
 
                                         if (!$this->Answers->save($a_auto)) {
@@ -500,20 +585,23 @@ class AnswersController extends AppController
                             }
 
                             if (!empty($moto)) {
-                                $q_moto_ids = ['emissioni_moto' => Configure::read('Questions_spos.emissioni_moto'),
-                                'cilindrata_moto' => Configure::read('Questions_spos.cilindrata_moto'),
-                                'alimentazione_moto' => Configure::read('Questions_spos.alimentazione_moto'),
-                                'tipo_moto' => Configure::read('Questions_spos.tipo_moto'),
+                                $q_moto_ids = [
+                                    'emissioni_moto' => Configure::read('Questions_spos.emissioni_moto'),
+                                    'cilindrata_moto' => Configure::read('Questions_spos.cilindrata_moto'),
+                                    'alimentazione_moto' => Configure::read('Questions_spos.alimentazione_moto'),
+                                    'tipo_moto' => Configure::read('Questions_spos.tipo_moto'),
                                 ];
 
                                 foreach ($q_moto_ids as $name_moto => $q_moto_id) {
                                     if (!is_null($q_moto_id)) {
                                         $a_moto = $this->Answers->find()
-                                        ->where(['survey_id' => $survey_id, 'user_id' => $user_id, 'question_id' => $q_moto_id])
-                                        ->first();
+                                            ->where(['survey_id' => $survey_id, 'user_id' => $user_id, 'question_id' => $q_moto_id])
+                                            ->first();
                                         if (empty($a_moto)) {
                                             $a_moto  = new Answer([
-                                                'question_id' => $q_moto_id, 'survey_id' => $survey_id, 'user_id' => $user_id,
+                                                'question_id' => $q_moto_id,
+                                                'survey_id' => $survey_id,
+                                                'user_id' => $user_id,
                                             ]);
                                         }
 
@@ -553,17 +641,20 @@ class AnswersController extends AppController
                                 }
                             }
                             if (!empty($bici)) {
-                                $q_bici_ids = ['tipo_bici' => Configure::read('Questions_spos.tipo_bici'),
+                                $q_bici_ids = [
+                                    'tipo_bici' => Configure::read('Questions_spos.tipo_bici'),
                                 ];
 
                                 foreach ($q_bici_ids as $name_bici => $q_bici_id) {
                                     if (!is_null($q_bici_id)) {
                                         $a_bici = $this->Answers->find()
-                                        ->where(['survey_id' => $survey_id, 'user_id' => $user_id, 'question_id' => $q_bici_id])
-                                        ->first();
+                                            ->where(['survey_id' => $survey_id, 'user_id' => $user_id, 'question_id' => $q_bici_id])
+                                            ->first();
                                         if (empty($a_bici)) {
                                             $a_bici = new Answer([
-                                                'question_id' => $q_bici_id, 'survey_id' => $survey_id, 'user_id' => $user_id,
+                                                'question_id' => $q_bici_id,
+                                                'survey_id' => $survey_id,
+                                                'user_id' => $user_id,
                                             ]);
                                         }
                                         switch ($q_bici_id) {
@@ -584,17 +675,20 @@ class AnswersController extends AppController
                                 }
                             }
                             if (!empty($mono)) {
-                                $q_mono_ids = ['tipo_mono' => Configure::read('Questions_spos.tipo_mono'),
+                                $q_mono_ids = [
+                                    'tipo_mono' => Configure::read('Questions_spos.tipo_mono'),
                                 ];
 
                                 foreach ($q_mono_ids as $name_mono => $q_mono_id) {
                                     if (!is_null($q_mono_id)) {
                                         $a_mono = $this->Answers->find()
-                                        ->where(['survey_id' => $survey_id, 'user_id' => $user_id, 'question_id' => $q_mono_id])
-                                        ->first();
+                                            ->where(['survey_id' => $survey_id, 'user_id' => $user_id, 'question_id' => $q_mono_id])
+                                            ->first();
                                         if (empty($a_mono)) {
                                             $a_mono = new Answer([
-                                                'question_id' => $q_mono_id, 'survey_id' => $survey_id, 'user_id' => $user_id,
+                                                'question_id' => $q_mono_id,
+                                                'survey_id' => $survey_id,
+                                                'user_id' => $user_id,
                                             ]);
                                         }
                                         switch ($q_mono_id) {
@@ -615,17 +709,20 @@ class AnswersController extends AppController
                                 }
                             }
                             if (!empty($treno)) {
-                                $q_treno_ids = ['tipo_treno' => Configure::read('Questions_spos.tipo_treno'),
+                                $q_treno_ids = [
+                                    'tipo_treno' => Configure::read('Questions_spos.tipo_treno'),
                                 ];
 
                                 foreach ($q_treno_ids as $name_treno => $q_treno_id) {
                                     if (!is_null($q_treno_id)) {
                                         $a_treno = $this->Answers->find()
-                                        ->where(['survey_id' => $survey_id, 'user_id' => $user_id, 'question_id' => $q_treno_id])
-                                        ->first();
+                                            ->where(['survey_id' => $survey_id, 'user_id' => $user_id, 'question_id' => $q_treno_id])
+                                            ->first();
                                         if (empty($a_treno)) {
                                             $a_treno = new Answer([
-                                                'question_id' => $q_treno_id, 'survey_id' => $survey_id, 'user_id' => $user_id,
+                                                'question_id' => $q_treno_id,
+                                                'survey_id' => $survey_id,
+                                                'user_id' => $user_id,
                                             ]);
                                         }
                                         switch ($q_treno_id) {
@@ -660,34 +757,101 @@ class AnswersController extends AppController
             }
             $this->set('errorMsg', $errorMsg);
             $this->set('result', $result);
-            $this->viewBuilder()->setOption('serialize', ['errorMsg','result']);
+            $this->viewBuilder()->setOption('serialize', ['errorMsg', 'result']);
         }
     }
 
     public function countResponders()
     {
-        $this->allowRolesOnly(['admin', 'moma', 'user','moma_area']);
+        $this->allowRolesOnly(['admin', 'moma', 'user', 'moma_area']);
 
-        $query = $this->Answers->find();
+        $count = Cache::remember('answers-count-responders', function () {
+            $query = $this->Answers->find();
 
-        $count = $query->select([
-            'count' => $query->func()->count('DISTINCT user_id'),
-        ])
-            ->toArray()[0]['count'];
+            return (int)$query->select([
+                'count' => $query->func()->count('DISTINCT user_id'),
+            ])
+                ->toArray()[0]['count'];
+        }, 'dashboard');
 
         $this->set(compact('count'));
         $this->viewBuilder()->setOption('serialize', ['count']);
     }
 
+    /**
+     * Ownership check per i chiamanti NON privilegiati di getIndicator(): company/survey/office
+     * forniti dal client devono appartenere alla loro azienda (403 altrimenti, anche se la
+     * risorsa non esiste, per non fare da oracolo). Un office_id di identita' e' gia' il loro.
+     *
+     * @param int $identityCompanyId Azienda dell'identita' (0 = nessuna)
+     * @param int $companyId Azienda effettiva (gia' sovrascritta dall'identita' se presente)
+     * @param int $surveyId survey_id del client (0 = non fornito)
+     * @param mixed $clientOfficeId office_id grezzo della query string
+     * @param bool $officeFromIdentity true se office_id e' stato imposto dall'identita'
+     * @return void
+     * @throws \Cake\Http\Exception\ForbiddenException
+     */
+    private function assertIndicatorScope(int $identityCompanyId, int $companyId, int $surveyId, $clientOfficeId, bool $officeFromIdentity): void
+    {
+        $deny = fn() => new ForbiddenException(__('Non sei autorizzato ad accedere alla risorsa richiesta'));
+        // Senza azienda non si puo' provare nessuna appartenenza: nessun id/azienda dal client.
+        if (empty($identityCompanyId)) {
+            if (!empty($companyId) || !empty($surveyId) || (!$officeFromIdentity && !empty($clientOfficeId))) {
+                throw $deny();
+            }
+
+            return;
+        }
+        if (!empty($surveyId)) {
+            $survey = $this->Answers->Surveys->find()->select(['Surveys.id', 'Surveys.company_id'])
+                ->where(['Surveys.id' => $surveyId])->first();
+            if (empty($survey) || (int)$survey->company_id !== $identityCompanyId) {
+                throw $deny();
+            }
+        }
+        if (!$officeFromIdentity && !empty($clientOfficeId)) {
+            $office = TableRegistry::getTableLocator()->get('Offices')->find()
+                ->select(['Offices.id', 'Offices.company_id'])
+                ->where(['Offices.id' => (int)$clientOfficeId])->first();
+            if (empty($office) || (int)$office->company_id !== $identityCompanyId) {
+                throw $deny();
+            }
+        }
+    }
+
+    /**
+     * Aggregato "tutte le aziende" di getIndicator() (nessuna azienda, survey o sede dopo l'override
+     * dell'identita'): consentito SOLO a admin e moma_area. Un `user` o un `moma` senza azienda
+     * (privilegiato per allowWhoCanSeeCompanyOnly) non puo' leggerlo; con un company/survey/office
+     * esplicito il moma senza azienda resta privilegiato come prima.
+     *
+     * @param string|null $role Ruolo dell'identita'
+     * @param int $companyId Azienda effettiva (dopo l'override dell'identita')
+     * @param int $surveyId survey_id del client (0 = non fornito)
+     * @param mixed $officeId Sede effettiva (dopo l'override dell'identita')
+     * @return void
+     * @throws \Cake\Http\Exception\ForbiddenException
+     */
+    private function assertNoCompanyAggregateAllowed(?string $role, int $companyId, int $surveyId, $officeId): void
+    {
+        if (in_array($role, ['admin', 'moma_area'], true)) {
+            return;
+        }
+        if (empty($companyId) && empty($surveyId) && empty($officeId)) {
+            throw new ForbiddenException(__('Non sei autorizzato ad accedere alla risorsa richiesta'));
+        }
+    }
+
     public function getIndicator($indicator_id)
     {
-        $this->allowRolesOnly(['admin', 'moma', 'user','moma_area']);
+        $this->allowRolesOnly(['admin', 'moma', 'user', 'moma_area']);
 
         $company_id = (int)$this->request->getQuery('company_id');
         $survey_id = (int)$this->request->getQuery('survey_id');
         $office_id = $this->request->getQuery('office_id');
         $default_sort = $this->request->getQuery('default_sort');
         $answer = $this->request->getQuery('answer');
+        $year = (int)$this->request->getQuery('year');
 
         $identity = $this->Authentication->getIdentity();
         if ($identity->get('company_id')) {
@@ -698,6 +862,16 @@ class AnswersController extends AppController
         }
         $subcompany  =   $identity->get('subcompany');
 
+        // Scope: admin, moma_area e moma senza azienda sono privilegiati (come in
+        // allowWhoCanSeeCompanyOnly); gli altri vedono solo i dati della propria azienda.
+        $role = $identity->get('role');
+        $identityCompanyId = (int)$identity->get('company_id');
+        $privileged = $role === 'admin' || $role === 'moma_area' || ($role === 'moma' && empty($identityCompanyId));
+        $this->assertNoCompanyAggregateAllowed($role, $company_id, $survey_id, $office_id);
+        if (!$privileged) {
+            $this->assertIndicatorScope($identityCompanyId, $company_id, $survey_id, $this->request->getQuery('office_id'), (bool)$identity->get('office_id'));
+        }
+
         $all_params = $this->request->getQueryParams();
         $filters = array_filter(
             $all_params,
@@ -707,44 +881,169 @@ class AnswersController extends AppController
 
         //Devo ricavare la survey di quell'azienda
         if (!empty($company_id) && empty($survey_id)) {
-            $survey_id = (int)$this->Answers->Surveys->fromCompanyId($company_id);
+            $survey_id = (int)$this->Answers->Surveys->fromCompanyId($company_id, $year ?: null);
+        }
+
+        // Azienda richiesta ma nessuna indagine risolta: gli indicatori (es. splitBS) senza survey_id
+        // non applicano lo scope e conterebbero le risposte di TUTTE le aziende. Payload vuoto.
+        // L'anno viene applicato solo dove gia' lo e' (fromCompanyId sopra + chiave di cache).
+        // Unica eccezione (solo splitBS, anno + sede indicati): nessuna survey per quell'anno ma
+        // la sede ha una scheda aggregata per quell'anno -> la restituisco (mai la query live con
+        // survey_id null). A livello azienda (senza sede) non c'e' fallback: servirebbero i pesi.
+        if (!empty($company_id) && empty($survey_id)) {
+            if (empty($answer) && !is_numeric($answer)) {
+                $labels = [];
+                $series = [[]];
+                $Type = null;
+                $seriesLabels = null;
+                $keys = null;
+                $total = 0;
+                $survey_id = null;
+                $survey_name = null;
+                $source = null;
+                $surveyYear = null;
+
+                if ($indicator_id === 'splitBS' && !empty($year) && !empty($office_id)) {
+                    // survey_id 0: il costruttore non risolve nulla, count() non viene mai chiamato
+                    $aggregatedOnly = (new splitBSIndicator(0, $office_id, [], null, $year))
+                        ->setCompanyId($company_id)
+                        ->requireCompanyScope(!$privileged)
+                        ->loadAggregatedOnly(true);
+                    if (!empty($aggregatedOnly->getLabels())) {
+                        $labels = $this->translateIndicatorLabels($aggregatedOnly->getLabels());
+                        $series = $aggregatedOnly->getSeries();
+                        $keys = $aggregatedOnly->getKeys();
+                        $total = $aggregatedOnly->getTotal();
+                        $source = $aggregatedOnly->getSource();
+                        $surveyYear = $aggregatedOnly->getAggregatedYear();
+                    }
+                }
+                $year = $surveyYear;
+                $this->set(compact('labels', 'series', 'Type', 'seriesLabels', 'keys', 'total', 'survey_id', 'survey_name', 'year', 'source'));
+                $this->viewBuilder()->setOption('serialize', ['labels', 'series', 'Type', 'seriesLabels', 'keys', 'total', 'survey_id', 'survey_name', 'year', 'source']);
+            } else {
+                $list = [];
+                $this->set(compact('list'));
+                $this->viewBuilder()->setOption('serialize', ['list']);
+            }
+
+            return;
         }
 
         if (!empty($office_id)) {
             $of = $this->Answers->Surveys->Users->find()
-                        ->select(['office_id'])
-                        ->where([
-                            'office_id' => $office_id,
-                        ])
-                        ->first();
-            if (empty($of)) {
+                ->select(['office_id'])
+                ->where([
+                    'office_id' => $office_id,
+                ])
+                ->first();
+/*             if (empty($of)) {
                 $office_id = null;
-            }
+            } */
         }
 
-        $class = '\\App\\Indicator\\' . $indicator_id . 'Indicator';
-        if (!class_exists($class)) {
-            if (
-                $indicator_id == 'costo-spostamento' or $indicator_id == 'quale-distanza' or $indicator_id == 'quale-distanza-auto' or $indicator_id == 'spesa-spostamento'
-                or $indicator_id == 'distanza-totale'
-            ) {
-                $objIndicator = new RangeIndicator($indicator_id, $survey_id, $office_id, $filters, $subcompany);
-            } else {
-                $objIndicator = new baseIndicator($indicator_id, $survey_id, $office_id, $filters, $subcompany);
-            }
-        } else {
-            $objIndicator = new $class($survey_id);    //Creo una classe dinamica con il nome passato come parametro
-        }
+        $rangeQuestions = Configure::read('Range_questions');
 
         if (empty($answer) && !is_numeric($answer)) {
-            $objIndicator->count($default_sort);
-            $labels = $objIndicator->getLabels();
-            $series = $objIndicator->getSeries();
-            $Type = $objIndicator->getQuestionType();
+            $cacheFilters = $filters;
+            ksort($cacheFilters);
+            $cacheKey = 'indicator-' . md5(serialize([
+                'indicator_id' => $indicator_id,
+                'survey_id' => $survey_id,
+                'office_id' => $office_id,
+                'subcompany' => $subcompany,
+                'company_id' => $company_id,
+                'default_sort' => $default_sort,
+                'filters' => $cacheFilters,
+                'year' => $year,
+                'privileged' => $privileged,
+            ]));
 
-            $this->set(compact('labels', 'series', 'Type'));
-            $this->viewBuilder()->setOption('serialize', ['labels', 'series', 'Type']);
+            $payload = Cache::remember(
+                $cacheKey,
+                function () use ($indicator_id, $survey_id, $office_id, $filters, $subcompany, $default_sort, $rangeQuestions, $year, $company_id, $privileged) {
+                    $class = '\\App\\Indicator\\' . $indicator_id . 'Indicator';
+                    if (!class_exists($class)) {
+                        if (in_array($indicator_id, $rangeQuestions)) {
+                            $objIndicator = new RangeIndicator($indicator_id, $survey_id, $office_id, $filters, $subcompany);
+                        } else {
+                            $objIndicator = new baseIndicator($indicator_id, $survey_id, $office_id, $filters, $subcompany);
+                        }
+                    } else {
+                        $objIndicator = new $class($survey_id, $office_id, $filters, $subcompany, $year ?: null);
+                        if ($objIndicator instanceof splitBSIndicator) {
+                            $objIndicator->setCompanyId($company_id)->requireCompanyScope(!$privileged);
+                        }
+                    }
+                    $objIndicator->count($default_sort);
+
+                    // Questionario effettivamente usato (additivo): id/nome/anno della survey risolta.
+                    // Sulla scheda aggregata `year` e' l'anno della riga di storia (null = valore corrente).
+                    $usedSurvey = !empty($survey_id)
+                        ? $this->Answers->Surveys->find()->select(['Surveys.id', 'Surveys.name', 'Surveys.year'])
+                            ->where(['Surveys.id' => $survey_id])->first()
+                        : null;
+                    $source = method_exists($objIndicator, 'getSource') ? $objIndicator->getSource() : null;
+                    $usedYear = $usedSurvey && $usedSurvey->year ? (int)$usedSurvey->year : null;
+                    // splitBS senza survey ne' azienda ma con anno: aggregato su tutte le survey di
+                    // quell'anno (survey_id/survey_name null, year = anno richiesto).
+                    if (empty($survey_id) && !empty($year) && $objIndicator instanceof splitBSIndicator) {
+                        $usedYear = (int)$year;
+                    }
+                    if ($source === 'aggregated') {
+                        $usedYear = $objIndicator->getAggregatedYear();
+                    }
+
+                    return [
+                        'labels' => $objIndicator->getLabels(),
+                        'series' => $objIndicator->getSeries(),
+                        'Type' => $objIndicator->getQuestionType(),
+                        // Solo alcuni indicatori (es. splitBSKM) restituiscono più serie
+                        // (una per modalità di trasporto): il nome di ciascuna serie,
+                        // nello stesso ordine di 'series', quando disponibile.
+                        'seriesLabels' => method_exists($objIndicator, 'getSeriesLabels')
+                            ? $objIndicator->getSeriesLabels()
+                            : null,
+                        // Additivi (solo splitBS): chiavi indipendenti dalla lingua e n. rispondenti
+                        'keys' => method_exists($objIndicator, 'getKeys') ? $objIndicator->getKeys() : null,
+                        'total' => method_exists($objIndicator, 'getTotal') ? $objIndicator->getTotal() : null,
+                        'survey_id' => $usedSurvey ? (int)$usedSurvey->id : null,
+                        'survey_name' => $usedSurvey ? $usedSurvey->name : null,
+                        'year' => $usedYear,
+                        'source' => $source,
+                    ];
+                },
+                'dashboard'
+            );
+
+            // Le label nel payload sono in italiano (valore canonico, usato da
+            // baseIndicator per abbinare le risposte). Le traduco qui, dopo la
+            // cache (che è locale-agnostica), solo per la visualizzazione.
+            $labels = $this->translateIndicatorLabels($payload['labels']);
+            $series = $payload['series'];
+            $Type = $payload['Type'];
+            $seriesLabels = $payload['seriesLabels'] ?? null;
+            $keys = $payload['keys'] ?? null;
+            $total = $payload['total'] ?? null;
+            $survey_id = $payload['survey_id'] ?? null;
+            $survey_name = $payload['survey_name'] ?? null;
+            $year = $payload['year'] ?? null;
+            $source = $payload['source'] ?? null;
+
+            $this->set(compact('labels', 'series', 'Type', 'seriesLabels', 'keys', 'total', 'survey_id', 'survey_name', 'year', 'source'));
+            $this->viewBuilder()->setOption('serialize', ['labels', 'series', 'Type', 'seriesLabels', 'keys', 'total', 'survey_id', 'survey_name', 'year', 'source']);
         } else {
+            $class = '\\App\\Indicator\\' . $indicator_id . 'Indicator';
+            if (!class_exists($class)) {
+                if (in_array($indicator_id, $rangeQuestions)) {
+                    $objIndicator = new RangeIndicator($indicator_id, $survey_id, $office_id, $filters, $subcompany);
+                } else {
+                    $objIndicator = new baseIndicator($indicator_id, $survey_id, $office_id, $filters, $subcompany);
+                }
+            } else {
+                $objIndicator = new $class($survey_id, $office_id, $filters, $subcompany);
+            }
+
             $list = $objIndicator->getList($answer);
             //Anonimizzato
             if (!empty($survey_id)) {
@@ -776,6 +1075,28 @@ class AnswersController extends AppController
         }
     }
 
+    /**
+     * Traduce le label di un indicatore nella lingua corrente (impostata dal
+     * LocaleSelectorMiddleware via Accept-Language) SOLO per la visualizzazione.
+     *
+     * Il conteggio/abbinamento in baseIndicator deve restare sui valori canonici
+     * (italiani) memorizzati nella colonna `answer`, perciò NON si usa il
+     * Translate behavior su `questions.options` (romperebbe il match risposta↔label,
+     * vedi nota in QuestionsTable). Le stringhe francesi stanno in
+     * resources/locales/fr/default.po; una label senza traduzione ricade
+     * sull'italiano (msgid). In locale 'it' (defaultLocale) __() torna l'originale.
+     *
+     * @param array $labels Label canoniche (italiane) prodotte dall'indicatore.
+     * @return array Label tradotte per la lingua richiesta.
+     */
+    private function translateIndicatorLabels(array $labels): array
+    {
+        return array_map(
+            fn($label) => is_string($label) ? __($label) : $label,
+            $labels
+        );
+    }
+
     private function anonymize($s)
     {
         if (empty($s)) {
@@ -801,7 +1122,7 @@ class AnswersController extends AppController
 
     public function usersList($survey_id)
     {
-        $this->allowRolesOnly(['admin', 'moma', 'moma_area']);
+        $this->allowRolesOnly(['admin', 'moma']);
 
         $identity = $this->Authentication->getIdentity();
         $company_id = $identity->get('company_id');
@@ -811,10 +1132,17 @@ class AnswersController extends AppController
         $result  = $this->Answers->find()
             ->distinct(['Answers.user_id']) // remeber to remove full group by -> SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
             ->select([
-                'Answers.user_id', 'Users.first_name', 'Users.last_name', 'Answers.modified',
-                'Origins.lat', 'Origins.lon', 'Origins.geocoded_at', 'Origins.address',
+                'Answers.user_id',
+                'Users.first_name',
+                'Users.last_name',
+                'Answers.modified',
+                'Origins.geohash',
+                'Origins.geocoded_at',
+                // Origins.address is no longer persisted on new rows; the
+                // frontend derives location text from city/postal_code or
+                // decodes the geohash client-side via latlon-geohash.
             ])
-            ->contain(['Origins','Users'])
+            ->contain(['Origins', 'Users'])
             ->where(['Answers.survey_id' => $survey_id])
             ->order('Answers.modified DESC');
 
@@ -849,10 +1177,16 @@ class AnswersController extends AppController
                 ['survey_id' => $survey_id, 'user_id' => $user_id]
             )
         ) {
+            // delete user if anonymized (use delete() instead of deleteAll() to trigger cascade callbacks for Origins)
+            $user = $this->Answers->Users->find()->where(['id' => $user_id, 'last_name IS' => 'Anonimo'])->first();
+            if ($user) {
+                $this->Answers->Users->delete($user);
+            }
             $msg = 'Risposte eliminate con successo';
             $w = "getStats-$survey_id";
             // delete the cache
             Cache::delete($w, 'long');
+            Cache::clearGroup('dashboard');
         } else {
             $msg = 'Impossibile eliminare queste risposte';
         }
@@ -927,8 +1261,6 @@ class AnswersController extends AppController
         foreach ($questions_in_survey as $question_weight) {
             foreach ($questions as $question) {
                 if ($question_weight->question_id == $question->question->id) {
-                    $question->question['section_id'] = $question_weight->section_id;
-
                     if ($question_weight->weight != null) {
                         $question->question['weight'] = $question_weight->weight;
                     } else {
@@ -982,7 +1314,7 @@ class AnswersController extends AppController
         $users = $this->Answers->find()
             ->select(['Answers.user_id'])
             ->contain(['Surveys', 'Questions'])
-            ->where(['survey_id' => $survey_id,'question_id' => Configure::read('Questions.origine_spostamenti')])
+            ->where(['survey_id' => $survey_id, 'question_id' => Configure::read('Questions.origine_spostamenti')])
             //->limit(100)
             ->distinct();
 
@@ -1062,135 +1394,133 @@ class AnswersController extends AppController
         //             array_push($questions_options, $question->question->name);
         //         } elseif( strtolower($question->question->type) == "map") { //Risposta mappa
         //             //TODO: Qui devo esplodere i titoli della mappa
-                    array_push(
-                        $questions_name,
-                        'mappa',
-                        'mappa',
-                        'mappa',
-                        'mappa',
-                        'mappa'
-                    );
-                    array_push(
-                        $questions_description,
-                        'o/d del dipendente',
-                        'o/d del dipendente',
-                        'o/d del dipendente',
-                        'o/d del dipendente',
-                        'o/d del dipendente',
-                        'mezzo'
-                    );
-                    array_push(
-                        $questions_options,
-                        'citta',
-                        'cap',
-                        'provincia',
-                        'lat-origine',
-                        'lon-origine',
-                        'sede',
-                        'lat-sede',
-                        'lon-sede',
-                        'subcompany',
-                        'Bici',
-                        'Distanza',
-                        'Costo',
-                        'Tipo di Bici',
-                        'Bus/Tram',
-                        'Distanza',
-                        'Costo',
-                        'Treno',
-                        'Distanza',
-                        'Costo',
-                        'tipo di Treno',
-                        'Metro',
-                        'Distanza',
-                        'Costo',
-                        'Piedi',
-                        'Distanza',
-                        'Costo',
-                        'Monopattino',
-                        'Distanza',
-                        'Costo',
-                        'tipo di Monopattino',
-                        'Auto',
-                        'Distanza',
-                        'Costo',
-                        'Tipo di auto',
-                        'Tipo Conducente',
-                        'Classe Ambientale',
-                        'Cilindrata',
-                        "L'alimentazione",
-                        'Moto',
-                        'Distanza',
-                        'Costo',
-                        'Tipo di moto',
-                        'Classe Ambientale',
-                        'Cilindrata',
-                        "L'alimentazione"
-                    );
-                    array_push(
-                        $questions_index,
-                        'citta',
-                        'cap',
-                        'provincia',
-                        'lat-origine',
-                        'lon-origine',
-                        'sede',
-                        'lat-sede',
-                        'lon-sede',
-                        'subcompany',
-                        'Bike',
-                        'Distanza',
-                        'Costo',
-                        'Tipo di Bici',
-                        'Bus/Tram',
-                        'Distanza',
-                        'Costo',
-                        'Train',
-                        'Distanza',
-                        'Costo',
-                        'tipo di Treno',
-                        'Metro',
-                        'Distanza',
-                        'Costo',
-                        'On_foot',
-                        'Distanza',
-                        'Costo',
-                        'Monopattino',
-                        'Distanza',
-                        'Costo',
-                        'tipo di Monopattino',
-                        'Auto',
-                        'distance',
-                        'cost',
-                        'type_auto',
-                        'type_personale',
-                        'alimentazioneauto',
-                        'emissioni_auto',
-                        'cilindratauto',
-                        'Moto',
-                        'Distanza',
-                        'Costo',
-                        'Tipo di moto',
-                        'Classe Ambientale',
-                        'Cilindrata',
-                        "L'alimentazione"
-                    );
+        array_push(
+            $questions_name,
+            'mappa',
+            'mappa',
+            'mappa',
+            'mappa',
+            'mappa'
+        );
+        array_push(
+            $questions_description,
+            'o/d del dipendente',
+            'o/d del dipendente',
+            'o/d del dipendente',
+            'o/d del dipendente',
+            'o/d del dipendente',
+            'mezzo'
+        );
+        array_push(
+            $questions_options,
+            'citta',
+            'cap',
+            'provincia',
+            'geohash-origine',
+            'sede',
+            'lat-sede',
+            'lon-sede',
+            'subcompany',
+            'Bici',
+            'Distanza',
+            'Costo',
+            'Tipo di Bici',
+            'Bus/Tram',
+            'Distanza',
+            'Costo',
+            'Treno',
+            'Distanza',
+            'Costo',
+            'tipo di Treno',
+            'Metro',
+            'Distanza',
+            'Costo',
+            'Piedi',
+            'Distanza',
+            'Costo',
+            'Monopattino',
+            'Distanza',
+            'Costo',
+            'tipo di Monopattino',
+            'Auto',
+            'Distanza',
+            'Costo',
+            'Tipo di auto',
+            'Tipo Conducente',
+            'Classe Ambientale',
+            'Cilindrata',
+            "L'alimentazione",
+            'Moto',
+            'Distanza',
+            'Costo',
+            'Tipo di moto',
+            'Classe Ambientale',
+            'Cilindrata',
+            "L'alimentazione"
+        );
+        array_push(
+            $questions_index,
+            'citta',
+            'cap',
+            'provincia',
+            'geohash-origine',
+            'sede',
+            'lat-sede',
+            'lon-sede',
+            'subcompany',
+            'Bike',
+            'Distanza',
+            'Costo',
+            'Tipo di Bici',
+            'Bus/Tram',
+            'Distanza',
+            'Costo',
+            'Train',
+            'Distanza',
+            'Costo',
+            'tipo di Treno',
+            'Metro',
+            'Distanza',
+            'Costo',
+            'On_foot',
+            'Distanza',
+            'Costo',
+            'Monopattino',
+            'Distanza',
+            'Costo',
+            'tipo di Monopattino',
+            'Auto',
+            'distance',
+            'cost',
+            'type_auto',
+            'type_personale',
+            'alimentazioneauto',
+            'emissioni_auto',
+            'cilindratauto',
+            'Moto',
+            'Distanza',
+            'Costo',
+            'Tipo di moto',
+            'Classe Ambientale',
+            'Cilindrata',
+            "L'alimentazione"
+        );
 
-                    // array_push($questions_name, "mappa");
-                    // array_push($questions_description, "o/d del dipendente");
-                    // array_push($questions_options, "cap");
+        // array_push($questions_name, "mappa");
+        // array_push($questions_description, "o/d del dipendente");
+        // array_push($questions_options, "cap");
 
-                    // array_push($questions_name, "mappa");
-                    // array_push($questions_description, "o/d del dipendente");
-                    // array_push($questions_options, "provincia");
+        // array_push($questions_name, "mappa");
+        // array_push($questions_description, "o/d del dipendente");
+        // array_push($questions_options, "provincia");
 
-                    // array_push($questions_name, "mappa");
-                    // array_push($questions_description, "o/d del dipendente");
-                    // array_push($questions_options, "sede");
+        // array_push($questions_name, "mappa");
+        // array_push($questions_description, "o/d del dipendente");
+        // array_push($questions_options, "sede");
 
-                    // array_push($questions_name, "mappa");
-                    // array_push($questions_description, "o/d del dipendente");
-                    // array_push($questions_options, "subcompany");
+        // array_push($questions_name, "mappa");
+        // array_push($questions_description, "o/d del dipendente");
+        // array_push($questions_options, "subcompany");
         //         } else { //Risposta multipla o array
         //             $flag_for_array_questions = 0;
         //             foreach ($question->question->options as $option) {
@@ -1281,22 +1611,30 @@ class AnswersController extends AppController
     private function answersMapQuestion($survey_id, $questions_name, $questions_options, $user_id, $sheet, $current_row, $questions_index)
     {
         $user_answers = $this->Answers->find()
-            ->select(['Answers.user_id', 'Answers.created', 'Answers.answer',
-                        'Questions.name', 'Questions.options', 'Questions.type',
-                        'Users.email', 'Users.subcompany'])
-            ->contain(['Questions' => [
-                            'fields' => ['name','type','options'],
-                        ],
-                        'Users' => [
-                            'fields' => ['id','email','subcompany'],
-                            'Offices' => ['fields' => ['id','name','lat','lon']],
-                        ],
-                    ])
-            ->where(['Answers.survey_id' => $survey_id, 'Answers.user_id' => $user_id,'Answers.question_id' => Configure::read('Questions.origine_spostamenti')])
+            ->select([
+                'Answers.user_id',
+                'Answers.created',
+                'Answers.answer',
+                'Questions.name',
+                'Questions.options',
+                'Questions.type',
+                'Users.email',
+                'Users.subcompany',
+            ])
+            ->contain([
+                'Questions' => [
+                    'fields' => ['name', 'type', 'options'],
+                ],
+                'Users' => [
+                    'fields' => ['id', 'email', 'subcompany'],
+                    'Offices' => ['fields' => ['id', 'name', 'lat', 'lon']],
+                ],
+            ])
+            ->where(['Answers.survey_id' => $survey_id, 'Answers.user_id' => $user_id, 'Answers.question_id' => Configure::read('Questions.origine_spostamenti')])
             ->matching('Users.SurveyParticipants', function ($q) {
                 return $q->where(['SurveyParticipants.survey_completed_at IS NOT NULL']);
             });
-            //->order('Questions.name'); non serve ordinare per risparmiare 0,5 secondi
+        //->order('Questions.name'); non serve ordinare per risparmiare 0,5 secondi
         $survey = $this->Answers->Surveys->findById($survey_id)->first();
         $first = true;
         if (empty($user_answers->toArray())) {
@@ -1358,16 +1696,12 @@ class AnswersController extends AppController
                         $question_column++;
                     }
 
-                    //Lat-origine
-                    if (isset($dec['origin']['lat'])) {
-                        $sheet->setCellValue([$question_column++, $current_row], $dec['origin']['lat']);
-                    } else {
-                        $question_column++;
-                    }
-
-                    //Lon-origine
-                    if (isset($dec['origin']['lon'])) {
-                        $sheet->setCellValue([$question_column++, $current_row], $dec['origin']['lon']);
+                    // Geohash-origine: the coarse origin cell now travels directly in the
+                    // answer payload (OriginPayloadHelper::stripOriginPii() injects
+                    // origin.geohash before stripping address/lat/lon) — no Origins lookup
+                    // needed anymore.
+                    if (isset($dec['origin']['geohash'])) {
+                        $sheet->setCellValue([$question_column++, $current_row], $dec['origin']['geohash']);
                     } else {
                         $question_column++;
                     }
@@ -1392,7 +1726,7 @@ class AnswersController extends AppController
                         $question_column++;
                     }
 
-                     //Subcompany
+                    //Subcompany
                     if (isset($answer->user->subcompany)) {
                         $sheet->setCellValue([$question_column++, $current_row], $answer->user->subcompany);
                     } else {
@@ -1526,30 +1860,30 @@ class AnswersController extends AppController
      */
     public function getExportQuestions($survey_id = null, $all = false)
     {
-            $this->allowRolesOnly(['admin', 'moma', 'user', 'moma_area']);
+        $this->allowRolesOnly(['admin', 'moma', 'user', 'moma_area']);
         if ($survey_id == null) {
             $survey_id = $this->request->getData();
-            $this->loadModel('Questions_surveys');
+            $this->Questions_surveys = TableRegistry::getTableLocator()->get('Questions_surveys');
         }
-            $questions_in_survey = $this->Questions_surveys->find()
-                        ->select(['question_id', 'weight', 'section_id'])
-                        ->where(['survey_id IN' => $survey_id])
-                        ->distinct();
-        if (!$all) {
-            $questions = $this->Answers->find()->select(['Questions.id', 'Questions.name', 'Questions.description'])
-            ->contain(['Surveys', 'Questions'])
+        $questions_in_survey = $this->Questions_surveys->find()
+            ->select(['question_id', 'weight'])
             ->where(['survey_id IN' => $survey_id])
             ->distinct();
+        if (!$all) {
+            $questions = $this->Answers->find()->select(['Questions.id', 'Questions.name', 'Questions.description'])
+                ->contain(['Surveys', 'Questions'])
+                ->where(['survey_id IN' => $survey_id])
+                ->distinct();
             $questions_used = $this->questions_used_in_survey($questions, $questions_in_survey);
             $this->set('questions', $questions_used);
             $this->viewBuilder()->setOption('serialize', ['questions']);
             // $this->render('export_questions');
         } else {
             $questions = $this->Answers->find()
-            ->select(['Questions.section_id', 'Questions.id', 'Questions.name', 'Questions.description', 'Questions.options', 'Questions.type'])
-            ->contain(['Surveys', 'Questions'])
-            ->where(['survey_id IN' => $survey_id])
-            ->distinct();
+                ->select(['Questions.id', 'Questions.name', 'Questions.description', 'Questions.options', 'Questions.type'])
+                ->contain(['Surveys', 'Questions'])
+                ->where(['survey_id IN' => $survey_id])
+                ->distinct();
 
             return $this->questions_used_in_survey($questions, $questions_in_survey);
         }
@@ -1606,7 +1940,7 @@ class AnswersController extends AppController
                 'company_id' => $company_id,
                 'office_id' => $office_id,
                 'subcompany' => $subcompany,
-                ], JSON_THROW_ON_ERROR),
+            ], JSON_THROW_ON_ERROR),
             priority: Pheanstalk::DEFAULT_PRIORITY,
             delay: 30,
             timeToRelease: 60
@@ -1622,7 +1956,7 @@ class AnswersController extends AppController
 
     public function setQueueStatus($survey_id, $job_id, $step)
     {
-        $lock = [-1,-1,-1,-1,-1];
+        $lock = [-1, -1, -1, -1, -1];
         // if survey_id is array change value to totall
         if (is_array($survey_id)) {
             $survey_id = 'totall';
@@ -1676,7 +2010,9 @@ class AnswersController extends AppController
         $this->set('message', $message);
         $this->viewBuilder()->setOption('serialize', ['message', 'lock']);
     }
+
     // generate deleted users by survey_id
+
     public function generateDeletedUsers($survey_id = null)
     {
         $this->allowRolesOnly(['admin']);
@@ -1689,19 +2025,19 @@ class AnswersController extends AppController
                 ->distinct()
                 ->limit(1000);
             // if result empty then return
-            $GenUsersCount= $result->count();
-            if(empty($GenUsersCount)) {
+            $GenUsersCount = $result->count();
+            if (empty($GenUsersCount)) {
                 $errorMsg = 'Nessun utente cancellato trovato per il sondaggio selezionato';
                 $this->set(compact('errorMsg'));
                 $this->viewBuilder()->setOption('serialize', ['errorMsg']);
+
                 return;
             }
-            
-            
+
             $survey = $this->Answers->Surveys
-            ->find()
-            ->where(['id' => $survey_id])
-            ->first();
+                ->find()
+                ->where(['Surveys.id' => $survey_id])
+                ->first();
             if (empty($survey)) {
                 throw new NotFoundException("Survey $survey not found");
             }
@@ -1710,16 +2046,24 @@ class AnswersController extends AppController
             foreach ($result as $row) {
                 $user_id = $row->user_id;
                 $user = $this->Answers->Users->newEntity([
-                'id' => $user_id,
-                'username' => "$user_id@email.invalid",
-                'email' => "$user_id@email.invalid",
-                'password' => 'fake unguessable password (no string could have this as hashed value)',
-                'first_name' => 'Partecipante',
-                'last_name' => 'Anonimo',
-                'active' => 0,
-                'role' => 'user',
-                'company_id' => $company_id,
-                'years' => [(string)$survey['year']],
+                    'id' => $user_id,
+                    'username' => "$user_id@email.invalid",
+                    'email' => "$user_id@email.invalid",
+                    'password' => 'fake unguessable password (no string could have this as hashed value)',
+                    'first_name' => 'Partecipante',
+                    'last_name' => 'Anonimo',
+                    'active' => 0,
+                    'role' => 'user',
+                    'company_id' => $company_id,
+                    'years' => [(string)$survey['year']],
+                ], [
+                    // Flusso fidato: l'entity blocca questi campi al mass-assignment lato UI.
+                    'accessibleFields' => [
+                        'id' => true,
+                        'role' => true,
+                        'company_id' => true,
+                        'password' => true,
+                    ],
                 ]);
                 $this->Answers->Users->save($user);
                 $surveyParticipant = $this->Answers->Users->SurveyParticipants->newEmptyEntity();
@@ -1731,15 +2075,72 @@ class AnswersController extends AppController
         } catch (\Exception $e) {
             $errorMsg = $e->getMessage();
             $this->set(compact('message', 'errorMsg'));
-            $this->viewBuilder()->setOption('serialize', [ 'errorMsg']);
+            $this->viewBuilder()->setOption('serialize', ['errorMsg']);
+
             return;
         }
         $errorMsg = "Generati $GenUsersCount utenti cancellati per il sondaggio $survey_id";
         $this->set(compact('errorMsg'));
         $this->viewBuilder()->setOption('serialize', ['errorMsg']);
-
-
-
     }
 
+    /**
+     * Restituisce le origini geolocalizzate (geohash) dalle risposte ad una domanda mappa di un questionario.
+     *
+     * @param int $survey_id ID del questionario
+     * @param int $question_id ID della domanda di tipo mappa
+     * @return void
+     */
+    public function getOriginsFromAnswers($survey_id, $question_id): void
+    {
+        $this->allowRolesOnly(['admin', 'moma', 'moma_area']);
+
+        $errorMsg = false;
+        try {
+            $answers = $this->Answers->find()
+                ->select(['answer', 'user_id'])
+                ->where([
+                    'survey_id' => $survey_id,
+                    'question_id' => $question_id,
+                ])
+                ->all();
+
+            $origins = [];
+            foreach ($answers as $answer) {
+                $data = $answer->answer;
+                if (is_string($data)) {
+                    $dt = json_decode($data, true);
+                    if (json_last_error() === JSON_ERROR_NONE) {
+                        $data = $dt;
+                    }
+                }
+                $geohash = null;
+
+                //Presicione del geohash di default
+                $precision = Configure::read('Geohash.precision', 7);
+
+                if (is_array($data) && !empty($data['geohash'])) {
+                    $geohash = substr($data['geohash'], 0, $precision);
+                } elseif (is_array($data) && isset($data['lat']) && isset($data['lon'])) {
+                    $g = new Geohash();
+                    $geohash = $g->encode($data['lat'], $data['lon'], $precision);
+                } elseif (is_array($data) && isset($data['lat']) && isset($data['lng'])) {
+                    $g = new Geohash();
+                    $geohash = $g->encode($data['lat'], $data['lng'], $precision);
+                }
+                if ($geohash !== null) {
+                    $origins[] = [
+                        'geohash' => $geohash,
+                        'user_id' => $answer->user_id,
+                    ];
+                }
+            }
+        } catch (\Exception $e) {
+            $errorMsg = $e->getMessage();
+            $origins = [];
+        }
+
+        $this->set(compact('origins', 'errorMsg'));
+        $this->viewBuilder()->setOption('serialize', ['origins', 'errorMsg']);
+    }
 }

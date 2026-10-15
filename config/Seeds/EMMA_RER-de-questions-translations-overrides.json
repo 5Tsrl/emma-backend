@@ -1,0 +1,289 @@
+{
+  "_comment": "German (de) translations for QuestionsSurveys.id rows whose description/long_description/options diverge from their parent Questions row of the Rer database (emma_rer, rerfe.drupalvm.test). Italian source text of each row in `_it` (verified by the import command, never stored). Generated for review before running: HTTP_HOST=rerfe.drupalvm.test ./bin/cake import_questions_translations config/Seeds/EMMA_RER-de-questions-translations-overrides.json --locale de --dry-run --verbose",
+  "questions_surveys": {
+    "41": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "42": {
+      "options": "Hauptstandort Vorlage",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "43": {
+      "options": "Firmenwagen|Auto allein als Fahrer/in|Auto als Beifahrer/in oder im Carpooling|Betriebliches Carsharing|Städtisches Carsharing|Taxi",
+      "_it": "Scegli il tipo di auto"
+    },
+    "45": {
+      "description": "Wählen Sie die Art des Fahrrads (Muskelkraft oder E-Bike)",
+      "options": "Privat|Firmen-Bikesharing|Städtisches Bikesharing",
+      "_it": "Scegli Il Tipo Di Bici (Muscolare O E-Bike)"
+    },
+    "48": {
+      "options": "Privat|Firmen-Sharing",
+      "_it": "Globale - Scegli il tipo di monopattino"
+    },
+    "51": {
+      "long_description": "Wählen Sie unter den unten aufgeführten Optionen die Einstufung, die Ihren tatsächlichen Aufgaben am nächsten kommt",
+      "_it": "Qual'è il tuo inquadramento?"
+    },
+    "53": {
+      "options": "Nie oder gelegentlich, höchstens 2 oder 3 Mal im Monat|Häufig, einige Tage pro Woche|Immer, an allen Tagen meiner Arbeitswoche|In bestimmten Zeiten des Jahres",
+      "_it": "Con che frequenza, abitualmente, ricorri allo Smart Working?"
+    },
+    "54": {
+      "description": "Sind Sie Angestellte/r des Unternehmens, für das Sie den Fragebogen ausfüllen?",
+      "_it": "Sei dipendente dell'azienda per cui stai compilando il questionario?"
+    },
+    "136": {
+      "options": "Standort 2|Hauptstandort",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "137": {
+      "options": "Firmenwagen|Auto allein als Fahrer/in|Auto als Beifahrer/in oder im Carpooling|Betriebliches Carsharing|Städtisches Carsharing|Taxi",
+      "_it": "Scegli il tipo di auto"
+    },
+    "139": {
+      "description": "Wählen Sie die Art des Fahrrads (Muskelkraft oder E-Bike)",
+      "options": "Privat|Firmen-Bikesharing|Städtisches Bikesharing",
+      "_it": "Scegli Il Tipo Di Bici (Muscolare O E-Bike)"
+    },
+    "142": {
+      "options": "Privat|Firmen-Sharing",
+      "_it": "Globale - Scegli il tipo di monopattino"
+    },
+    "210": {
+      "options": "<b>Weniger</b> als 15 Minuten|<b> Mehr </b> als 90 Minuten|Zwischen 15 und 30 Minuten|Zwischen 30 und 45 Minuten|Zwischen 45 und 60 Minuten|Zwischen 60 und 75 Minuten|Zwischen 75 und 90 Minuten",
+      "_it": "Quanti minuti impieghi, mediamente e comprendendo eventuali soste, per lo SPOSTAMENTO LAVORO-CASA"
+    },
+    "226": {
+      "options": "S1|Standort 2|Standort 3|zweiter Standort",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "227": {
+      "options": "Firmenwagen|Auto allein als Fahrer/in|Auto als Beifahrer/in oder im Carpooling|Betriebliches Carsharing|Städtisches Carsharing|Taxi",
+      "_it": "Scegli il tipo di auto"
+    },
+    "229": {
+      "description": "Wählen Sie die Art des Fahrrads (Muskelkraft oder E-Bike)",
+      "options": "Privat|Firmen-Bikesharing|Städtisches Bikesharing",
+      "_it": "Scegli Il Tipo Di Bici (Muscolare O E-Bike)"
+    },
+    "232": {
+      "options": "Privat|Firmen-Sharing",
+      "_it": "Globale - Scegli il tipo di monopattino"
+    },
+    "248": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend, um zur Arbeit zu gelangen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnverkehr|Carsharing|Bikesharing|Motorradsharing|E-Scooter-Sharing|Werksshuttle|Carpooling",
+      "_it": "Quale mezzo utilizzi prevalentemente per recarti al lavoro"
+    },
+    "249": {
+      "options": "Standort 2|Hauptstandort|zweiter Standort",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "250": {
+      "options": "Firmenwagen|Auto allein als Fahrer/in|Auto als Beifahrer/in oder im Carpooling|Betriebliches Carsharing|Städtisches Carsharing|Taxi",
+      "_it": "Scegli il tipo di auto"
+    },
+    "252": {
+      "description": "Wählen Sie die Art des Fahrrads (Muskelkraft oder E-Bike)",
+      "options": "Privat|Firmen-Bikesharing|Städtisches Bikesharing",
+      "_it": "Scegli Il Tipo Di Bici (Muscolare O E-Bike)"
+    },
+    "255": {
+      "options": "Privat|Firmen-Sharing",
+      "_it": "Globale - Scegli il tipo di monopattino"
+    },
+    "258": {
+      "long_description": "Wählen Sie unter den unten aufgeführten Optionen die Einstufung, die Ihren tatsächlichen Aufgaben am nächsten kommt",
+      "_it": "Qual'è il tuo inquadramento?"
+    },
+    "260": {
+      "options": "Nie oder gelegentlich, höchstens 2 oder 3 Mal im Monat|Häufig, einige Tage pro Woche|Immer, an allen Tagen meiner Arbeitswoche|In bestimmten Zeiten des Jahres",
+      "_it": "Con che frequenza, abitualmente, ricorri allo Smart Working?"
+    },
+    "261": {
+      "description": "Sind Sie Angestellte/r des Unternehmens, für das Sie den Fragebogen ausfüllen?",
+      "_it": "Sei dipendente dell'azienda per cui stai compilando il questionario?"
+    },
+    "337": {
+      "options": "S1|Standort 2|Standort 3|zweiter Standort",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "338": {
+      "options": "Firmenwagen|Auto allein als Fahrer/in|Auto als Beifahrer/in oder im Carpooling|Betriebliches Carsharing|Städtisches Carsharing|Taxi",
+      "_it": "Scegli il tipo di auto"
+    },
+    "340": {
+      "description": "Wählen Sie die Art des Fahrrads (Muskelkraft oder E-Bike)",
+      "options": "Privat|Firmen-Bikesharing|Städtisches Bikesharing",
+      "_it": "Scegli Il Tipo Di Bici (Muscolare O E-Bike)"
+    },
+    "343": {
+      "options": "Privat|Firmen-Sharing",
+      "_it": "Globale - Scegli il tipo di monopattino"
+    },
+    "883": {
+      "options": "{\"groups\":[{\"label\":\"Kosten der Fahrt\",\"options\":[\"Überhaupt nicht zufrieden\",\"Wenig zufrieden\",\"Ziemlich zufrieden\",\"Sehr zufrieden\"]},{\"label\":\"Fahrtzeiten\",\"options\":[\"Überhaupt nicht zufrieden\",\"Wenig zufrieden\",\"Ziemlich zufrieden\",\"Sehr zufrieden\"]},{\"label\":\"Taktfrequenz der Fahrten\",\"options\":[\"Überhaupt nicht zufrieden\",\"Wenig zufrieden\",\"Ziemlich zufrieden\",\"Sehr zufrieden\"]},{\"label\":\"Pünktlichkeit der Fahrten\",\"options\":[\"Überhaupt nicht zufrieden\",\"Wenig zufrieden\",\"Ziemlich zufrieden\",\"Sehr zufrieden\"]},{\"label\":\"Anzahl der Umstiege\",\"options\":[\"Überhaupt nicht zufrieden\",\"Wenig zufrieden\",\"Ziemlich zufrieden\",\"Sehr zufrieden\"]},{\"label\":\"Bequemlichkeit der Fahrt\",\"options\":[\"Überhaupt nicht zufrieden\",\"Wenig zufrieden\",\"Ziemlich zufrieden\",\"Sehr zufrieden\"]},{\"label\":\"Persönliche Sicherheit\",\"options\":[\"Überhaupt nicht zufrieden\",\"Wenig zufrieden\",\"Ziemlich zufrieden\",\"Sehr zufrieden\"]}],\"allowOther\":false}",
+      "_it": "Quanto ti ritieni soddisfatto dei seguenti aspetti riguardanti lo spostamento con i mezzi pubblici?"
+    },
+    "897": {
+      "long_description": "Mehrfachantworten möglich",
+      "options": "Ja, nur das eigene|Ja, die geteilte (Bikesharing)|Ja, wenn es sichere Radwege gäbe|Ja, wenn im Unternehmen die entsprechende Ausstattung für die Fahrradfahrt vorhanden wäre (Umkleiden und Duschen für die persönliche Hygiene, mit eventueller Lademöglichkeit für E-Bikes usw.)|Ja, wenn es einen sicheren internen Parkplatz gäbe|Ja, wenn es einen geeigneten Umsteigeparkplatz zum öffentlichen Verkehr gäbe (z. B. am Bahnhof)|Ja, wenn ich eine Erstattung für den Kauf eines Fahrrads erhalten könnte|Ja, wenn es einen finanziellen Anreiz mit Kilometererstattung gäbe|Ja, nur in den Sommermonaten|Nein",
+      "_it": "Saresti disposto a utilizzare la bicicletta per effettuare il tuo spostamento?"
+    },
+    "905": {
+      "long_description": "Gemäß dem Gesetzesdekret Nr. 66 vom 8.4.2003 (\"Umsetzung der Richtlinien 93/104/EG und\n2000/34/EG über bestimmte Aspekte der Arbeitszeitgestaltung\") versteht man unter „Schichtarbeit“ jede Form der Arbeitsorganisation, auch in Arbeitsgruppen, bei der\nArbeitnehmer nacheinander an denselben Arbeitsplätzen gemäß einem\nbestimmten Rhythmus eingesetzt werden, einschließlich Rotationsrhythmus, der kontinuierlich oder diskontinuierlich sein kann,\nund die für die Arbeitnehmer die Notwendigkeit mit sich bringt, zu unterschiedlichen Zeiten innerhalb eines\nbestimmten Zeitraums von Tagen oder Wochen zu arbeiten [...]",
+      "_it": "Lavori su turni?"
+    },
+    "908": {
+      "long_description": "Telearbeit: Arbeit, die entfernt vom eigenen Arbeitsstandort ausgeführt wird, mit fest vorgegebenem Ort und festen Arbeitszeiten.\n\nHomeoffice/Smart Working: Der Mitarbeiter übt seine Tätigkeit außerhalb des Unternehmensstandorts aus, entscheidet aber vollständig eigenständig über Zeit und Ort der Arbeit, ohne festen Arbeitsplatz.",
+      "_it": "La tua azienda prevede la possibilità di lavorare da casa?"
+    },
+    "920": {
+      "long_description": "Mehrfachantworten möglich",
+      "options": "Ratenzahlung der Fahrscheinkosten über die Gehaltsabrechnung|Rabatt auf die Fahrscheinkosten|Ratenzahlung der Fahrradkosten über die Gehaltsabrechnung (auch mit elektrischer Tretunterstützung)|Rabatt auf den Kaufpreis eines Fahrrads |Rabatt auf den Kaufpreis eines E-Scooters|Kostenloses/vergünstigtes Abonnement für E-Scooter-Sharing|Kostenloses/vergünstigtes Bikesharing-Abonnement|Vereinbarung Parkplatz-öffentliche Verkehrsmittel (z. B. Park&Ride, Fahrradstation)",
+      "_it": "Se potessi scegliere il tipo di incentivo, quale preferiresti?"
+    },
+    "933": {
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnservice anderer Anbieter (Trenord, Italo, Hochgeschwindigkeitszüge, ...)|Carsharing|Bikesharing|Motorrad-Sharing|E-Scooter-Sharing|Firmenshuttle|Carpooling",
+      "_it": "Per lo spostamento di andata e ritorno quale mezzo utilizzi in prevalenza nei mesi invernali?"
+    },
+    "934": {
+      "options": "Hauptstandort|Zweigstelle",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "936": {
+      "options": "Fahrer|Beifahrer",
+      "_it": "Scegli se sei conducente oppure passeggero"
+    },
+    "941": {
+      "options": "<b>Führungskraft</b> - *Bedarfsverkehr: Dies sind Mobilitätsdienste, die keinen festen Fahrplänen und Strecken folgen, sondern nur aktiviert werden, wenn ein Nutzer die Fahrt bucht. In der Praxis wird die Fahrt (telefonisch oder per App) unter Angabe von Start- und Zielort angefordert, und das Fahrzeug wird entsprechend den eingegangenen Anfragen organisiert.)|test",
+      "_it": "test"
+    },
+    "1029": {
+      "options": "marconi |Standort 2|zweiter Standort",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "1030": {
+      "options": "Firmenwagen|Auto allein als Fahrer/in|Auto als Beifahrer/in oder im Carpooling|Betriebliches Carsharing|Städtisches Carsharing|Taxi",
+      "_it": "Scegli il tipo di auto"
+    },
+    "1032": {
+      "description": "Wählen Sie die Art des Fahrrads (Muskelkraft oder E-Bike)",
+      "options": "Privat|Firmen-Bikesharing|Städtisches Bikesharing",
+      "_it": "Scegli Il Tipo Di Bici (Muscolare O E-Bike)"
+    },
+    "1035": {
+      "options": "Privat|Firmen-Sharing",
+      "_it": "Globale - Scegli il tipo di monopattino"
+    },
+    "1075": {
+      "options": "marconi |Standort 2|zweiter Standort",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "1076": {
+      "options": "Firmenwagen|Auto allein als Fahrer/in|Auto als Beifahrer/in oder im Carpooling|Betriebliches Carsharing|Städtisches Carsharing|Taxi",
+      "_it": "Scegli il tipo di auto"
+    },
+    "1078": {
+      "description": "Wählen Sie die Art des Fahrrads (Muskelkraft oder E-Bike)",
+      "options": "Privat|Firmen-Bikesharing|Städtisches Bikesharing",
+      "_it": "Scegli Il Tipo Di Bici (Muscolare O E-Bike)"
+    },
+    "1081": {
+      "options": "Privat|Firmen-Sharing",
+      "_it": "Globale - Scegli il tipo di monopattino"
+    },
+    "1391": {
+      "options": "Hauptstandort",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "1561": {
+      "options": "Standort 2|Hauptstandort",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "1562": {
+      "options": "Firmenwagen|Auto allein als Fahrer/in|Auto als Beifahrer/in oder im Carpooling|Betriebliches Carsharing|Städtisches Carsharing|Taxi",
+      "_it": "Scegli il tipo di auto"
+    },
+    "1564": {
+      "description": "Wählen Sie die Art des Fahrrads (Muskelkraft oder E-Bike)",
+      "options": "Privat|Firmen-Bikesharing|Städtisches Bikesharing",
+      "_it": "Scegli Il Tipo Di Bici (Muscolare O E-Bike)"
+    },
+    "1567": {
+      "options": "Privat|Firmen-Sharing",
+      "_it": "Globale - Scegli il tipo di monopattino"
+    },
+    "1833": {
+      "options": "Hauptsitz",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "1834": {
+      "options": "Firmenwagen|Auto allein als Fahrer/in|Auto als Beifahrer/in oder im Carpooling|Betriebliches Carsharing|Städtisches Carsharing|Taxi",
+      "_it": "Scegli il tipo di auto"
+    },
+    "1836": {
+      "description": "Wählen Sie die Art des Fahrrads (Muskelkraft oder E-Bike)",
+      "options": "Privat|Firmen-Bikesharing|Städtisches Bikesharing",
+      "_it": "Scegli Il Tipo Di Bici (Muscolare O E-Bike)"
+    },
+    "1839": {
+      "options": "Privat|Firmen-Sharing",
+      "_it": "Globale - Scegli il tipo di monopattino"
+    },
+    "1863": {
+      "options": "Standort 2|Hauptstandort",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "1864": {
+      "options": "Firmenwagen|Auto allein als Fahrer/in|Auto als Beifahrer/in oder im Carpooling|Betriebliches Carsharing|Städtisches Carsharing|Taxi",
+      "_it": "Scegli il tipo di auto"
+    },
+    "1866": {
+      "description": "Wählen Sie die Art des Fahrrads (Muskelkraft oder E-Bike)",
+      "options": "Privat|Firmen-Bikesharing|Städtisches Bikesharing",
+      "_it": "Scegli Il Tipo Di Bici (Muscolare O E-Bike)"
+    },
+    "1869": {
+      "options": "Privat|Firmen-Sharing",
+      "_it": "Globale - Scegli il tipo di monopattino"
+    },
+    "1893": {
+      "options": "Standort 2|Hauptstandort",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "1894": {
+      "options": "Firmenwagen|Auto allein als Fahrer/in|Auto als Beifahrer/in oder im Carpooling|Betriebliches Carsharing|Städtisches Carsharing|Taxi",
+      "_it": "Scegli il tipo di auto"
+    },
+    "1896": {
+      "description": "Wählen Sie die Art des Fahrrads (Muskelkraft oder E-Bike)",
+      "options": "Privat|Firmen-Bikesharing|Städtisches Bikesharing",
+      "_it": "Scegli Il Tipo Di Bici (Muscolare O E-Bike)"
+    },
+    "1899": {
+      "options": "Privat|Firmen-Sharing",
+      "_it": "Globale - Scegli il tipo di monopattino"
+    },
+    "1993": {
+      "options": "Standort 2|Hauptstandort",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "1994": {
+      "options": "Firmenwagen|Auto allein als Fahrer/in|Auto als Beifahrer/in oder im Carpooling|Betriebliches Carsharing|Städtisches Carsharing|Taxi",
+      "_it": "Scegli il tipo di auto"
+    },
+    "1996": {
+      "description": "Wählen Sie die Art des Fahrrads (Muskelkraft oder E-Bike)",
+      "options": "Privat|Firmen-Bikesharing|Städtisches Bikesharing",
+      "_it": "Scegli Il Tipo Di Bici (Muscolare O E-Bike)"
+    },
+    "1999": {
+      "options": "Privat|Firmen-Sharing",
+      "_it": "Globale - Scegli il tipo di monopattino"
+    }
+  }
+}

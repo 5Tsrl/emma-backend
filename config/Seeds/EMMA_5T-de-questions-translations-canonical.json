@@ -1,0 +1,1608 @@
+{
+  "_comment": "German (de) translations for Questions.id (canonical question bank). Generated for review before running: ./bin/cake import_questions_translations config/Seeds/de-questions-translations-canonical.json --locale de --dry-run --verbose",
+  "questions": {
+    "3": {
+      "description": "Wie viele Kilometer legen Sie mit dem Auto/Motorrad zurück, um zu Ihrer Arbeit/Schule zu gelangen (für die einfache Fahrt)?",
+      "long_description": "Bitte geben Sie genau die Anzahl der mit dem privaten Verkehrsmittel zurückgelegten Kilometer an, ausgenommen die mit anderen Verkehrsmitteln zurückgelegten Strecken, damit die Umweltauswirkungen korrekt berechnet werden können.",
+      "options": "<2 km|2,1-5 km|5,1-10 km|10,1-15 km|15,1-25 km|25,1-50 km|50,1-75 km|75,1-100 km|100,1-125 km|125,1-150 km|>150 km|Ungültige Daten",
+      "_it": "Quanti chilometri percorri in auto/moto per raggiungere il tuo lavoro/scuola (per il viaggio di sola andata)?"
+    },
+    "4": {
+      "description": "Welche Art von Arbeitszeit haben Sie",
+      "options": "2 Schichten (06:00 - 14:00, 14:00 - 22:00)|3 Schichten (06:00 - 14:00, 14:00 - 22:00, 22:00 - 06:00)|Ganztags|Sonstiges",
+      "_it": "Che tipo di orario di lavoro hai"
+    },
+    "5": {
+      "description": "Um wie viel Uhr brechen Sie normalerweise zu Ihrer Fahrt auf?",
+      "options": "vor 6:30 Uhr|zwischen 6:30 und 6:45 Uhr|zwischen 6:45 und 7:00 Uhr|zwischen 7:00 und 7:15 Uhr|zwischen 7:15 und 7:30 Uhr|zwischen 7:30 und 7:45 Uhr|zwischen 7:45 und 8:00 Uhr|zwischen 8:00 und 8:15 Uhr|zwischen 8:15 und 8:30 Uhr|zwischen 8:30 und 8:45 Uhr|zwischen 8:45 und 9:00 Uhr|nach 9:00 Uhr|ich arbeite im Schichtdienst|Zeitplan abhängig vom Unterricht",
+      "_it": "A che ora parti solitamente per effettuare il tuo spostamento?"
+    },
+    "6": {
+      "description": "Wie viele Minuten benötigen Sie im Durchschnitt, einschließlich eventueller Zwischenstopps, für die FAHRT VON DER ARBEIT NACH HAUSE",
+      "options": "weniger als 15 Minuten|mehr als 90 Minuten|zwischen 15 und 30 Minuten|zwischen 30 und 45 Minuten|zwischen 45 und 60 Minuten|zwischen 60 und 75 Minuten|zwischen 75 und 90 Minuten",
+      "_it": "Quanti minuti impieghi, mediamente e comprendendo eventuali soste, per lo SPOSTAMENTO LAVORO-CASA"
+    },
+    "7": {
+      "description": "Um wie viel Uhr verlassen Sie normalerweise die Arbeit für den Heimweg, wenn Sie Ihre Tätigkeit beenden?",
+      "options": "vor 14:00 Uhr|von 14:00 bis 14:30 Uhr|von 14:30 bis 15:00 Uhr|von 15:00 bis 15:30 Uhr|von 15:30 bis 16:00 Uhr|von 16:00 bis 16:30 Uhr|von 16:30 bis 17:00 Uhr|von 17:00 bis 17:30 Uhr|von 17:30 bis 18:00 Uhr|von 18:00 bis 18:30 Uhr|von 18:30 bis 19:00 Uhr|nach 19:00 Uhr|ich arbeite im Schichtdienst|ich verlasse die Arbeit immer zu unterschiedlichen Zeiten",
+      "_it": "Solitamente a che ora esci quando finisci l'attività lavorativa per il ritorno a casa?"
+    },
+    "8": {
+      "description": "Um wie viel Uhr verlassen Sie normalerweise freitags die Arbeit?",
+      "options": "vor 14:00 Uhr|von 14:00 bis 14:30 Uhr|von 14:30 bis 15:00 Uhr|von 15:30 bis 16:00 Uhr|von 16:00 bis 16:30 Uhr|von 16:30 bis 17:00 Uhr|von 17:00 bis 17:30 Uhr|von 17:30 bis 18:00 Uhr|von 18:00 bis 18:30 Uhr|von 18:30 bis 19:00 Uhr|nach 19:00 Uhr",
+      "_it": "Solitamente a che ora esci da lavoro il venerdì?"
+    },
+    "9": {
+      "description": "Erledigen Sie während der Fahrt, auf dem Hinweg oder Rückweg, weitere Tätigkeiten (z. B. Besorgungen, Einkaufen, Sport, Kinder zur Schule bringen usw.)?",
+      "options": "Ja, auf dem Hinweg|Ja, auf dem Rückweg|Ja, sowohl auf dem Hinweg als auch auf dem Rückweg|Ja, nur manchmal|Nein",
+      "_it": "Durante lo spostamento, in andata o al ritorno, svolgi altre attività (es. commissioni, fare la spesa, fare sport, accompagnare i figli a scuola ecc...)?"
+    },
+    "10": {
+      "description": "Welches Verkehrsmittel nutzen Sie für Hin- und Rückweg überwiegend in den Wintermonaten?",
+      "long_description": "Als hauptsächlich genutztes Verkehrsmittel gilt jenes, mit dem Sie die meisten Kilometer zurücklegen",
+      "options": "Zu Fuß|Bus/Straßenbahn|U-Bahn|Auto|Motorrad|Fahrrad|E-Scooter|Taxi|Zug|Bahnservice anderer Anbieter (Trenord, Italo, Hochgeschwindigkeitszüge...)|Carsharing|Bikesharing|Motorrad-Sharing|E-Scooter-Sharing|Firmenshuttle|Carpooling",
+      "_it": "Per lo spostamento di andata e ritorno quale mezzo utilizzi in prevalenza nei mesi invernali?"
+    },
+    "11": {
+      "description": "Aus welchem Grund nutzen Sie das private Verkehrsmittel?",
+      "long_description": "Mehrfachantworten möglich",
+      "options": "Während der Fahrt von zu Hause zur Arbeit erledige ich weitere Tätigkeiten (Fitnessstudio, Einkaufen usw.)|Ich muss die Kinder zur Schule bringen |Mit einem anderen Verkehrsmittel würde ich zu viel Zeit benötigen|Aus Sicherheitsgründen (fehlende Radwege, schlecht beleuchtete Straßen, mehr Gesundheitssicherheit usw.)|Weniger Stress|Ich habe keine Alternativen|Weil ich die Fahrt mit anderen Personen teile|Ich nutze das private Verkehrsmittel allein, da die Zeiten mit anderen Personen, mit denen ich die Fahrt teilen könnte, nicht übereinstimmen|Sonstiges",
+      "_it": "Per quale motivo utilizzi il mezzo di trasporto privato?"
+    },
+    "12": {
+      "description": "Sind Sie der Fahrer des Verkehrsmittels, das Sie für Ihre Fahrt nutzen?",
+      "options": "Ja|Nein",
+      "_it": "Sei il conducente del mezzo che utilizzi per il tuo spostamento?"
+    },
+    "13": {
+      "description": "Welcher Umweltklasse gehört Ihr Auto/Motorrad an?",
+      "options": "Euro 0|Euro 1|Euro 2|Euro 3|Euro 3 mit Partikelfilter|Euro 4|Euro 4 mit Partikelfilter|Euro 5|Euro 5 mit Partikelfilter|Euro 6",
+      "_it": "A quale classe ambientale appartiene la tua auto/moto?"
+    },
+    "14": {
+      "description": "Wie groß ist der Hubraum Ihres Autos?",
+      "options": "Bis 1200 cc|Bis 1400 cc|Bis 1600 cc|Bis 1800 cc|Bis 2000 cc|Über 2000 cc|Elektro",
+      "_it": "Qual è la cilindrata della tua auto?"
+    },
+    "15": {
+      "description": "Wie groß ist der Hubraum Ihres Motorrads oder Mofas?",
+      "options": "50 cc|125 cc|Bis 250 cc|Bis 350 cc|Bis 500 cc|Bis 750 cc|Über 750 cc",
+      "_it": "Qual è la cilindrata della tua moto o ciclomotore?"
+    },
+    "16": {
+      "description": "Welche Kraftstoffart hat Ihr Auto?",
+      "options": "Benzin|Diesel|Hybrid|Elektro|GPL|Erdgas",
+      "_it": "Qual è l'alimentazione della tua auto?"
+    },
+    "17": {
+      "description": "Welche Kraftstoffart hat Ihr Motorrad oder Mofa?",
+      "options": "Benzin|Elektro|Mit Kraftstoffgemisch (2-Takt)",
+      "_it": "Qual è l'alimentazione della tua moto o ciclomotore?"
+    },
+    "18": {
+      "description": "Wie zufrieden sind Sie mit den folgenden Aspekten bei der Nutzung des privaten motorisierten Verkehrsmittels für die Fahrt zu Ihrem Arbeitsplatz?",
+      "options": "{\"groups\":[{\"label\":\"Direkte Fahrtkosten (z. B. Benzinkosten, Parkgebühren, Mautgebühren, ...)\",\"options\":[\"Überhaupt nicht zufrieden\",\"Wenig zufrieden\",\"Ziemlich zufrieden\",\"Sehr zufrieden\"]},{\"label\":\"Fahrtzeiten\",\"options\":[\"Überhaupt nicht zufrieden\",\"Wenig zufrieden\",\"Ziemlich zufrieden\",\"Sehr zufrieden\"]},{\"label\":\"Verkehrssicherheit während der Fahrt\",\"options\":[\"Überhaupt nicht zufrieden\",\"Wenig zufrieden\",\"Ziemlich zufrieden\",\"Sehr zufrieden\"]},{\"label\":\"Sicherheit vor Diebstahl und Vandalismus\",\"options\":[\"Überhaupt nicht zufrieden\",\"Wenig zufrieden\",\"Ziemlich zufrieden\",\"Sehr zufrieden\"]},{\"label\":\"Parkplatzsystem\",\"options\":[\"Überhaupt nicht zufrieden\",\"Wenig zufrieden\",\"Ziemlich zufrieden\",\"Sehr zufrieden\"]}],\"allowOther\":false}",
+      "_it": "Quanto ti ritieni soddisfatto dei seguenti aspetti nell’utilizzo del mezzo motorizzato privato per recarti sul posto di lavoro?"
+    },
+    "19": {
+      "description": "Ist es Ihnen schon einmal passiert, öffentliche Verkehrsmittel für Ihre Fahrt zu nutzen?",
+      "options": "Ja|Nein",
+      "_it": "Ti è mai capitato di utilizzare i mezzi pubblici per il tuo spostamento?"
+    },
+    "20": {
+      "description": "Unter welchen Bedingungen würden Sie öffentliche Verkehrsmittel für Ihre Fahrt nutzen?",
+      "long_description": "Mehrfachantworten möglich",
+      "options": "Kürzere Reisedauer|Mehr Komfort in den öffentlichen Verkehrsmitteln|Regelmäßigere Fahrten|Häufigere Fahrten|Verkehrsmittel zu meinen Arbeitszeiten|Verkehrsmittel in der Nähe meiner Wohnung|Weniger Schwierigkeiten bei Anschlüssen|Wenn ich mehr Informationen über Fahrpläne/Strecken des öffentlichen Verkehrs hätte|Die dem Eingang des Standorts nächstgelegene Haltestelle des öffentlichen Verkehrs|Mehr Sicherheit in den öffentlichen Verkehrsmitteln|Wenn ich einen Anreiz für den Kauf von Fahrscheinen oder eines Fahrrads erhalten könnte|Wenn ich das öffentliche Verkehrsmittel mit dem Fahrrad kombinieren könnte|Sonstiges",
+      "_it": "A quali condizioni utilizzeresti il trasporto pubblico per effettuare il tuo spostamento?"
+    },
+    "21": {
+      "description": "Wenn Sie die Art des Anreizes wählen könnten, welchen würden Sie bevorzugen -",
+      "options": "{\"groups\":[{\"label\":\"Ratenzahlung der Fahrscheinkosten über die Gehaltsabrechnung\",\"options\":[\"Nein\",\"Ja\"]},{\"label\":\"Rabatt auf die Fahrscheinkosten\",\"options\":[\"Nein\",\"Ja\"]},{\"label\":\"Ratenzahlung der Fahrradkosten über die Gehaltsabrechnung, auch mit elektrischer Tretunterstützung\",\"options\":[\"Nein\",\"Ja\"]},{\"label\":\"Rabatt auf den Kaufpreis eines Fahrrads, auch mit elektrischer Tretunterstützung\",\"options\":[\"Nein\",\"Ja\"]},{\"label\":\"Kostenloses oder vergünstigtes Bikesharing-Abonnement\",\"options\":[\"Ja\",\"Nein\"]},{\"label\":\"Vereinbarung Parkplatz-öffentliche Verkehrsmittel (z. B. Park&Ride, Fahrradstation)\",\"options\":[\"Nein\",\"Ja\"]}],\"allowOther\":true}",
+      "_it": "Se potessi scegliere il tipo di incentivo, quale preferiresti-"
+    },
+    "22": {
+      "description": "Wären Sie im Falle neuer Anreize bereit, öffentliche Verkehrsmittel zu nutzen?",
+      "options": "Ja|Nein, weil die Haltestelle zu weit entfernt ist|Nein, weil der Weg zur Haltestelle nicht sicher ist|Nein, weil es nicht möglich ist, das Fahrrad am Bahnhof zu lassen / in das öffentliche Verkehrsmittel mitzunehmen|Nein",
+      "_it": "In caso di nuovi incentivi, saresti disponibile a prendere il trasporto pubblico?"
+    },
+    "23": {
+      "description": "Denken Sie an den HINWEG (von zu Hause zur Arbeit) und geben Sie die ABFOLGE der genutzten Verkehrsmittel an:",
+      "options": "[[\"Zu Fuß\",\"Fahrrad\",\"Auto\",\"Öffentliches Verkehrsmittel\",\"Schiff\",\"E-Scooter\"],[\"Zu Fuß\",\"Fahrrad\",\"Auto\",\"Öffentliches Verkehrsmittel\"],[\"Zu Fuß\",\"Fahrrad\",\"Auto\",\"Verkehrsmittel\"],[\"Zu Fuß\",\"Fahrrad\",\"Auto\",\"Verkehrsmittel\"]]",
+      "_it": "Pensando allo spostamento di ANDATA (casa-lavoro), indica la SEQUENZA di mezzi di trasporto utilizzati:"
+    },
+    "24": {
+      "description": "Denken Sie an die Fahrt VON ZU HAUSE ZUR ARBEIT: Welches öffentliche Verkehrsmittel nutzen Sie -",
+      "options": "{\"groups\":[{\"label\":\"Bus/Straßenbahn\",\"options\":[\"Nein\",\"N/A\",\"Ja\"]},{\"label\":\"U-Bahn\",\"options\":[\"Nein\",\"N/A\",\"Ja\"]},{\"label\":\"Zug\",\"options\":[\"Ja\",\"N/A\",\"Nein\"]},{\"label\":\"Shuttle\",\"options\":[\"Nein\",\"N/A\"]},{\"label\":\"Sonstiges\",\"options\":[]}],\"allowOther\":false}",
+      "_it": "Pensando allo spostamento CASA-LAVORO, quale mezzo pubblico utilizzi-"
+    },
+    "25": {
+      "description": "Wenn Sie \"Bus\", \"Straßenbahn\", \"Zug\" oder \"Shuttle\" geantwortet haben, geben Sie die Strecke an",
+      "options": "Autobus GTT Collegno Fermi - Ferriera |Avigliana torino porta nuova sfm |Zug SFM3, Straßenbahn 4|Zug: SFM3",
+      "_it": "Se hai risposto \"Autobus\", \"Tram\", \"Treno\"  o “Navetta” specifica la tratta"
+    },
+    "26": {
+      "description": "Wie zufrieden sind Sie mit den folgenden Aspekten der Fahrt mit öffentlichen Verkehrsmitteln?",
+      "options": "{\"groups\":[{\"label\":\"Kosten der Fahrt\",\"options\":[\"Überhaupt nicht zufrieden\",\"Wenig zufrieden\",\"Ziemlich zufrieden\",\"Sehr zufrieden\"]},{\"label\":\"Fahrtzeiten\",\"options\":[\"Überhaupt nicht zufrieden\",\"Wenig zufrieden\",\"Ziemlich zufrieden\",\"Sehr zufrieden\"]},{\"label\":\"Taktfrequenz der Fahrten\",\"options\":[\"Überhaupt nicht zufrieden \",\"Wenig zufrieden\",\"Ziemlich zufrieden\",\"Sehr zufrieden\"]},{\"label\":\"Pünktlichkeit der Fahrten\",\"options\":[\"Überhaupt nicht zufrieden \",\"Wenig zufrieden\",\"Ziemlich zufrieden\",\"Sehr zufrieden\"]},{\"label\":\"Anzahl der Umstiege\",\"options\":[\"Überhaupt nicht zufrieden \",\"Wenig zufrieden\",\"Ziemlich zufrieden\",\"Sehr zufrieden\"]},{\"label\":\"Bequemlichkeit der Fahrt\",\"options\":[\"Überhaupt nicht zufrieden\",\"Wenig zufrieden\",\"Ziemlich zufrieden\",\"Sehr zufrieden\"]},{\"label\":\"Persönliche Sicherheit\",\"options\":[\"Überhaupt nicht zufrieden\",\"Wenig zufrieden\",\"Ziemlich zufrieden\",\"Sehr zufrieden\"]}],\"allowOther\":true}",
+      "_it": "Quanto ti ritieni soddisfatto dei seguenti aspetti riguardanti lo spostamento con i mezzi pubblici?"
+    },
+    "27": {
+      "description": "Besitzen Sie ein Abonnement für öffentliche Verkehrsmittel?",
+      "options": "Ja, jährlich|Ja, monatlich|Ja, wöchentlich|Kauf von Einzelfahrscheinen |Ich nutze den Dienstausweis",
+      "_it": "Possiedi un abbonamento al trasporto pubblico?"
+    },
+    "28": {
+      "description": "Wären Sie bereit, ein Jahresabonnement für öffentliche Verkehrsmittel zu kaufen?",
+      "options": "Ja, bei Ratenzahlung über die Gehaltsabrechnung |Ja, bei einem Rabatt auf das Abonnement|Ja, wenn es die Vereinbarung Parkplatz-öffentliche Verkehrsmittel gäbe (Park&Ride, Fahrradstation)|Nein",
+      "_it": "Saresti disposto ad acquistare un abbonamento annuale al trasporto pubblico?"
+    },
+    "29": {
+      "description": "???Geben Sie an, wie sehr Ihnen die folgenden Organisationsformen zusagen",
+      "options": "{\"groups\":[{\"label\":\"Rang 1\",\"options\":[\"Festlegung von Treffpunkten (mit Schildern gekennzeichnete Haltestellen, Warteplätze usw.)\",\"Anmeldung bei bestehenden Diensten (Apps usw.)\",\"Vom Unternehmen koordinierte Gruppenorganisation\"]},{\"label\":\"Rang 2\",\"options\":[\"Anmeldung bei bestehenden Diensten (Apps usw.)\",\"Vom Unternehmen koordinierte Gruppenorganisation\",\"Festlegung von Treffpunkten (mit Schildern gekennzeichnete Haltestellen, Warteplätze usw.)\"]},{\"label\":\"Rang 3\",\"options\":[\"Vom Unternehmen koordinierte Gruppenorganisation\",\"Anmeldung bei bestehenden Diensten (Apps usw.)\",\"Festlegung von Treffpunkten (mit Schildern gekennzeichnete Haltestellen, Warteplätze usw.)\"]}],\"allowOther\":false}",
+      "_it": "???Indica il livello di gradimento delle seguenti modalità organizzative"
+    },
+    "30": {
+      "description": "Wie wären Sie bereit, in einer Carpooling-Fahrgemeinschaft zu fahren?",
+      "options": "Sowohl als Fahrer als auch als Beifahrer|Nur als Fahrer|Nur als Beifahrer",
+      "_it": "Come saresti disposto a viaggiare in un equipaggio di car pooling?"
+    },
+    "31": {
+      "description": "An welchen Wochentagen nutzen oder würden Sie Carpooling nutzen?",
+      "long_description": "Mehrfachantworten möglich",
+      "options": "Montag|Dienstag|Mittwoch|Donnerstag|Freitag|Samstag|Sonntag",
+      "_it": "In quali giorni della settimana utilizzi o utilizzeresti il car pooling?"
+    },
+    "32": {
+      "description": "Um wie viel wären Sie bereit, die Dauer Ihrer Fahrt (allein mit dem Auto) VON ZU HAUSE ZUR ARBEIT durch die Nutzung von Carpooling zu verlängern - Höchstens um...",
+      "options": "10 Minuten|15 Minuten|5 Minuten",
+      "_it": "Di quanto saresti disposto ad aumentare la durata del tuo spostamento (in auto da solo) CASA-LAVORO utilizzando il Car-Pooling- Al massimo di..."
+    },
+    "33": {
+      "description": "Wären Sie bereit, sich für einen Carsharing-Dienst anzumelden?",
+      "long_description": "Mehrfachantworten möglich",
+      "options": "Ja|Ja, wenn es eine Station in der Nähe meiner Wohnung/meines Arbeitsplatzes gäbe|Ja, wenn meine Wohnung/mein Arbeitsplatz innerhalb des Einsatzgebiets des Dienstes läge |Ich kenne den Dienst nicht|Nein",
+      "_it": "Saresti disposto ad iscriverti ad un servizio di car sharing?"
+    },
+    "35": {
+      "description": "Welche Verkehrsmittel nutzen Sie in den Sommermonaten für Ihre Fahrt?",
+      "long_description": "Mehrfachantworten möglich",
+      "options": "Dieselben, die ich in den Wintermonaten nutze|Zu Fuß|Bus/Straßenbahn|Metropolitana GTT|Auto|Motorrad/Roller|Fahrrad|E-Scooter|Taxi |Firmenshuttle|Bahnservice Trenitalia/GTT|Andere Bahnservices (Trenord, Italo, Hochgeschwindigkeitszüge, ...)|Carsharing|Bikesharing|Motorrad-Sharing|Carpooling",
+      "_it": "Quali mezzi utilizzi nei mesi estivi per il tuo spostamento?"
+    },
+    "36": {
+      "description": "Unter welchen Bedingungen würden Sie den Arbeitsplatz mit dem Fahrrad erreichen?",
+      "options": "Wenn es Radwege gäbe|Wenn im Unternehmen nützliche Ausstattung für die Fahrt mit dem Fahrrad verfügbar wäre (Fahrradständer, Überdachungen, Umkleiden, Duschen)|Wenn man bis zum Arbeitsplatz gelangen könnte|Wenn es einen geeigneten Umsteigeparkplatz zu öffentlichen Verkehrsmitteln gäbe (z. B. am Bahnhof)|Wenn es einen geeigneten Parkplatz am Arbeitsplatz gäbe|Wenn ich einen Anreiz für den Kauf eines Fahrrads erhalten könnte|Nur in den Sommermonaten|Nie",
+      "_it": "a quali condizioni raggiungeresti il luogo di lavoro in bicicletta?"
+    },
+    "37": {
+      "description": "Wären Sie daran interessiert, Formen des „agilen Arbeitens“ (Homeoffice) auszuprobieren",
+      "options": "{\"groups\":[{\"label\":\"Sonstiges\",\"options\":[\"meine Arbeit erlaubt es nicht\",\"aufgrund der Art meiner Arbeit nicht möglich\",\"ich arbeite bereits in einem Coworking-Büro\",\"unbefristete Schwarzarbeit\",\"ich mache es bereits\",\"Das würde mir gefallen, aber als Erzieher/in ist das leider ziemlich unwahrscheinlich\",\"nicht machbar\"]}],\"allowOther\":true}",
+      "_it": "Saresti interessato/a sperimentare modalità di “lavoro agile”"
+    },
+    "38": {
+      "description": "Geben Sie im untenstehenden Feld eventuelle Vorschläge zur Verbesserung Ihrer täglichen Fahrt an",
+      "_it": "Indica nello spazio sottostante eventuali proposte per migliorare il tuo spostamento quotidiano"
+    },
+    "39": {
+      "description": "Arbeitsstandort",
+      "_it": "Sede lavorativa"
+    },
+    "40": {
+      "description": "Geschlecht",
+      "options": "Weiblich|Männlich|Ich möchte nicht antworten",
+      "_it": "Sesso"
+    },
+    "41": {
+      "description": "Wie alt sind Sie?",
+      "options": "Zwischen 6 und 10|Zwischen 11 und 15|Zwischen 16 und 20|Zwischen 21 und 25|Zwischen 26 und 30|Zwischen 31 und 40|Zwischen 41 und 50|Zwischen 51 und 60|Über 60",
+      "_it": "Quanti anni hai?"
+    },
+    "42": {
+      "description": "Geben Sie die Provinz Ihres Wohnsitzes an",
+      "options": "AL|AT|BI|CN|NEIN|TO|VC|VCO|Sonstiges (außerhalb des Piemont)",
+      "_it": "Indica la provincia dove hai il domicilio"
+    },
+    "43": {
+      "description": "Geben Sie die Gemeinde Ihres Wohnsitzes an",
+      "_it": "Indica il comune dove hai il domicilio"
+    },
+    "44": {
+      "description": "Geben Sie die Adresse an, von der aus Sie Ihre Fahrt beginnen",
+      "long_description": "Bedenken zum Datenschutz? Sie geben keine vertrauliche Information preis. Die Adresse ist eine Angabe, über die Ihr Arbeitgeber bereits verfügt. Sie wird ausschließlich für Fragen im Zusammenhang mit der Fahrt von zu Hause zur Arbeit verwendet und nicht in nicht-anonymer Form an Dritte weitergegeben.\n\nFür mehr Genauigkeit geben Sie bitte an: Straße, Hausnummer, Postleitzahl, Gemeinde; wenn Sie möchten, genügt auch nur die Gemeinde",
+      "_it": "Indica l'indirizzo dal quale parti per effettuare il tuo spostamento"
+    },
+    "166": {
+      "description": "Wie viele Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen?",
+      "options": "Nur eines|Kombination von zwei oder mehr Verkehrsmitteln",
+      "_it": "Quanti mezzi di trasporto utilizzi per recarti al lavoro?"
+    },
+    "168": {
+      "description": "Aus welchem Grund nutzen Sie öffentliche Verkehrsmittel für Ihre Fahrt?",
+      "long_description": "Mehrfachantworten möglich",
+      "options": "Sicherheit|Geschwindigkeit|Wirtschaftlichkeit|Respekt vor der Umwelt|Während der Fahrt erledige ich weitere Tätigkeiten|Mit einem anderen Verkehrsmittel würde ich zu viel Zeit benötigen|Ich habe keine Alternativen ",
+      "_it": "Per quale motivo usi il trasporto pubblico per il tuo spostamento?"
+    },
+    "169": {
+      "description": "Wären Sie bereit, von zu Hause aus zu arbeiten?",
+      "options": "Ja, jeden Tag|Ja, 1 Tag pro Woche|Ja, 2 Tage pro Woche|Ja, 3 Tage pro Woche|Ja, 4 Tage pro Woche|Ja, 5 Tage pro Woche|Ja, wenn mir das Unternehmen die Mittel zur Verfügung stellen würde|Ja, wenn das Unternehmen sich an den Kosten beteiligen würde|Nein, nie",
+      "_it": "Saresti disposto a lavorare da casa?"
+    },
+    "170": {
+      "description": "Wären Sie bereit, in einem Coworking-Umfeld zu arbeiten?",
+      "long_description": "Coworking: Arbeitsmodell, bei dem die Räume eines Arbeitsumfelds, in der Regel eines Büros, mit anderen Personen geteilt werden, die nicht im selben Unternehmen oder derselben Organisation beschäftigt sind",
+      "options": "Ja, 1 Tag pro Woche|Ja, 2 Tage pro Woche|Ja, 3 Tage pro Woche|Ja, 4 Tage pro Woche|Ja, 5 Tage pro Woche|Nein, nie",
+      "_it": "Saresti disposto a effettuare lavoro in coworking?"
+    },
+    "171": {
+      "description": "Wenn Sie die Möglichkeit hätten, mehrere Verkehrsmittel in einem einzigen Abonnement zu kombinieren, welche würden Sie wählen?",
+      "long_description": "Mehrfachantworten möglich",
+      "options": "Öffentlicher Verkehr (Stadt- und Überlandbus, Straßenbahn, U-Bahn)|Bahnservice|Taxi|E-Scooter im Sharing|Motorrad-Sharing|Carsharing|Bikesharing|Autovermietung",
+      "_it": "Se avessi la possibilità di combinare più mezzi in un unico abbonamento, quali sceglieresti?"
+    },
+    "172": {
+      "description": "Wenn am Ziel Ihrer Fahrt ein Ladepunkt für Elektrofahrzeuge verfügbar wäre, mit welchem Verkehrsmittel würden Sie fahren?",
+      "long_description": "Mehrfachantworten möglich",
+      "options": "Roller|E-Scooter|Fahrrad|Auto|Keine der vorherigen",
+      "_it": "Se presso la destinazione del tuo spostamento fosse disponibile un punto di ricarica per mezzi elettrici, con quale ti sposteresti?"
+    },
+    "174": {
+      "description": "Geben Sie eine Bewertung des öffentlichen Verkehrsangebots im Allgemeinen ab (sei es der lokale öffentliche Verkehr, die Bahn usw.)",
+      "options": "Sehr schlecht|Ausreichend|Ausreichend|Gut|Ausgezeichnet",
+      "_it": "Esprimi un giudizio sull'offerta di trasporto pubblico in generale (sia esso trasporto pubblico locale o treno ecc)"
+    },
+    "175": {
+      "description": "Geben Sie Ihren Zufriedenheitsgrad zu den folgenden Aspekten des öffentlichen Verkehrs an ",
+      "options": "{\"groups\":[{\"label\":\"Komfort\",\"options\":[\"Überhaupt nicht zufrieden\",\"Wenig zufrieden\",\"Ziemlich zufrieden\",\"Sehr zufrieden\"]},{\"label\":\"Pünktlichkeit\",\"options\":[\"Überhaupt nicht zufrieden\",\"Wenig zufrieden\",\"Ziemlich zufrieden\",\"Sehr zufrieden \"]},{\"label\":\"Reisezeit\",\"options\":[\"Überhaupt nicht zufrieden\",\"Wenig zufrieden\",\"Ziemlich zufrieden\",\"Sehr zufrieden\"]},{\"label\":\"Information\",\"options\":[\"Überhaupt nicht zufrieden\",\"Wenig zufrieden\",\"Ziemlich zufrieden\",\"Sehr zufrieden\"]},{\"label\":\"Nähe zu den Haltestellen\",\"options\":[\"Überhaupt nicht zufrieden\",\"Wenig zufrieden\",\"Ziemlich zufrieden\",\"Sehr zufrieden\"]},{\"label\":\"Tarife\",\"options\":[\"Überhaupt nicht zufrieden\",\"Wenig zufrieden\",\"Ziemlich zufrieden\",\"Sehr zufrieden\"]},{\"label\":\"Häufigkeit\",\"options\":[\"Überhaupt nicht zufrieden\",\"Wenig zufrieden\",\"Ziemlich zufrieden\",\"Sehr zufrieden\"]},{\"label\":\"Sicherheit\",\"options\":[\"Überhaupt nicht zufrieden\",\"Wenig zufrieden\",\"Ziemlich zufrieden\",\"Sehr zufrieden\"]}],\"allowOther\":false}",
+      "_it": "Esprimi il tuo grado di soddisfazione sui seguenti aspetti del trasporto pubblico"
+    },
+    "176": {
+      "description": "Wären Sie bereit, Ihre Fahrt mit jemandem zu teilen?",
+      "long_description": "Beim Carpooling stellt eine Privatperson, in der Regel über eine Plattform, freie Plätze in ihrem Auto zur Verfügung, um die Fahrt (oder einen Teil davon) mit anderen Personen zu teilen.",
+      "options": "Ja, ich mache es bereits|Ja, wenn ich mehr Informationen über die Einsparungen und Vorteile hätte|Ja, wenn es wirtschaftlich günstiger wäre oder ich die Kosten trotzdem teilen könnte|Ja, wenn es in Bezug auf den Ausgangsort praktisch wäre|Ja, wenn es in Bezug auf den Zielort praktisch wäre|Ja, wenn die Rückfahrt auf die gleiche Weise garantiert wäre|Ja, wenn ich Informationen über den Fahrer/Mitfahrer hätte|Nein, nie|Ich kenne die Möglichkeiten der gemeinsamen Nutzung nicht",
+      "_it": "Saresti disposto a condividere con qualcuno il tuo spostamento?"
+    },
+    "177": {
+      "description": "Wären Sie bereit, das Fahrrad für Ihre Fahrt zu nutzen?",
+      "long_description": "Mehrfachantworten möglich",
+      "options": "Ja, nur das eigene|Ja, die geteilte (Bikesharing)|Ja, wenn es sichere Radwege gäbe|Ja, wenn im Unternehmen die entsprechende Ausstattung für die Fahrradfahrt vorhanden wäre (Umkleiden und Duschen für die persönliche Hygiene, mit eventueller Lademöglichkeit für E-Bikes usw.)|Ja, wenn es einen sicheren internen Parkplatz gäbe|Ja, wenn es einen geeigneten Umsteigeparkplatz zum öffentlichen Verkehr gäbe (z. B. am Bahnhof)|Ja, wenn ich einen Anreiz oder eine Erstattung für den Kauf eines Fahrrads erhalten könnte|Ja, nur in den Sommermonaten|Nein",
+      "_it": "Saresti disposto a utilizzare la bicicletta per effettuare il tuo spostamento?"
+    },
+    "178": {
+      "description": "Wären Sie bereit, den E-Scooter oder Roller für Ihre Fahrt zu nutzen?",
+      "long_description": "Mehrfachantworten möglich",
+      "options": "Ja, nur das eigene|Ja, der geteilte (E-Scooter-/Motorrad-Sharing)|Ja, wenn im Unternehmen die entsprechende Ausstattung vorhanden wäre (Umkleiden und Duschen für die persönliche Hygiene, mit eventueller Lademöglichkeit für Elektroroller/E-Scooter)|Ja, wenn es einen sicheren internen Parkplatz gäbe|Ja, wenn ich einen Anreiz oder eine Erstattung für den Kauf des Verkehrsmittels erhalten könnte|Ja, wenn die Fahrt durch die Unfallversicherung (INAIL) abgedeckt wäre|Ja, nur in den Sommermonaten|Nein",
+      "_it": "Saresti disposto a utilizzare il monopattino o lo scooter per effettuare il tuo spostamento?"
+    },
+    "179": {
+      "description": "Wie viel Zeit würden Sie für die Fahrt benötigen, wenn Sie NUR öffentliche Verkehrsmittel nutzen würden?",
+      "long_description": "Berücksichtigen Sie die Strecke zu Fuß nicht, wenn sie weniger als 15 Minuten beträgt (gehen Sie auf https://www.muoversiatorino.it/POS/-/nearyou oder https://www.muoversinpiemonte.it/ , um die Fahrzeiten zu berechnen)",
+      "options": "Weniger als 15 Minuten|Zwischen 15 und 30 Minuten|Zwischen 30 und 45 Minuten|Zwischen 45 und 60 Minuten|Zwischen 60 und 75 Minuten|Zwischen 75 und 90 Minuten|Mehr als 90 Minuten|Ich habe nicht die Möglichkeit, ein oder mehrere öffentliche Verkehrsmittel zu nehmen |Ich weiß es nicht",
+      "_it": "Quanto tempo impiegheresti per compiere lo spostamento se utilizzassi SOLO il trasporto pubblico?"
+    },
+    "180": {
+      "description": "Wie viel geben Sie monatlich für die Fahrt aus?",
+      "long_description": "Berücksichtigen Sie die Kosten für Kraftstoff, Mautgebühren und Parkplätze",
+      "options": "Weniger als 30 Euro|Zwischen 30 und 50 Euro|Zwischen 50 und 80 Euro|Mehr als 80 Euro|Die Kosten für die Fahrt von zu Hause zur Arbeit werden mir vollständig erstattet|Ich nutze nur den Dienstausweis",
+      "_it": "Quanto spendi al mese per compiere lo spostamento?"
+    },
+    "181": {
+      "description": "Wie weit ist die nächste Haltestelle des öffentlichen Verkehrs vom Ausgangsort Ihrer Fahrt entfernt?",
+      "long_description": "Geben Sie die Entfernung in Metern ein",
+      "options": "Weniger als 5 Meter|5 metri|10 metri|15 metri|20 metri|25 metri|30 metri|35 metri|40 metri|50 metri|100 metri|200 metri|300 metri|400 metri|500 metri|In meiner Gegend gibt es keine Haltestellen innerhalb von 500 Metern",
+      "_it": "Quanto dista la fermata del trasporto pubblico più vicina al luogo di partenza del tuo spostamento?"
+    },
+    "183": {
+      "description": "Erhalten Sie einen Anreiz (z. B. Bike-to-Work, Kraftstoff, Firmenwagen usw.), um die Kosten Ihrer Fahrt zu decken?",
+      "long_description": "Mehrfachantworten möglich",
+      "options": "Ja, für öffentliche Verkehrsmittel |Ja, um mein Fahrrad oder Bikesharing zu nutzen|Ja, um Carpooling oder Carsharing zu nutzen|Ja, um das Auto zu nutzen|Nein",
+      "_it": "Ricevi un incentivo (es. bike to work, carburante, auto aziendale, ecc) per sostenere i costi del tuo spostamento?"
+    },
+    "185": {
+      "description": "Ist der interne Parkplatz kostenpflichtig?",
+      "options": "Ja|Nein",
+      "_it": "Il parcheggio interno è a pagamento?"
+    },
+    "186": {
+      "description": "Welche berufliche Einstufung haben Sie?",
+      "long_description": "Wir erinnern Sie daran, dass sich der Fragebogen gleichermaßen an Behörden, Unternehmen und Schulen richtet. Wählen Sie aus den unten stehenden Optionen die Ihren tatsächlichen Aufgaben am nächsten kommende Einstufung",
+      "options": "Arbeiter/in|Angestellte/r|Beamte/r|Führungskraft (mittlere Ebene)|Führungskraft|Lehrer/in|Student/in|Personale ATA|Sonstiges",
+      "_it": "Qual è il tuo inquadramento?"
+    },
+    "187": {
+      "description": "Welche Art von Vertrag haben Sie?",
+      "options": "Befristet|Unbefristet|Berater/in|Sonstiges",
+      "_it": "Che tipo di contratto hai?"
+    },
+    "188": {
+      "description": "Welche Art von Arbeitszeit haben Sie?",
+      "options": "Ganztags|Teilzeit vertikal|Teilzeit horizontal|Guthaben - Schuld",
+      "_it": "Che tipo di orario hai?"
+    },
+    "189": {
+      "description": "Arbeiten Sie im Schichtdienst?",
+      "long_description": "Gemäß dem Gesetzesdekret Nr. 66 vom 8.4.2003 (\"Umsetzung der Richtlinien 93/104/EG und\n2000/34/EG über bestimmte Aspekte der Arbeitszeitgestaltung\") versteht man unter „Schichtarbeit“ jede Form der Arbeitsorganisation, auch in Arbeitsgruppen, bei der\nArbeitnehmer nacheinander an denselben Arbeitsplätzen gemäß einem\nbestimmten Rhythmus eingesetzt werden, einschließlich Rotationsrhythmus, der kontinuierlich oder diskontinuierlich sein kann,\nund die für die Arbeitnehmer die Notwendigkeit mit sich bringt, zu unterschiedlichen Zeiten innerhalb eines\nbestimmten Zeitraums von Tagen oder Wochen zu arbeiten [...]",
+      "options": "Ja, mit festem Schichtplan (ich arbeite immer in derselben Schicht)|Ja, mit wechselndem Schichtplan (ich wechsle zwischen Morgen, Nachmittag, Abend/Nacht)|Nein",
+      "_it": "Lavori su turni?"
+    },
+    "190": {
+      "description": "In welcher Schicht arbeiten Sie diese Woche?",
+      "long_description": "Mehrfachantworten möglich",
+      "options": "Erste Schicht (Morgen)|Zweite Schicht (Nachmittag)|Dritte Schicht (Abend/Nacht)|Zentral (Morgen/Nachmittag)|Abhängig vom Unterricht",
+      "_it": "Questa settimana su quale turno lavori?"
+    },
+    "191": {
+      "description": "Gibt es flexible Arbeitszeiten beim Kommen/Gehen?",
+      "options": "Ja|Nein",
+      "_it": "C'è flessibilità oraria in ingresso/uscita?"
+    },
+    "192": {
+      "description": "Bietet Ihr Unternehmen die Möglichkeit, von zu Hause aus zu arbeiten?",
+      "long_description": "Telearbeit: Arbeit, die entfernt vom eigenen Arbeitsstandort ausgeführt wird, mit fest vorgegebenem Ort und festen Arbeitszeiten.\n\nHomeoffice/Smart Working: Der Mitarbeiter übt seine Tätigkeit außerhalb des Unternehmensstandorts aus, entscheidet aber vollständig eigenständig über Zeit und Ort der Arbeit, ohne festen Arbeitsplatz.",
+      "options": "Ja, in Telearbeit|Ja, im agilen Arbeiten/Homeoffice|Nein|Ja, beides",
+      "_it": "La tua azienda prevede la possibilità di lavorare da casa?"
+    },
+    "193": {
+      "description": "An wie vielen Tagen pro Woche arbeiten Sie im Durchschnitt von zu Hause aus?",
+      "options": "1 giorno/settimana|2 Tage/Woche|3 Tage/Woche|4 Tage/Woche|5 Tage/Woche|6 Tage/Woche|Nie",
+      "_it": "Quanti giorni mediamente a settimana lavori da casa?"
+    },
+    "194": {
+      "description": "An wie vielen Tagen pro Woche führen Sie Ihre Fahrt durch?",
+      "options": "Eins|Zwei|Drei|Vier|Fünf|Sechs",
+      "_it": "Quanti giorni alla settimana effettui il tuo spostamento?"
+    },
+    "195": {
+      "description": "Wie viele Minuten benötigen Sie im Durchschnitt, einschließlich eventueller Zwischenstopps, für Ihren Hinweg?",
+      "options": "Weniger als 15 Minuten|Zwischen 15 und 30 Minuten|Zwischen 30 und 45 Minuten|Zwischen 45 und 60 Minuten|Zwischen 60 und 75 Minuten|Zwischen 75 und 90 Minuten|Mehr als 90 Minuten",
+      "_it": "Quanti minuti impieghi, mediamente, comprendendo eventuali soste, per il tuo spostamento di andata?"
+    },
+    "197": {
+      "description": "Welche Linie des öffentlichen Verkehrs nutzen Sie für Ihre Fahrt?",
+      "long_description": "z. B.: 5, 5/, 13, 106CN, Linie C",
+      "_it": "Quale linea del trasporto pubblico utilizzi nel tuo spostamento?"
+    },
+    "198": {
+      "description": "Um wie viel Uhr verlassen Sie normalerweise freitags die Arbeit?",
+      "options": "zwischen 12:00 und 12:30 Uhr|zwischen 12:30 und 13:00 Uhr|zwischen 13:00 und 13:30 Uhr|zwischen 13:30 und 14:00 Uhr|zwischen 14:00 und 14:30 Uhr|nach 14:30 Uhr|ich arbeite im Schichtdienst",
+      "_it": "Solitamente a che ora esci dal lavoro il venerdì?"
+    },
+    "199": {
+      "description": "Halten Sie Unterricht im Fernunterricht ab?",
+      "options": "Ja|Nein",
+      "_it": "Svolgi lezioni in didattica a distanza?"
+    },
+    "200": {
+      "description": "An wie vielen Tagen pro Woche halten Sie Unterricht im Fernunterricht ab?",
+      "options": "1 Tag pro Woche|2 Tage pro Woche|3 Tage pro Woche|4 Tage pro Woche|5 Tage pro Woche|6 Tage pro Woche|Niemand",
+      "_it": "Quanti giorni a settimana svogli lezioni in didattica a distanza?"
+    },
+    "202": {
+      "description": "Kehren Sie zum Mittagessen nach Hause zurück?",
+      "options": "Ja|Nein",
+      "_it": "Ritorni a casa per pranzo?"
+    },
+    "203": {
+      "description": "Welche Strecke legen Sie tatsächlich zurück, um zur Arbeit zu gelangen?  ",
+      "long_description": "Berechnen Sie die Entfernung unter Berücksichtigung aller von Ihnen zurückgelegten Wegstrecken (nicht nur der direkten Entfernung von zu Hause zur Arbeit)",
+      "options": "bis 1 km;|bis 3 km|bis 5 km|von 5 bis 15 km; |von 16 bis 20 km|von 21 bis 30 km|von 31 bis 50 km|über 50 km",
+      "_it": "Quale distanza percorri realmente per recarti al lavoro?"
+    },
+    "204": {
+      "description": "Wie viele Minuten benötigen Sie im Durchschnitt, einschließlich eventueller Zwischenstopps, für Ihren Rückweg?",
+      "options": "Weniger als 15 Minuten|Zwischen 15 und 30 Minuten|Zwischen 30 und 45 Minuten|Zwischen 45 und 60 Minuten|Zwischen 60 und 75 Minuten|Zwischen 75 und 90 Minuten|Mehr als 90 Minuten",
+      "_it": "Quanti minuti impieghi, mediamente, comprendendo eventuali soste, per il tuo spostamento  di ritorno?"
+    },
+    "205": {
+      "description": "Wenn Sie für Hin- und Rückweg eine Kombination von Verkehrsmitteln nutzen, geben Sie alle an",
+      "long_description": "Mehrfachantworten möglich",
+      "options": "Zu Fuß (bei einer Strecke > 15 Minuten)|Bus/Straßenbahn|Metropolitana GTT|Auto|Motorrad/Roller|Fahrrad|E-Scooter|Taxi|Bahnservice Trenitalia/GTT|Bahnservice anderer Anbieter (Trenord, Italo, Hochgeschwindigkeitszüge, ...)|Carsharing|Bikesharing|Motorrad-Sharing|E-Scooter-Sharing|Firmenshuttle|Carpooling",
+      "_it": "Se per lo spostamento di andata e ritorno utilizzi una combinazione di mezzi, indicali tutti"
+    },
+    "206": {
+      "description": "Geben Sie die Postleitzahl des Ausgangsortes Ihrer Fahrt an",
+      "long_description": "Diese Angabe gehört gemäß den ministeriellen Richtlinien (D.I. 179/2021) zu den mindestens zu erhebenden Informationen",
+      "_it": "Indica il CAP del luogo di inizio del tuo spostamento"
+    },
+    "207": {
+      "description": "Wenn Sie die Art des Anreizes wählen könnten, welchen würden Sie bevorzugen?",
+      "long_description": "Mehrfachantworten möglich",
+      "options": "Ratenzahlung der Fahrscheinkosten über die Gehaltsabrechnung|Rabatt auf die Fahrscheinkosten|Ratenzahlung der Fahrradkosten über die Gehaltsabrechnung (auch mit elektrischer Tretunterstützung)|Rabatt auf den Kaufpreis eines Fahrrads |Rabatt auf den Kaufpreis eines E-Scooters|Kostenloses/vergünstigtes Abonnement für E-Scooter-Sharing|Kostenloses/vergünstigtes Bikesharing-Abonnement|Vereinbarung Parkplatz-öffentliche Verkehrsmittel (z. B. Park&Ride, Fahrradstation)",
+      "_it": "Se potessi scegliere il tipo di incentivo, quale preferiresti?"
+    },
+    "208": {
+      "description": "Wären Sie bereit, ein Jahresabonnement zu kaufen, wenn es Anreize gäbe?",
+      "options": "Ja, bei Ratenzahlung über die Gehaltsabrechnung|Ja, falls ein Rabatt auf die Abo-Kosten gewährt wird|Ja, wenn es eine Vereinbarung Parkplatz-öffentliche Verkehrsmittel gäbe (z. B. Park&Ride, Fahrradstation)|Nein|Sonstiges",
+      "_it": "Saresti disposto ad acquistare un abbonamento annuale se ci fossero degli incentivi?"
+    },
+    "209": {
+      "description": "Welche Tätigkeit üben Sie aus?",
+      "options": "Parkraumüberwachung|Kundenbetreuer/in|Personal der Einsatzzentralen |Schichtleiter, Dienstgrad|Fahrpersonal|Personale operativo Ferrovia e Metro",
+      "_it": "Qual è la tua mansione?"
+    },
+    "212": {
+      "description": "Wo befindet sich Ihr Arbeitsstandort?",
+      "options": "Direzione e CSC corso Turati|Comprensorio Nizza (Deposito e palazzina c.so Bramante)|Deposito Gerbido|Comprensorio San Paolo (Deposito, sedi corso Trapani e via Monginevro)|Deposito Venaria|Comprensorio Tortona-Manin e via Fontanesi|Sede Metro Collegno|Corso Francia 6|Sonstiges",
+      "_it": "Qual è la sede del tuo lavoro?"
+    },
+    "213": {
+      "description": "Geben Sie an, an welchem Standort Sie arbeiten",
+      "_it": "Scrivi in quale sede lavori"
+    },
+    "215": {
+      "description": "Um den Verkehr und die Überfüllung der öffentlichen Verkehrsmittel zu verringern, wären Sie bereit,",
+      "options": "Dienstbeginn vor 8:00 Uhr |Dienstbeginn nach 10:00 Uhr|Nein, es ist mir nicht möglich",
+      "_it": "Per ridurre il traffico e il sovraffollamento dei mezzi pubblici saresti disponibile a"
+    },
+    "218": {
+      "description": "Was ist das Ziel Ihrer Fahrt?",
+      "long_description": "Geben Sie die Adresse Ihres ARBEITSSTANDORTS an, den Sie morgens (bzw. an den meisten Tagen der Woche) aufsuchen",
+      "_it": "Qual è la destinazione del tuo spostamento?"
+    },
+    "221": {
+      "description": "Wie gelangen Sie am häufigsten zur Arbeit?",
+      "long_description": "Diese Fragengruppe betrifft die Fahrt, die Sie zur Arbeit zurücklegen",
+      "options": "Zu Fuß|Fahrrad|Motorrad|Überlandbus|Bus, Straßenbahn oder U-Bahn|Zug|Auto als Beifahrer|Auto als Fahrer|Carpooling (ich stimme mich mit Kollegen ab)|Auto + Zug oder Bus/Straßenbahn/U-Bahn|Straßenbahn + Fahrrad",
+      "_it": "Come ti rechi più frequentemente al lavoro?"
+    },
+    "232": {
+      "description": "Wie kommen Sie im Sommer zur Arbeit?",
+      "options": "Auto|Fahrrad|Roller|E-Bike|zu Fuß|Zug|Bus",
+      "_it": "Come vieni al lavoro in estate?"
+    },
+    "237": {
+      "description": "Wie viele Verkehrsmittel nutzen Sie, um zur Arbeit zu kommen?",
+      "_it": "Quanti mezzi utilizzi per venire al lavoro?"
+    },
+    "238": {
+      "description": "Nutzen Sie auf dem Rückweg dieselben Verkehrsmittel wie auf dem Hinweg?",
+      "options": "Ja|Nein",
+      "_it": "Al ritorno utilizzi gli stessi mezzi dell' andata?"
+    },
+    "239": {
+      "description": "Kommt es vor, dass Sie auf Ihrer Strecke von zu Hause zur Arbeit und zurück auf Verkehr oder Staus stoßen?",
+      "options": "Jeden Tag|Manchmal|Nur auf dem Hinweg oder Rückweg|Nie",
+      "_it": "Ti capita di incontrare traffico o code lungo il tuo tragitto casa/lavoro - lavoro/casa?"
+    },
+    "240": {
+      "description": "Kommt es Ihnen häufig vor, dass Sie abends aufgehalten werden oder tagsüber aus unvorhergesehenen Gründen unterwegs sein müssen?",
+      "options": "Ja|Nein",
+      "_it": "Ti capita spesso di doverti fermare la sera o di dover uscire per motivi imprevisti durante il giorno?"
+    },
+    "241": {
+      "description": "Wenn es eine Haltestelle näher an Ihrem Arbeitsplatz und/oder Ihrem Zuhause gäbe, wären Sie bereit, den öffentlichen Verkehrsdienst zu nutzen?",
+      "options": "Ja|Nein",
+      "_it": "Se ci fosse una fermata più vicina al tuo luogo di lavoro e/o a casa tua, saresti disposto ad utilizzare il servizio di trasporto pubblico?"
+    },
+    "242": {
+      "description": "Hat die Covid-Notlage Ihre Wahl des Verkehrsmittels für die Fahrt von zu Hause zur Arbeit beeinflusst?",
+      "options": "Ja|Nein",
+      "_it": "L' emergenza Covid ha influenzato la scelta del mezzo che utilizzi per lo spostamento casa-lavoro?"
+    },
+    "245": {
+      "description": "Arbeitsstandort",
+      "long_description": "Wie arbeiten Sie derzeit?",
+      "options": "In sede|Im Homeoffice|Sowohl vor Ort als auch im Homeoffice",
+      "_it": "Sede lavorativa"
+    },
+    "246": {
+      "description": "Homeoffice",
+      "long_description": "An wie vielen Tagen pro Woche im Homeoffice?",
+      "options": "1 Tag|2 Tage|3 Tage|4 Tage|5 Tage",
+      "_it": "Smart working"
+    },
+    "254": {
+      "description": "häufig genutztes Verkehrsmittel",
+      "long_description": "Welches Verkehrsmittel nutzen Sie am häufigsten, um zur Arbeit zu gelangen?",
+      "options": "Zu Fuß|Auto als Fahrer|Fahrrad|Motorrad|Bus|Zug|Auto als Beifahrer",
+      "_it": "mezzo utilizzato frequentamente"
+    },
+    "283": {
+      "description": "Wie gelangen Sie am häufigsten zur Arbeit?",
+      "options": "Zu Fuß|Fahrrad|Motorrad|Stadt-/Überlandbus|Auto als Beifahrer|Auto als Fahrer|Car Pooling|Auto + Zug oder Bus|Zug + Fahrrad",
+      "_it": "Come ti rechi più frequentemente al lavoro?"
+    },
+    "286": {
+      "description": "Nutzen Sie im Winter dieselben Verkehrsmittel wie im Sommer?",
+      "options": "Ja|Nein",
+      "_it": "D'inverno utilizzi gli stessi mezzi che d'estate?"
+    },
+    "287": {
+      "description": "Wie häufig unternehmen Sie Dienstreisen?",
+      "options": "Mehrmals pro Woche|1 oder 2 Mal pro Woche|Weniger als einmal im Monat|Ich unternehme nie Dienstreisen|Gelegentlich",
+      "_it": "Con quale frequenza effettui delle trasferte?"
+    },
+    "290": {
+      "description": "Wie oft pro Woche führen Sie Ihre Fahrt durch?",
+      "options": "Eins|Zwei|Drei|Vier|Fünf|Sechs",
+      "_it": "Quante volte alla settimana effettui il tuo spostamento?"
+    },
+    "291": {
+      "description": "Um wie viel Uhr verlassen Sie normalerweise freitags die Arbeit?",
+      "options": "von 14:00 bis 14:30 Uhr|von 14:30 bis 15:00 Uhr|von 15:00 bis 15:30 Uhr|von 15.30 bis 16:00 Uhr|von 16:00 bis 16.30 Uhr|von 16.30 bis 17:00 Uhr|von 17:00 bis 17:30 Uhr|von 17:30 bis 18:00 Uhr|nach 18:00 Uhr|ich arbeite im Schichtdienst",
+      "_it": "Solitamente a che ora esci dal lavoro il venerdì?"
+    },
+    "292": {
+      "description": "Erhalten Sie einen Anreiz für die Kosten Ihrer Fahrt?",
+      "options": "Ja, für öffentliche Verkehrsmittel|Ja, um mein Fahrrad oder Bikesharing zu nutzen |Ja, um Carpooling oder Carsharing zu nutzen |Ja, um das Auto zu nutzen |Nein, aber es könnte für mich von Interesse sein",
+      "_it": "Ricevi un incentivo per i costi del tuo spostamento?"
+    },
+    "293": {
+      "description": "Welche berufliche Einstufung haben Sie?",
+      "options": "Arbeiter/in|Angestellte/r|Führungskraft (mittlere Ebene)|Führungskraft|Praktikant/in|Sonstiges",
+      "_it": "Qual è il tuo inquadramento?"
+    },
+    "294": {
+      "description": "Welche Art von Arbeitszeit haben Sie?",
+      "options": "Ganztags|Teilzeit vertikal |Teilzeit horizontal |Schicht",
+      "_it": "Che tipo di orario hai?"
+    },
+    "297": {
+      "description": "Welche Art von Arbeitszeit haben Sie?",
+      "options": "Ganztags|Teilzeit vertikal|Teilzeit horizontal|Guthaben - Schuld",
+      "_it": "Che tipo di orario hai?"
+    },
+    "298": {
+      "description": "Gibt es flexible Arbeitszeiten beim Kommen/Gehen?",
+      "options": "Ja|Nein",
+      "_it": "C'è flessibilità oraria in ingresso/uscita?"
+    },
+    "299": {
+      "description": "Haben Sie die Möglichkeit, von zu Hause aus zu arbeiten?",
+      "long_description": "Telearbeit: Arbeit, die entfernt vom eigenen Arbeitsstandort ausgeführt wird, mit fest vorgegebenem Ort und festen Arbeitszeiten. Homeoffice/Smart Working: Der Mitarbeiter übt seine Tätigkeit außerhalb des Unternehmensstandorts aus, entscheidet aber vollständig eigenständig über Zeit und Ort der Arbeit, ohne festen Arbeitsplatz.",
+      "options": "Ja, in Telearbeit|Ja, im Homeoffice|Nein",
+      "_it": "Hai la possibilità di lavorare da casa?"
+    },
+    "301": {
+      "description": "Wie groß könnte die Bereitschaft sein, einen E-Scooter zu nutzen, um zum Arbeitsplatz zu gelangen?",
+      "options": "Möglich|Unmöglich |Absolut umsetzbar",
+      "_it": "Quale potrebbe essere la propensione ad utilizzare un monopattino elettrico per recarsi nel luogo di lavoro?"
+    },
+    "302": {
+      "description": "Was ist das Ziel Ihrer Fahrt?",
+      "_it": "Qual è la destinazione del tuo spostamento?"
+    },
+    "304": {
+      "description": "WIE WEIT IST DIE NÄCHSTE HALTESTELLE DES ÖFFENTLICHEN VERKEHRS VOM AUSGANGSORT IHRER FAHRT ENTFERNT?",
+      "options": "<100 m|zwischen 100 und 500 m|> 500m",
+      "_it": "QUANTO DISTA LA FERMATA DEL TRASPORTO PUBBLICO PIÙ VICINA AL LUOGO DI PARTENZA DEL TUO SPOSTAMENTO?"
+    },
+    "305": {
+      "description": "Wenn Sie mit dem Auto zur Arbeit kommen, neigen Sie dazu: ",
+      "options": "Parcheggiare correttamente vicino allo stabilimento|Ordnungsgemäß entfernt vom Werksgelände parken und ein kurzes Stück zu Fuß gehen|In der Nähe des Werksgeländes parken, auch in nicht erlaubten Zonen",
+      "_it": "Se arrivi a lavoro in auto tendi a:"
+    },
+    "306": {
+      "description": "Haben Sie schon versucht, das Verkehrsmittel zu wechseln, um ohne privates Auto zur Arbeit zu gelangen? Wenn ja, beschreiben Sie uns die Schwierigkeiten, auf die Sie gestoßen sind.",
+      "_it": "Hai già provato a cambiare modalità di trasporto per raggiungere il posto di lavoro senza auto privata? Se sì, descrivici le difficoltà che hai incontrato."
+    },
+    "308": {
+      "description": "GEBEN SIE ALLE FÜR HIN- UND RÜCKWEG GENUTZTEN VERKEHRSMITTEL AN, EINSCHLIESSLICH DERER, DIE IN KOMBINATION GENUTZT WERDEN (Z. B. AUTO + BUS + STRECKE ZU FUSS).",
+      "long_description": "Mehrfachantworten möglich. Falls KEINE Kombination von Verkehrsmitteln vorliegt, geben Sie nur das einzige genutzte Verkehrsmittel an.",
+      "options": "Zu Fuß (bei einer Strecke > 15 Minuten)|Bus/Straßenbahn|Metropolitana GTT|Auto|Motorrad/Roller|Fahrrad|E-Scooter|Taxi|Bahnservice Trenitalia/GTT|Bahnservice anderer Anbieter (Trenord, Italo, Hochgeschwindigkeitszüge, ...)|Carsharing|Bikesharing|Motorrad-Sharing|E-Scooter-Sharing|Carpooling",
+      "_it": "INDICA TUTTI I MEZZI UTILIZZATI PER LO SPOSTAMENTO DI ANDATA E RITORNO, INCLUSI QUELLI USATI IN COMBINAZIONE (ES. AUTO + BUS + TRATTO A PIEDI)."
+    },
+    "309": {
+      "description": "Was ist Ihr Arbeitsstandort",
+      "long_description": "Geben Sie die Adresse Ihres Arbeitsstandorts an",
+      "_it": "Qual'è la tua sede di lavoro"
+    },
+    "310": {
+      "description": "Geben Sie im untenstehenden Feld weitere Hinweise zum Thema Mobilität an",
+      "_it": "Indica nello spazio sottostante qualsiasi altra segnalazione sul tema della mobilità"
+    },
+    "319": {
+      "description": "BETRIEBLICHER SAMMELVERKEHRSDIENST",
+      "long_description": "Falls das Unternehmen ein betriebliches Sammelverkehrssystem (Shuttle/Privatbus) zur Verfügung stellen würde, UNTER WELCHER BEDINGUNG WÜRDEN SIE ES NUTZEN?",
+      "options": "Keine, ich bin ohnehin nicht interessiert.|Nur wenn es kostenlos wäre|Auch kostenpflichtig, sofern die Kosten niedriger sind als beim derzeitigen privaten Verkehrsmittel|Nur wenn die Abfahrts- und Ankunftszeiten mit dem aktuellen Zeitplan übereinstimmen|Auch wenn die Abfahrts- und Ankunftszeiten eine Verschiebung gegenüber dem aktuellen Zeitplan bedeuten würden|Nur wenn die Gesamtreisezeit ähnlich der aktuellen bleibt (max. 25 %) |Auch wenn die Gesamtreisezeit deutlich zunehmen würde (mehr als 25 %)|Auch wenn es erforderlich ist, eigenständig zu festgelegten Haltestellen zu gelangen|Nur wenn ich für einzelne Strecken/Tage beitreten/bezahlen kann|Auch wenn eine durchgehende monatliche Mitgliedschaft erforderlich ist",
+      "_it": "SERVIZIO DI TRASPORTO COLLETTIVO AZIENDALE"
+    },
+    "325": {
+      "description": "Was ist das Ziel Ihrer Fahrt?",
+      "options": "Sede principale - Piazza 4 novembre|Agrario - via Nino Manera, 13|IPC - Via Nino Manera, 33|Plesso Piazza D'Armi - SP 36|Plesso Baruffi - via E. Tortora|IIS Giolitti Paire - Piazza Stazione|Sonstiges",
+      "_it": "Qual è la destinazione del tuo spostamento?"
+    },
+    "337": {
+      "description": "Wenn es einen Shuttle gäbe, der an einem Treffpunkt hält, würden Sie ihn nutzen?",
+      "options": "Ja|Nein",
+      "_it": "Se ci fosse una navetta che si ferma presso un punto di ritrovo lo useresti?"
+    },
+    "339": {
+      "description": "Nutzen Sie für Hin- und Rückweg eine Kombination von Verkehrsmitteln? Geben Sie alle an.",
+      "options": "Ich nutze keine Kombination|Bus/Straßenbahn|Auto|Motorrad/Roller|Fahrrad|E-Scooter|Taxi|Servizio Ferroviario Trenitalia/GTT|Bahnservice anderer Anbieter (Trenord, Italo, Hochgeschwindigkeitszüge...)|Carsharing (gemeinsame Autonutzung mit jemandem)|Motorrad-Sharing (gemeinsame Motorradnutzung mit jemandem)|Firmenshuttle|Zu Fuß (bei einer Strecke > 15 Minuten)",
+      "_it": "Per lo spostamento di andata e ritorno utilizzi una combinazione di mezzi? Indicali tutti."
+    },
+    "340": {
+      "description": "Ihre Fahrt auf der Karte",
+      "_it": "Il tuo spostamento su mappa"
+    },
+    "341": {
+      "description": "Emissionen Auto",
+      "_it": "Emissioni Auto"
+    },
+    "342": {
+      "description": "Emissionen Motorrad",
+      "_it": "Emissioni Moto"
+    },
+    "343": {
+      "description": "Welche Art von Verkehrsmittel nutzen Sie, um zur Arbeit zu gelangen?",
+      "options": "Auto|zu Fuß|Fahrrad|Motorrad|Überlandbus|Bus, Straßenbahn und U-Bahn|Zug|Auto als Beifahrer|Auto als Fahrer|Carpooling (ich stimme mich mit Kollegen ab, um ein Auto zu teilen)",
+      "_it": "Che tipologia di mezzo usi per andare a lavoro?"
+    },
+    "344": {
+      "description": "Wie viele Verkehrsmittel nutzen Sie, um zur Arbeit zu kommen?",
+      "_it": "Quanti mezzi utilizzi per venire a lavoro?"
+    },
+    "345": {
+      "description": "Nutzen Sie auf dem Rückweg dieselben Verkehrsmittel wie auf dem Hinweg?",
+      "options": "ja|nein, ich kehre mit folgenden Verkehrsmitteln zurück.......",
+      "_it": "Al ritorno usi gli stessi mezzi dell'andata?"
+    },
+    "354": {
+      "description": "Wie kommen Sie zur Arbeit?",
+      "long_description": "Fahren Sie zur Arbeit allein oder in Begleitung?",
+      "options": "ich komme allein, mit dem Auto oder Motorrad|ich komme allein, mit dem Fahrrad oder E-Scooter|ich komme allein, zu Fuß|ich nutze öffentliche Verkehrsmittel|ich teile das Auto mit einer weiteren Person|ich teile das Auto mit zwei oder mehr Personen|manchmal kann ich das Auto teilen, aber meistens fahre ich allein",
+      "_it": "Come vieni al lavoro?"
+    },
+    "355": {
+      "description": "Mit welchen Verkehrsmitteln kommen Sie zur Schule?",
+      "long_description": "Beschreiben Sie, mit welchem Verkehrsmittel Sie zur Schule und wieder nach Hause fahren",
+      "options": "mit dem Auto oder Motorrad|mit dem Fahrrad oder E-Scooter|es hängt von den Wetterbedingungen ab|ich nutze öffentliche Verkehrsmittel|keine der vorherigen",
+      "_it": "Con quali mezzi vieni a scuola?"
+    },
+    "356": {
+      "description": "Sind Sie bereit, den Mobilitätsmanager im Unterricht mitwirken zu lassen, um die Schüler für das Thema zu sensibilisieren?",
+      "long_description": "Halten Sie es als Lehrkraft für sinnvoll, dass die Schüler verstehen, was nachhaltige Mobilität ist, und dieses Wissen an ihre Familien weitergeben?",
+      "options": "ja, der Mobilitätsmanager kann nach Absprache in meinem Unterricht mitwirken|ja, ich bin bereit, eine Stunde zur Verfügung zu stellen|das Thema sollte behandelt werden, aber lieber nicht in meinem Unterricht|nein, ich halte es nicht für sinnvoll, Unterrichtsstunden für das Thema zu verwenden",
+      "_it": "Sei disposto a lasciar intervenire in aula il Mobility Manager per sensibilizzare gli alunni sul tema?"
+    },
+    "357": {
+      "description": "Sind Sie bereit, Aktivitäten im Zusammenhang mit nachhaltiger Mobilität durchzuführen?",
+      "long_description": "Sind Sie bereit, in Ihrem Unterricht Aktivitäten zu diesem Thema durchzuführen, die die Schüler einbeziehen, sei es aus eigener Initiative oder auf Vorschlag des Mobilitätsmanagers, auch im Rahmen der für Bürgerkunde vorgesehenen Unterrichtsstunden?",
+      "options": "ja, den Vorschlägen des Mobilitätsmanagers folgend|ja, Aktivitäten zu diesem Thema sind bereits Teil meiner Planung für Bürgerkunde|nein, ich beabsichtige nicht, das Thema zu behandeln",
+      "_it": "Sei disposto a svolgere attività inerenti alla mobilità sostenibile?"
+    },
+    "358": {
+      "description": "Wenn es Radwege auf der Strecke von zu Hause zur Arbeit gäbe, würden Sie diese nutzen?",
+      "long_description": "Ist es möglich, sicher mit dem Fahrrad zu Ihrer Schule zu gelangen? Wenn ja, nutzen Sie es? Wenn nein, würden Sie es nutzen?",
+      "options": "die Radwege sind vorhanden und ich nutze sie|die Radwege sind vorhanden, aber ich nutze sie nicht|die Radwege sind nur auf einigen Abschnitten vorhanden, und die Straßen sind sehr verkehrsreich, es ist nicht ratsam, zur Arbeit zu kommen|die Radwege fehlen, aber wenn es sie gäbe, würde ich sie sicherlich nutzen|die Radwege fehlen, aber wenn es sie gäbe, würde ich sie gelegentlich nutzen|die Radwege fehlen, aber selbst wenn es sie gäbe, würde ich sie trotzdem nicht nutzen",
+      "_it": "Se ci fossero piste ciclabili nel tragitto casa-lavoro le useresti?"
+    },
+    "366": {
+      "description": "An welchen Standorten arbeiten Sie?",
+      "_it": "Su che sedi lavori?"
+    },
+    "368": {
+      "description": "Das Ziel Ihrer Fahrt liegt beim Arbeitsamt von:",
+      "_it": "La destinazione del tuo spostamento è presso il centro per l'impiego di:"
+    },
+    "369": {
+      "description": "Sind Sie ein interner oder externer Mitarbeiter?",
+      "options": "Intern|Extern",
+      "_it": "Sei un dipendente interno o esterno?"
+    },
+    "371": {
+      "description": "Kommt es vor, dass Sie dienstlich außerhalb der Stadt reisen?",
+      "options": "Nie|Manchmal|Mindestens einmal im Monat|Mindestens einmal pro Woche",
+      "_it": "Ti capita di andare in trasferta fuori città?"
+    },
+    "372": {
+      "description": "Welches Verkehrsmittel nutzen Sie hauptsächlich für Dienstreisen außerhalb der Stadt? ",
+      "options": "Privates Auto|Dienstwagen der Behörde|Mezzi Pubblici|Carsharing",
+      "_it": "Che mezzo utilizzi prevalentemente per le trasferte fuori città?"
+    },
+    "373": {
+      "description": "Kommt es vor, dass Sie Besprechungen an einem anderen Standort abhalten?",
+      "options": "Nie|Manchmal|Mindestens einmal im Monat|Mindestens einmal pro Woche|Fast jeden Tag",
+      "_it": "Ti capita di fare riunioni in un'altra sede?"
+    },
+    "375": {
+      "description": "Kommt es vor, dass Sie aus dienstlichen Gründen vor Ort unterwegs sein müssen?",
+      "options": "Nie|Manchmal|Mindestens einmal im Monat|Mindestens einmal pro Woche|Jeden Tag",
+      "_it": "Ti capita di dover uscire sul territorio per motivi di servizio?"
+    },
+    "377": {
+      "description": "Welches Verkehrsmittel nutzen Sie hauptsächlich für Fahrten in der Stadt während der Arbeitszeit? ",
+      "options": "Privates Auto|Dienstwagen der Behörde|Mezzi Pubblici|Carsharing|Fahrrad|E-Scooter",
+      "_it": "Che mezzo utilizzi prevalentemente per gli spostamenti in città durante l'orario di lavoro?"
+    },
+    "378": {
+      "description": "Immer noch für dienstliche Fahrten in der Stadt: Welches Verkehrsmittel würden Sie am liebsten nutzen, wenn es möglich wäre?",
+      "options": "Privates Auto|Dienstwagen der Behörde|Mezzi Pubblici|Carsharing|Fahrrad|E-Scooter|Zu Fuß gehen",
+      "_it": "Sempre per gli spostamenti di lavoro in Città, che mezzo utilizzeresti più volentieri se ce ne fosse la possibilità?"
+    },
+    "380": {
+      "description": "Was ist das Ziel Ihrer Fahrt?",
+      "long_description": "Geben Sie den Arbeitsstandort an, dem Sie zugeordnet sind",
+      "_it": "Qual è la destinazione del tuo spostamento?"
+    },
+    "428": {
+      "description": "WIE WEIT IST DIE NÄCHSTE HALTESTELLE DES ÖFFENTLICHEN VERKEHRS VOM AUSGANGSORT IHRER FAHRT ENTFERNT? ",
+      "_it": "QUANTO DISTA LA FERMATA DEL TRASPORTO PUBBLICO PIÙ VICINA AL LUOGO DI PARTENZA DEL TUO SPOSTAMENTO?"
+    },
+    "429": {
+      "description": "WENN SIE DIE ART DES ANREIZES WÄHLEN KÖNNTEN, WELCHEN WÜRDEN SIE BEVORZUGEN? ",
+      "options": "Ratenzahlung der Fahrscheinkosten über die Gehaltsabrechnung|Rabatt auf die Fahrscheinkosten|Ratenzahlung der Fahrradkosten über die Gehaltsabrechnung (auch mit elektrischer Tretunterstützung)|Rabatt auf den Kaufpreis eines Fahrrads|Rabatt auf den Kaufpreis eines E-Scooters|Kostenloses/vergünstigtes Abonnement für E-Scooter-Sharing|Kostenloses/vergünstigtes Bikesharing-Abonnement|Vereinbarung Parkplatz-öffentliche Verkehrsmittel (z. B. Park&Ride, Fahrradstation)|Keiner der vorherigen",
+      "_it": "SE POTESSI SCEGLIERE IL TIPO DI INCENTIVO, QUALE PREFERIRESTI?"
+    },
+    "439": {
+      "description": "NUTZEN SIE FÜR HIN- UND RÜCKWEG EINE KOMBINATION VON VERKEHRSMITTELN? WENN JA, GEBEN SIE ALLE AN, WENN NEIN, GEBEN SIE DAS EINZELNE VERKEHRSMITTEL AN ",
+      "options": "Zu Fuß (bei einer Strecke > 15 Minuten)|Bus/Straßenbahn|Metropolitana GTT|Auto|Motorrad/Roller|Fahrrad|E-Scooter|Taxi|Bahnservice Trenitalia/GTT|Bahnservice anderer Anbieter (Trenord, Italo, Hochgeschwindigkeitszüge, ...)|Carsharing|Bikesharing|Motorrad-Sharing|E-Scooter-Sharing|Firmenshuttle|Carpooling",
+      "_it": "PER LO SPOSTAMENTO DI ANDATA E RITORNO UTILIZZI UNA COMBINAZIONE DI MEZZI? SE SI INDICALI TUTTI SE NO INDICA IL SINGOLO MEZZO"
+    },
+    "440": {
+      "description": "WAS IST DAS ZIEL IHRER FAHRT? ",
+      "_it": "QUAL È LA DESTINAZIONE DEL TUO SPOSTAMENTO?"
+    },
+    "443": {
+      "description": "WENN SIE FÜR HIN- UND RÜCKWEG EINE KOMBINATION VON VERKEHRSMITTELN NUTZEN, GEBEN SIE ALLE AN ",
+      "options": "Zu Fuß (bei einer Strecke > 15 Minuten)|Bus/Straßenbahn|Metropolitana GTT|Auto|Motorrad/Roller|Fahrrad|E-Scooter|Taxi|Bahnservice Trenitalia/GTT|Bahnservice anderer Anbieter (Trenord, Italo, Hochgeschwindigkeitszüge, ...)|Carsharing|Bikesharing|Motorrad-Sharing|E-Scooter-Sharing|Firmenshuttle|Carpooling|Ich nutze nur ein Verkehrsmittel",
+      "_it": "SE PER LO SPOSTAMENTO DI ANDATA E RITORNO UTILIZZI UNA COMBINAZIONE DI MEZZI. INDICALI TUTTI"
+    },
+    "453": {
+      "description": "Was ist das Ziel Ihrer Fahrt?",
+      "_it": "Qual è la destinazione del tuo spostamento?"
+    },
+    "454": {
+      "description": "WENN SIE DIE ART DES ANREIZES WÄHLEN KÖNNTEN, WELCHEN WÜRDEN SIE BEVORZUGEN",
+      "long_description": "Mehrfachantworten möglich",
+      "options": "Anreiz für den Kauf eines ÖPNV-Abonnements (Rabatt/Ratenzahlung über die Gehaltsabrechnung usw.)|Kostenloses/vergünstigtes Carsharing-Abonnement|Kostenloses/vergünstigtes Abonnement für Bikesharing/E-Scooter|Jährlicher Gutschein für Fahrradwartung/-inspektion|Parkplatz-Vereinbarung (z. B. Park&Ride, Fahrradstation)|Verfügbarkeit interner Parkplätze für Carpooling (< 3 pro Auto)|Sonstiges",
+      "_it": "SE POTESSI SCEGLIERE IL TIPO DI INCENTIVO, QUALE PREFERIRESTI"
+    },
+    "458": {
+      "description": "Wird das Verkehrsmittel, das Sie für die Fahrt von zu Hause zur Arbeit nutzen, von Ihrem Arbeitgeber gestellt? ",
+      "options": "Ja|Nein",
+      "_it": "Il mezzo di trasporto che utilizzi per lo spostamento casa/lavoro è fornito dal tuo datore di lavoro?"
+    },
+    "462": {
+      "description": "Wie viel Zeit benötigen Sie, um in der Nähe des Arbeitsplatzes einen Parkplatz zu finden?",
+      "_it": "Quanto tempo impieghi per cercare parcheggio nei pressi del luogo di lavoro?"
+    },
+    "464": {
+      "description": "Wären Sie bereit, an vom Arbeitgeber organisierten Formen des Gruppenverkehrs teilzunehmen (z. B. Firmenbusse)?",
+      "options": "Ja|Nein",
+      "_it": "Saresti disposto a partecipare a forme di trasporto di gruppo (es. bus aziendali) organizzate dal datore di lavoro?"
+    },
+    "467": {
+      "description": "Wie beurteilen Sie die Qualität der Fahrradabstellplätze in Ihrem Unternehmen?",
+      "options": "Niedrig|Mittel|Hoch",
+      "_it": "Come giudichi la qualità dei ricoveri per biciclette presso la tua azienda?"
+    },
+    "468": {
+      "description": "Wie beurteilen Sie die Qualität der Motorrad-Stellplätze in Ihrem Unternehmen?",
+      "options": "Niedrig|Mittel|Hoch",
+      "_it": "Come giudichi la qualità dei posti per motocicli presso la tua azienda?"
+    },
+    "469": {
+      "description": "Wie beurteilen Sie die Qualität der Pkw-Stellplätze in Ihrem Unternehmen?",
+      "options": "Niedrig|Mittel|Hoch",
+      "_it": "Come giudichi la qualità dei posti per autoveicoli presso la tua azienda?"
+    },
+    "470": {
+      "description": "Wie beurteilen Sie die Qualität der Abstellplätze für E-Scooter in Ihrem Unternehmen?",
+      "options": "Niedrig|Mittel|Hoch",
+      "_it": "Come giudichi la qualità dei ricoveri per monopattini presso la tua azienda?"
+    },
+    "471": {
+      "description": "WENN SIE MIT DEM AUTO FAHREN, WO PARKEN SIE GEWÖHNLICH, WENN SIE AM ARBEITSPLATZ ANKOMMEN?",
+      "options": "Kostenloser öffentlicher Parkplatz|Kostenpflichtiger öffentlicher Parkplatz |Firmenparkplatz",
+      "_it": "SE TI SPOSTI IN AUTO, DOVE PARCHEGGI ABITUALMENTE QUANDO ARRIVI SUL LUOGO DI LAVORO?"
+    },
+    "472": {
+      "description": "Geben Sie die Art des Anreizes an, den Sie erhalten möchten",
+      "_it": "Indica il tipo di incentivo che vorresti ricevere"
+    },
+    "474": {
+      "description": "Wie gelangen Sie am häufigsten zur Arbeit?",
+      "_it": "Come ti rechi più frequentemente al lavoro?"
+    },
+    "482": {
+      "description": "An wie vielen Tagen pro Monat nutzen Sie den Firmenshuttle?",
+      "options": "Nie|Weniger als 5|Zwischen 5 und 10|Zwischen 10 und 15|Mehr als 15",
+      "_it": "Quanti giorni al mese utilizzi il servizio di navetta aziendale?"
+    },
+    "483": {
+      "description": "Aus welchen Gründen nutzen Sie den Firmenshuttle nicht häufiger? ",
+      "options": "Haltestellen zu weit von meiner Wohnung entfernt|Unbequeme Fahrzeiten|Übermäßige Reisezeit|Zu hohe Kosten|Ich bevorzuge andere Verkehrsmittel|Ich brauche das Auto für andere Zwecke|Sonstiges",
+      "_it": "Per quali motivi non utilizzi più spesso la navetta aziendale?"
+    },
+    "484": {
+      "description": "Wären Sie an einem vergünstigten Abonnement für öffentliche Verkehrsmittel und an einem Shuttle interessiert, der den Firmenstandort mit den nächstgelegenen Bahn-/Bushaltestellen verbindet?",
+      "options": "Ja|Ja, sehr|Ja, ziemlich interessiert|Nein",
+      "_it": "Saresti interessato ad un abbonamento ai mezzi pubblici a prezzi scontati e ad una navetta che connettesse la sede aziendale alle fermate del treno/bus più vicini?"
+    },
+    "486": {
+      "description": "An welchem Standort arbeiten Sie hauptsächlich?",
+      "_it": "In quale sede stai lavorando prevalentemente?"
+    },
+    "487": {
+      "description": "Glauben Sie, dass das Unternehmen etwas unternimmt, um nachhaltige Mobilität zu fördern?",
+      "options": "Ja|Nein|Nicht genug",
+      "_it": "Ritieni che l’azienda stia facendo qualcosa per incentivare la mobilità sostenibile?"
+    },
+    "488": {
+      "description": "Was sollte Ihrer Meinung nach mehr getan werden?",
+      "options": "Veranstaltungen|Höhere Anreize|Mehr Kommunikation|Workshop|Sonstiges",
+      "_it": "Cosa vorresti facesse di piu?"
+    },
+    "489": {
+      "description": "Halten Sie die vom Unternehmen angebotenen Rabatte für ausreichend?",
+      "options": "Ja |Nein",
+      "_it": "Ritieni che la scontistica che l’azienda mette a disposizione sia sufficiente?"
+    },
+    "490": {
+      "description": "Wenn das Unternehmen den Rabattprozentsatz erhöhen würde, wären Sie „tatsächlich“ bereit, öffentliche Verkehrsmittel zu nutzen?",
+      "options": "Ja|Nein",
+      "_it": "Se l’azienda aumentasse la % di sconto saresti “realmente” disposto ad utilizzare i mezzi pubblici?"
+    },
+    "491": {
+      "description": "Haben Sie eine Vorstellung davon, wie viel CO2 Sie bei Ihrer Fahrt von zu Hause zur Arbeit verursachen?",
+      "options": "Ja|Nein",
+      "_it": "Hai idea di quanta CO2 produci durante i tuoi spostamenti casa-lavoro?"
+    },
+    "493": {
+      "description": "Wie oft würden Sie einen Shuttle nutzen, der Sie mit den nächstgelegenen Haltestellen des öffentlichen Verkehrs verbindet (z. B. Volpiano-Settimo Torinese (FS, GTT usw.)?",
+      "options": "Jeden Tag|Mindestens ein paar Tage pro Woche|Mindestens ein paar Tage im Monat|Nie",
+      "_it": "Quanto utilizzeresti una navetta che ti connettesse con le fermate più vicine del trasporto pubblico (ad es Volpiano-Settimo Torinese (FS, GTT, etc)?"
+    },
+    "494": {
+      "description": "Wenn das Unternehmen seinen Mitarbeitern erlauben würde, ihr Elektroauto kostenlos aufzuladen, würden Sie einen Fahrzeugwechsel innerhalb der nächsten 18 Monate planen?",
+      "options": "Ja|Nein|Ich besitze bereits ein aufladbares Auto",
+      "_it": "Se l’azienda permettesse ai propri dipendenti di ricaricare gratuitamente la propria auto elettrica, pianificheresti una sostituzione dell’auto entro i prossimi 18 mesi?"
+    },
+    "496": {
+      "description": "WELCHE BERUFLICHE EINSTUFUNG HABEN SIE? ",
+      "options": "Lehrkraft|Forscher/in|Technologe/-in|Techniker/in|Verwaltungsangestellte/r|Stipendiat/in",
+      "_it": "QUAL È IL TUO INQUADRAMENTO?"
+    },
+    "497": {
+      "description": "Wählen Sie den Autotyp",
+      "options": "Taxi|Personal|Carpooling|Carsharing",
+      "_it": "Scegli il tipo di auto"
+    },
+    "498": {
+      "description": "Wählen Sie, ob Sie Fahrer oder Beifahrer sind",
+      "options": "Als Fahrer|Als Beifahrer",
+      "_it": "Scegli se sei conducente oppure passeggero"
+    },
+    "499": {
+      "description": "Wählen Sie den Fahrradtyp",
+      "options": "Personal|Bikesharing",
+      "_it": "Scegli il tipo di bici"
+    },
+    "500": {
+      "description": "Wählen Sie den Motorradtyp",
+      "options": "Personal|Motorrad- oder Roller-Sharing",
+      "_it": "Scegli il tipo di moto"
+    },
+    "501": {
+      "description": "Wählen Sie den Zugtyp",
+      "options": "Bahnservice Trenitalia|Bahnservice anderer Anbieter (Trenord, Italo, Hochgeschwindigkeitszüge...)",
+      "_it": "Scegli il tipo di treno"
+    },
+    "502": {
+      "description": "Global - Wählen Sie den Typ des E-Scooters",
+      "options": "Personal|Roller-Sharing",
+      "_it": "Globale - Scegli il tipo di monopattino"
+    },
+    "505": {
+      "description": "Zu welcher Kategorie gehören Sie?",
+      "long_description": "Wählen Sie nur eine der folgenden Optionen:",
+      "options": "Student/in|Lehrer/in|Elternteil|Nichtunterrichtendes Schulpersonal (ATA)",
+      "_it": "A quale categoria appartieni?"
+    },
+    "506": {
+      "description": "In welcher Bildungsstufe arbeiten Sie?",
+      "_it": "In quale grado di istruzione lavori?"
+    },
+    "507": {
+      "description": "Die Schule, an der ich unterrichte, befindet sich in einer Gegend:",
+      "options": "Mit wenig Verkehr|Mit viel Verkehr",
+      "_it": "La scuola in cui insegno si trova in un'area:"
+    },
+    "508": {
+      "description": "Die Schule, an der ich unterrichte, befindet sich in einer Gegend mit viel Verkehr:",
+      "options": "Den ganzen Tag|Nur zu den Ein-/Austrittszeiten der Schule",
+      "_it": "La scuola in cui insegno si trova in un'area con molto traffico:"
+    },
+    "509": {
+      "description": "Die Beschilderung im Umfeld der Schule:",
+      "options": "Sie wird im Allgemeinen nicht eingehalten, mit gefährlichem Verhalten|Sie wird überwiegend eingehalten",
+      "_it": "Nell'intorno della scuola, la segnaletica:"
+    },
+    "510": {
+      "description": "Die meisten Nutzer und Mitarbeiter der Schule erreichen das Schulgebäude:",
+      "long_description": "Wählen Sie nur eine der folgenden Optionen:",
+      "options": "Zu Fuß/mit dem Fahrrad/mit einem öffentlichen Verkehrsmittel|Mit dem Auto",
+      "_it": "La maggior parte degli utenti e del personale scolastico raggiunge il plesso:"
+    },
+    "511": {
+      "description": "Wurden Ihren Schülern Bildungsprogramme zur Straßenverkehrssicherheit und nachhaltigen Mobilität angeboten?",
+      "options": "Ja|Nein",
+      "_it": "Sono stati proposti ai tuoi allievi percorsi di educazione alla sicurezza stradale e alla mobilità sostenibile?"
+    },
+    "512": {
+      "description": "Haben Sie nach den Bildungsprogrammen Veränderungen in den Mobilitätsgewohnheiten Ihrer Schüler auf der Fahrt von zu Hause zur Schule festgestellt?",
+      "options": "Ja|Nein",
+      "_it": "Dopo i percorsi hai riscontrato cambiamenti nelle abitudini di mobilità casa-scuola dei tuoi allievi?"
+    },
+    "513": {
+      "description": "Welche Bildungsprogramme (zum Thema Straßenverkehrssicherheit und nachhaltige Mobilität) wurden angeboten?",
+      "long_description": "Schreiben Sie Ihre Antwort hier:",
+      "options": "Ja|Nein",
+      "_it": "Quali percorsi educativi (sul tema sicurezza stradale e mobilità sostenibile) sono stati proposti?"
+    },
+    "514": {
+      "description": "Hat sich die Schule mit einem Plan für die Fahrt von zu Hause zur Schule ausgestattet?",
+      "long_description": "Wählen Sie nur eine der folgenden Optionen:",
+      "options": "Ja|Nein|Ich weiß es nicht",
+      "_it": "La scuola si è dotata di un Piano Spostamenti Casa - Scuola?"
+    },
+    "515": {
+      "description": "Wurde ein schulischer Mobilitätsmanager benannt (auch in Zusammenarbeit zwischen mehreren Schulgebäuden/Schulleitungen)?",
+      "long_description": "Wählen Sie nur eine der folgenden Optionen:",
+      "options": "Ja|Nein|Ich weiß es nicht",
+      "_it": "E' stato individuato un Mobility Manager scolastico (anche in collaborazione tra più plessi scolastici/più Direzioni Didattiche)?"
+    },
+    "516": {
+      "description": "Haben der Schulrat / das Lehrerkollegium die Einrichtung eines Ausschusses genehmigt, der Lehrer und Eltern in die Themen der nachhaltigen Mobilität einbeziehen soll (",
+      "options": "Ja|Nein",
+      "_it": "Il Consiglio d'Istituto / il Collegio Docenti hanno approvato l'istituzione di una Commissione finalizzata a coinvolgere gli insegnanti e i genitori alle tematiche connesse alla mobilità sostenibile ("
+    },
+    "517": {
+      "description": "Sieht das Schulprogramm (POF) Aktivitäten zum Thema nachhaltige Mobilität vor?",
+      "options": "Ja|Nein",
+      "_it": "Il POF prevede attività connesse con il tema della mobilità sostenibile?"
+    },
+    "518": {
+      "description": "Welche Bildungsstufe besuchen Sie derzeit?",
+      "_it": "Quale grado di istruzione stai frequentando?"
+    },
+    "519": {
+      "description": "Welche Klasse besuchen Sie?",
+      "options": "Erste|Zweite|Dritte|Vierte|Fünfte",
+      "_it": "Che classe fai?"
+    },
+    "520": {
+      "description": "Welche Klasse besuchen Sie?",
+      "options": "Erste|Zweite|Dritte",
+      "_it": "Che classe fai?"
+    },
+    "521": {
+      "description": "Welche Klasse besuchen Sie?",
+      "long_description": "Wählen Sie nur eine der folgenden Optionen:",
+      "options": "Erste|Zweite|Dritte|Vierte|Fünfte",
+      "_it": "Che classe fai?"
+    },
+    "522": {
+      "description": "Wie viele Minuten dauert im Durchschnitt, einschließlich eventueller Zwischenstopps, die Fahrt von zu Hause zur Schule?",
+      "long_description": "Wählen Sie nur eine der folgenden Optionen:",
+      "options": "Weniger als 15 Minuten|Zwischen 15 und 30 Minuten|Zwischen 30 Minuten und einer Stunde|Mehr als eine Stunde",
+      "_it": "Quanti minuti occupa, mediamente e comprendendo eventuali soste, lo spostamento casa-scuola?"
+    },
+    "523": {
+      "description": "Um wie viel Uhr kommen Sie in der Schule an?",
+      "long_description": "Für Eltern: Um wie viel Uhr kommt Ihr Kind in der Schule an?",
+      "options": "Bis 7.40 Uhr|Zwischen 7.41 und 7.50 Uhr|Zwischen 7.51 und 8.00 Uhr|Zwischen 8.01 und 8.10 Uhr|Zwischen 8.11 und 8.20 Uhr|Zwischen 8.21 und 8.30 Uhr|Zwischen 8.31 und 8.40 Uhr",
+      "_it": "A che ora arrivi a scuola?"
+    },
+    "524": {
+      "description": "Wer begleitet Sie normalerweise zur Schule?",
+      "long_description": "Wählen Sie nur eine der folgenden Optionen:",
+      "options": "Papa / Mama|Großeltern / Onkel und Tanten|Mit meinem Bruder / meiner Schwester|Mit Freunden|Ich fahre allein|Sonstiges",
+      "_it": "Chi ti accompagna a scuola di solito?"
+    },
+    "525": {
+      "description": "Wer begleitet Ihr Kind normalerweise zur Schule?",
+      "long_description": "Wählen Sie nur eine der folgenden Optionen:",
+      "options": "Ein Elternteil|Großeltern oder Onkel und Tanten|Ein Bruder / eine Schwester|Geht mit Freunden|Geht allein zur Schule|Sonstiges",
+      "_it": "Di solito, chi accompagna tuo figlio a scuola?"
+    },
+    "526": {
+      "description": "Mit welchem Verkehrsmittel würden Sie gerne zur Schule fahren?",
+      "options": "Zu Fuß|Mit dem Fahrrad|Mit dem Zug|Mit dem Bus|Mit dem Auto|Mit Moped/Motorrad|Mit mehreren Verkehrsmitteln|Sonstiges",
+      "_it": "Con quale mezzo vorresti recarti a scuola?"
+    },
+    "527": {
+      "description": "Warum?",
+      "options": "Es ist unterhaltsamer|Es ist bequemer|Es ist weniger gefährlich|Ich benötige weniger Zeit|Ich bin unabhängiger|Sonstiges",
+      "_it": "Perchè?"
+    },
+    "528": {
+      "description": "Um die Sicherheit rund um die Schule zu verstehen: Bleiben Sie, wenn Sie in der Schule ankommen oder von ihr zurückkommen, in der Nähe der Schule stehen, um zu warten oder mit Freunden zu sprechen?",
+      "options": "Ja|Nein",
+      "_it": "Allo scopo di comprendere la sicurezza nell’intorno della scuola, quando arrivi o torni da scuola, ti fermi ad aspettare o a parlare con amici nei pressi della scuola?"
+    },
+    "529": {
+      "description": "Ist der Ort, an dem Sie sich aufhalten, sicher und vor dem Verkehr geschützt?",
+      "options": "Ja|Nein",
+      "_it": "Lo spazio in cui ti fermi è sicuro e protetto dal traffico?"
+    },
+    "530": {
+      "description": "Haben Sie an Bildungsprogrammen zu nachhaltiger Mobilität und/oder Straßenverkehrssicherheit teilgenommen?",
+      "options": "Ja|Nein",
+      "_it": "Hai partecipato a percorsi di educazione alla mobilità sostenibile e/o alla sicurezza stradale?"
+    },
+    "531": {
+      "description": "Haben sich Ihre Fortbewegungsarten auf der Fahrt von zu Hause zur Schule geändert, nachdem Sie an den Bildungsprogrammen zu nachhaltiger Mobilität und/oder Straßenverkehrssicherheit teilgenommen haben?",
+      "options": "Ja, ich habe meine Gewohnheiten geändert und gehe jetzt zu Fuß, mit dem Fahrrad oder mit öffentlichen Verkehrsmitteln zur Schule|Ja, ich komme mit dem Auto, lege aber mindestens die letzten 200 Meter zu Fuß oder mit dem Fahrrad zurück|Nein, weil ich schon vorher zu Fuß, mit dem Fahrrad oder mit öffentlichen Verkehrsmitteln zur Schule ging|Nein, meine Fortbewegungsart hat sich nicht geändert|Ich wüsste es nicht",
+      "_it": "Sono cambiate le tue modalità di spostamento nel tragitto casa-scuola dopo aver partecipato ai percorsi di educazione alla mobilità sostenibile e/o alla sicurezza stradale?"
+    },
+    "532": {
+      "description": "Was wäre notwendig, damit Schüler sicher zu Fuß zur Schule gehen können?",
+      "long_description": "Mehrfachantworten möglich",
+      "options": "Mehr geschützte Fußwege (z. B. mit Barrieren, die verhindern, dass Autos die Fußgängerbereiche besetzen, mit erhöhten Kreuzungen, damit Autos an den Stellen langsamer fahren, an denen Schüler die Straße überqueren)|Mehr Maßnahmen zur Verlangsamung der Fahrzeuge|Anwesenheit von Erwachsenen, die den Schülern beim Überqueren an den riskantesten Stellen helfen|Sonstiges",
+      "_it": "Che cosa sarebbe necessario per permettere agli studenti di recarsi a scuola a piedi in sicurezza?"
+    },
+    "533": {
+      "description": "Was wäre notwendig, damit Schüler sicher mit dem Fahrrad zur Schule fahren können?",
+      "long_description": "Mehrfachantworten möglich",
+      "options": "Mehr Radwege, die von den Autospuren geschützt sind|Mehr Maßnahmen zur Verlangsamung der Fahrzeuge|Anwesenheit von Erwachsenen, die den Schülern beim Überqueren an den riskantesten Stellen helfen|Vorhandensein bequemer, sicherer und überdachter Fahrradabstellplätze an der Schule|Sonstiges",
+      "_it": "Che cosa sarebbe necessario per permettere agli studenti di recarsi a scuola in bicicletta in sicurezza?"
+    },
+    "534": {
+      "description": "Was stört Sie am meisten unter den folgenden Punkten?",
+      "long_description": "Mehrfachantworten möglich",
+      "options": "Verkehr und Staus|Unfallrisiko und geringe Sicherheit auf der Straße|Luft- und Lärmverschmutzung|Langweilige und wenig attraktive Strecken|Schwierigkeiten, zu Fuß oder mit dem Fahrrad zu gehen (Autos zu schnell oder auf dem Gehweg geparkt)|Sonstiges",
+      "_it": "Cosa ti infastidisce di più tra le seguenti cose?"
+    },
+    "535": {
+      "description": "Wie würden Sie das Problem von Verkehr und Umweltverschmutzung lösen?",
+      "long_description": "Mehrfachantworten möglich",
+      "options": "Mehr öffentliche Verkehrsmittel|Günstigere Fahrscheine für öffentliche Verkehrsmittel|Mehr Spuren, die ausschließlich öffentlichen Verkehrsmitteln vorbehalten sind|Mehr Zonen, in denen Autos nicht fahren dürfen|Mehr Radwege|Sonstiges",
+      "_it": "Come risolveresti il problema del traffico e dell'inquinamento?"
+    },
+    "536": {
+      "description": "Ihrer Meinung nach, auf den Straßen rund um die Schule, ZU FUSS ZU GEHEN",
+      "options": "Es ist sicher|Es ist gefährlich",
+      "_it": "Secondo te, nelle strade intorno alla scuola, CAMMINARE"
+    },
+    "537": {
+      "description": "Warum?",
+      "long_description": "Mehrfachantworten möglich: ",
+      "options": "Weil es keine Fußwege (Gehwege oder Fußgängerbereiche) gibt oder diese schmal oder ungeschützt sind|Weil sich auf den Fußwegen Elemente befinden, die die Durchfahrt riskant machen (Schlaglöcher, hervorstehende Wurzeln o. Ä.)|Weil sich auf den Fußwegen Hindernisse befinden, die die Durchfahrt behindern (Pfosten, Container o. Ä.)|Weil die Geschwindigkeit der Fahrzeuge alle gefährdet (Fußgänger, Radfahrer, andere Autofahrer)|Weil die Fahrzeuge an den Überwegen die Regeln nicht einhalten (sie halten nicht an und bremsen nicht ab)|Weil die Straßen schlecht beleuchtet sind|Weil es entlang der Straßen wenige Geschäfte oder andere Anlaufstellen gibt (Bibliothek, Jugendzentrum, Pfarrzentrum usw.)",
+      "_it": "Perché?"
+    },
+    "538": {
+      "description": "Warum?",
+      "options": "Weil es keine Radwege gibt|Weil die Radwege nicht von den Fahrspuren getrennt sind|Weil sich auf der Fahrbahn Schlaglöcher oder Kanaldeckel befinden|Weil sich auf der Fahrbahn Container oder andere Hindernisse befinden, die die Durchfahrt behindern|Weil die Geschwindigkeit der Fahrzeuge alle gefährdet (Fußgänger, Radfahrer, andere Autofahrer)|Weil die Fahrzeuge an den Kreuzungen die Regeln nicht einhalten (sie halten nicht an und bremsen nicht ab)|Weil die Straßen schlecht beleuchtet sind",
+      "_it": "Perchè?"
+    },
+    "539": {
+      "description": "Auf den Straßen rund um die Schule den SCHULBUS oder BUS zu nehmen:",
+      "options": "Es ist sicher|Es ist gefährlich|Es gibt keine Busse/Schulbusse",
+      "_it": "Nelle strade intorno alla scuola prendere lo SCUOLABUS o l’AUTOBUS:"
+    },
+    "540": {
+      "description": "Warum?",
+      "options": "Weil es an der Haltestelle keinen sicheren Warteraum gibt|Weil die Haltestelle nicht gut sichtbar/ausgeschildert ist|Weil es in der Nähe der Haltestelle keinen sicheren Fußgängerüberweg gibt|Weil die Geschwindigkeit der Fahrzeuge alle gefährdet (Fußgänger, Radfahrer, andere Autofahrer)|Weil der Straßenabschnitt schlecht beleuchtet ist",
+      "_it": "Perché?"
+    },
+    "541": {
+      "description": "Aus welchem Grund fahren Sie mit dem Auto?",
+      "long_description": "Mehrfachantworten möglich",
+      "options": "Aus Gewohnheit und Bequemlichkeit|Aus Notwendigkeit|Aus gesundheitlichen Gründen|Aus Sicherheitsgründen",
+      "_it": "Per quale motivo vai in auto?"
+    },
+    "542": {
+      "description": "Sich auf den Straßen rund um die Schule MIT DEM FAHRRAD FORTZUBEWEGEN:",
+      "options": "Es ist sicher|Es ist gefährlich",
+      "_it": "Nelle strade intorno alla scuola MUOVERSI IN BICICLETTA:"
+    },
+    "543": {
+      "description": "Warum?",
+      "long_description": "Mehrfachantworten möglich",
+      "options": "es dauert weniger lange und ich kann später aufstehen|meine Eltern kommen auf dem Weg zur Arbeit an der Schule vorbei / als Elternteil komme ich auf dem Weg zur Arbeit bereits an der Schule vorbei|das Auto wird von mir / von der mich begleitenden Person für andere Aktivitäten benötigt (Einkaufen, Fitnessstudio…)",
+      "_it": "Coma mai?"
+    },
+    "544": {
+      "description": "Warum?",
+      "long_description": "Mehrfachantworten möglich",
+      "options": "Es gibt keine Haltestelle des öffentlichen Verkehrs innerhalb von 5 Gehminuten von zu Hause/der Schule, oder das öffentliche Verkehrsmittel fährt zu früh/spät|Wenn ich zu Fuß, mit dem Fahrrad oder mit öffentlichen Verkehrsmitteln zur Schule käme, würde ich zu spät kommen (zur Schule / zur Arbeit)",
+      "_it": "Come mai?"
+    },
+    "545": {
+      "description": "Warum?",
+      "long_description": "Mehrfachantworten möglich",
+      "options": "Weil es keine Fußwege (Gehwege oder Fußgängerbereiche)/Radwege gibt|Weil die Fußwege schmal oder ungeschützt sind|Weil sich auf den Fuß-/Radwegen Hindernisse befinden (Pfosten, Container o. Ä.) oder die Durchfahrt riskant machen (Schlaglöcher, hervorstehende Wurzeln o. Ä.)|Weil die Radwege nicht von den Fahrspuren getrennt sind|Weil die Geschwindigkeit der Fahrzeuge alle gefährdet (Fußgänger, Radfahrer, andere Autofahrer)|Weil die Fahrzeuge an den Überwegen die Regeln nicht einhalten (sie halten nicht an und bremsen nicht ab)|Weil die Straßen schlecht beleuchtet sind|Weil es entlang der Straßen wenige Geschäfte oder andere Anlaufstellen gibt (Bibliothek, Jugendzentrum, Pfarrzentrum usw.)",
+      "_it": "Come mai?"
+    },
+    "546": {
+      "description": "Wären Sie bereit, ein umweltfreundlicheres Verkehrsmittel zu nutzen?",
+      "options": "Ja|Nur wenn ich höchstens 10 Minuten mehr benötigen würde|Nur wenn die Strecke für Fußgänger/Radfahrer sicher wäre|Nein",
+      "_it": "Saresti disposto a utilizzare un mezzo più sostenibile per l’ambiente?"
+    },
+    "547": {
+      "description": "Wären Sie (oder die Person, die Sie begleitet) bereit, das Fahrzeug 300 Meter vom Schuleingang entfernt abzustellen und die letzte Strecke zu Fuß zurückzulegen?",
+      "long_description": "Wählen Sie nur eine der folgenden Optionen:",
+      "options": "Ja, immer|Ja, in der warmen Jahreszeit|Ich weiß es nicht|Nein",
+      "_it": "Saresti disposto (o chi ti accompagna sarebbe disposto) a lasciare l'autoveicolo a 300 metri dall'ingresso della scuola e percorrere l'ultimo tratto a piedi?"
+    },
+    "548": {
+      "description": "Wären Sie bereit, ein \"Carpooling\" zu bilden, indem Sie eine Mitfahrgelegenheit im Auto eines Kollegen/einer Kollegin anbieten oder annehmen, mit einem minimalen Umweg von der aktuellen Route?",
+      "long_description": "Wählen Sie nur eine der folgenden Optionen:",
+      "options": "Ich mache es bereits|Nein|Ja|Ja, unter Aufteilung der Kosten|Nur wenn Formen der Vergünstigung vorgesehen wären",
+      "_it": "Saresti disponibile a formare un \"car pooling\" offrendo  o accettando un passaggio sull'auto di un collega/compagno, effettuando una minima deviazione dal percorso attuale?"
+    },
+    "549": {
+      "description": "-\tWohnen Sie in derselben Provinz, in der sich der Standort befindet, an dem Sie angestellt sind?",
+      "options": "Ja|Nein",
+      "_it": "-\tRisiedi nella stessa provincia in cui si trova la sede presso cui sei assunto?"
+    },
+    "550": {
+      "description": "Sieht Ihre Arbeitsweise agiles Arbeiten (Homeoffice) vor?",
+      "options": "Ja, 1 Tag pro Woche|Ja, 2 Tage pro Woche|Ja, 3 Tage pro Woche|Ja, 4 Tage pro Woche|Ja, 5 Tage pro Woche|Ja, mit Flexibilität bis zu 75 % des Monats|Nein",
+      "_it": "La tua modalità di lavoro prevede il lavoro agile?"
+    },
+    "551": {
+      "description": "An welchen Tagen fahren Sie gewöhnlich ins Büro?",
+      "options": "Montag|Dienstag|Mittwoch|Donnerstag|Freitag|Samstag|Sonntag",
+      "_it": "In quali giorni sei solito recarti in ufficio?"
+    },
+    "552": {
+      "description": "Wie stark wirkt sich die Zeit, die Sie für die Fahrt von zu Hause zur Arbeit und zurück aufwenden, auf Ihr Privatleben aus (Hobbys, Sport, Freizeit)?",
+      "options": "Viel, mir bleibt wenig Freizeit vor und nach der Arbeit|Nicht sehr, da ich wenig Zeit für die Fahrten aufwende|Es wirkt sich nicht aus, weil ich immer (oder sehr oft) von zu Hause aus arbeite",
+      "_it": "Quanto incide il tempo che impieghi negli spostamenti casa-lavoro e lavoro-casa nella realizzazione della tua vita privata (hobby, sport, svago)?"
+    },
+    "553": {
+      "description": "Ist Ihre gewohnte Art der Fortbewegung eine Stressquelle für Sie?",
+      "options": "Ja, sehr|Nein, die Fahrt wirkt sich nicht auf mein Stressniveau aus|Ja, aber die Möglichkeit, einige Tage im Homeoffice zu arbeiten, hat mein Stressniveau gesenkt|Nein, weil ich für die Arbeit nicht von zu Hause weg muss",
+      "_it": "La tua abituale modalità di spostamento è fonte di stress per te?"
+    },
+    "554": {
+      "description": "Wenn Ihr Vertrag Homeoffice vorsieht, wie hoch ist Ihre monatliche Kostenersparnis?",
+      "options": "> 15%|15% - 30%|30% - 60%|60% - 100%|Mein Vertrag sieht kein Homeoffice vor",
+      "_it": "Se il tuo contratto prevede lo smartworking, a quanto ammonta il tuo risparmio di spese mensile?"
+    },
+    "555": {
+      "description": "-\tGemeinsam fahren: Wenn Sie für die Fahrt von zu Hause zur Arbeit und zurück Ihr privates Auto nutzen, wären Sie bereit, die Fahrt mit anderen Kollegen zu teilen und die Kosten aufzuteilen?",
+      "options": "Nein, ich reise lieber allein|Ja, ich mache es bereits|Ich nutze kein privates Auto|Ich würde es tun, wenn es eine Unternehmens-App gäbe, um sich mit Kollegen abzustimmen",
+      "_it": "-\tViaggiare insieme: se utilizzi l’auto privata negli spostamenti casa-lavoro e lavoro-casa, saresti disposto a condividere il viaggio con altri colleghi dividendo i costi?"
+    },
+    "556": {
+      "description": "Gemeinsam fahren: Wenn Sie dienstlich zu anderen Standorten der Deda-Gruppe reisen müssen, erkundigen Sie sich, ob andere Kollegen dieselbe Strecke zurücklegen müssen, um die Fahrt zu teilen?",
+      "options": "Nein, ich reise lieber allein|Ich würde es gerne tun, wenn es eine Unternehmens-App gäbe, um sich mit Kollegen abzustimmen|Ja, ich mache es oft, aber nur mit meinen Abteilungskollegen|Ich unternehme nie Dienstreisen",
+      "_it": "Viaggiare insieme: quando devi fare trasferte di lavoro verso altre sedi del Gruppo Deda ti informi se altri colleghi devono percorrere la stessa distanza per condividere il viaggio?"
+    },
+    "557": {
+      "description": "Das Auto, das Sie für die Fahrt von zu Hause zur Arbeit nutzen:",
+      "options": "es gehört mir / meinem Haushalt|es ist der Firmenwagen|ich nutze das Auto nicht für meine Fahrt von zu Hause zur Arbeit",
+      "_it": "L'auto che usi per i tuoi spostamenti casa lavoro:"
+    },
+    "558": {
+      "description": "Wie groß ist Ihre Bereitschaft, Ihre Mobilitätsart und -gewohnheiten zu ändern?",
+      "long_description": "Würden Sie Mobilitätsalternativen zu denen nutzen, die Sie gewöhnlich verwenden?",
+      "options": "Sehr interessiert|Ziemlich interessiert|Wenig interessiert|Überhaupt nicht interessiert",
+      "_it": "Qual è la propensione al cambiamento nelle tue modalità e abitudini di mobilità?"
+    },
+    "559": {
+      "description": "Ist das Auto, das Sie für Ihre Fahrten nutzen, Ihr eigenes oder ein Firmenwagen?",
+      "options": "Eigenes|Betrieblich",
+      "_it": "L'auto che utilizzi per i tuoi spostamenti è tua o è aziendale?"
+    },
+    "560": {
+      "description": "Wie bewerten Sie die Verfügbarkeit von reservierten Parkplätzen für Carpooling-Fahrgemeinschaften",
+      "options": "Es gibt keine für Carpooling reservierten Parkplätze|An den meisten Tagen finde ich den reservierten Parkplatz verfügbar|Ich habe Schwierigkeiten, einen freien Platz zu finden|Ich finde den für Carpooling reservierten Parkplatz oft von nicht autorisierten Autos besetzt ",
+      "_it": "Come valuti la disponibilità di parcheggio riservato agli equipaggi di car pooling"
+    },
+    "561": {
+      "description": "Wie bewerten Sie die Möglichkeit einer garantierten Heimfahrt?",
+      "long_description": "Ihren Mitarbeitern, die auf nachhaltige Weise ins Büro kommen (Carpooling, Fahrrad, zu Fuß, E-Scooter, öffentliche Verkehrsmittel), garantiert die Gruppe Dolomiti in Ausnahmefällen die Möglichkeit, mit dem Firmenwagen nach Hause zurückzukehren",
+      "options": "Es gibt keine für Carpooling reservierten Parkplätze|An den meisten Tagen finde ich den reservierten Parkplatz verfügbar|Ich habe Schwierigkeiten, einen freien Platz zu finden|Ich finde den für Carpooling reservierten Parkplatz oft von nicht autorisierten Autos besetzt ",
+      "_it": "Come valuti l'opportunità del ritorno garantito?"
+    },
+    "562": {
+      "description": "Wie zufrieden sind Sie mit der internen Kommunikation zum Thema Mobilität",
+      "options": "Dank der eigens dafür vorgesehenen News habe ich von den neuen Initiativen der Gruppe erfahren|Es würde mir helfen, diese Mitteilungen direkt in Up2Go zu erhalten|Ich kenne diesen Dienst nicht und erhalte diese Mitteilungen über Mundpropaganda",
+      "_it": "Come ti trovi con il servizio di comunicazione interna sulla mobilità"
+    },
+    "563": {
+      "description": "Geben Sie, wenn möglich, eine Schätzung der monatlichen finanziellen Ersparnis an, die Sie durch agiles Arbeiten (Homeoffice) erzielt haben (z. B. geringere Ausgaben für Verkehr, Verpflegung, Kleidung usw.)",
+      "options": "Nessun risparmio|Bis zu 50 € pro Monat|Zwischen 51 € und 100 € pro Monat|Zwischen 101 € und 200 € pro Monat|Über 200 € pro Monat|Ich wüsste es nicht / Ich möchte nicht antworten",
+      "_it": "Indica, se possibile, una stima del risparmio economico mensile che hai ottenuto grazie al lavoro agile (es. minori spese per trasporti, pasti, abbigliamento, ecc.)"
+    },
+    "564": {
+      "description": "Sind Sie ein auswärtiger Student/Arbeitnehmer?",
+      "options": "ja|nein",
+      "_it": "Sei uno studente/lavoratore fuori sede?"
+    },
+    "565": {
+      "description": "IN WIE VIELEN WOCHEN IM JAHR BEGEBEN SIE SICH AN IHREN WOHNSITZ?",
+      "options": "einmal im Jahr|einmal alle sechs Monate|einmal alle zwei Monate|einmal im Monat|Einmal alle zwei Wochen|Jede Woche",
+      "_it": "QUANTE SETTIMANE ALL’ANNO TI RECHI NELLA TUA SEDE DI RESIDENZA?"
+    },
+    "566": {
+      "description": "MIT WELCHEM VERKEHRSMITTEL?",
+      "options": "Bus/Straßenbahn|Privates Auto|Carpooling|Carsharing|Taxi|Zug|Privates Motorrad|Motorrad-Sharing|U-Bahn|Flugzeug",
+      "_it": "CON QUALE MEZZO DI TRASPORTO?"
+    },
+    "567": {
+      "description": "WIE VIELE KILOMETER LEGEN SIE ZURÜCK, UM ZU IHREM WOHNSITZ ZURÜCKZUKEHREN?",
+      "options": "bis 20 km|bis 30 km|bis 40 km|bis 50 km|bis 60 km|bis 70 km|von 71 bis 100 km|von 101 bis 200 km|von 201 bis 300 km|von 301 bis 400 km|von 401 bis 500 km|über 500 km",
+      "_it": "QUANTI CHILOMETRI PERCORRI PER TORNARE ALLA TUA RESIDENZA?"
+    },
+    "568": {
+      "description": "Geben Sie an, wie viele KILOMETER Sie MIT DEM ZUG zurücklegen",
+      "_it": "Indica quanti CHILOMETRI percorri IN TRENO"
+    },
+    "569": {
+      "description": "Geben Sie an, wie viel Sie MIT DEM ZUG für die EINZELNE FAHRT AUSGEBEN ",
+      "_it": "Indica quanti SPENDI IN TRENO PER IL SINGOLO VIAGGIO"
+    },
+    "570": {
+      "description": "Geben Sie an, wie viele KILOMETER Sie MIT DEM AUTO für die EINZELNE FAHRT zurücklegen ",
+      "_it": "Indica quanti CHILOMETRI percorri IN AUTO PER IL SINGOLO VIAGGIO"
+    },
+    "571": {
+      "description": "Geben Sie an, wie viel Sie MIT DEM AUTO für die EINZELNE FAHRT AUSGEBEN",
+      "_it": "Indica quanti SPENDI IN AUTO PER IL SINGOLO VIAGGIO"
+    },
+    "572": {
+      "description": "WELCHER UMWELTKLASSE GEHÖRT IHR AUTO AN",
+      "options": "Euro 0|Euro 1|Euro 2|Euro 3|Euro 4|Euro 5|Euro 6/Hybrid",
+      "_it": "A QUALE CLASSE AMBIENTALE APPARTIENE LA TUA AUTO"
+    },
+    "573": {
+      "description": "WIE GROSS IST DER HUBRAUM IHRES AUTOS?",
+      "options": "Bis 1200|Bis 1400|Bis 1600|Bis 1800|Bis 2000|Über 2000",
+      "_it": "QUAL É LA CILINDRATA DELLA TUA AUTO?"
+    },
+    "574": {
+      "description": "WELCHE KRAFTSTOFFART HAT IHR AUTO?",
+      "options": "Benzin|Diesel|Hybrid|Elektro|GPL|Erdgas",
+      "_it": "QUAL É L’ALIMENTAZIONE DELLA TUA AUTO?"
+    },
+    "575": {
+      "description": "Geben Sie an, wie viele KILOMETER Sie MIT DEM MOTORRAD für die EINZELNE FAHRT zurücklegen ",
+      "options": "Benzin|Diesel|Hybrid|Elektro|GPL|Erdgas",
+      "_it": "Indica quanti CHILOMETRI percorri IN MOTO PER IL SINGOLO VIAGGIO"
+    },
+    "576": {
+      "description": "Geben Sie an, wie viel Sie MIT DEM MOTORRAD für die EINZELNE FAHRT AUSGEBEN",
+      "options": "Benzin|Diesel|Hybrid|Elektro|GPL|Erdgas",
+      "_it": "Indica quanto SPENDI IN MOTO PER IL SINGOLO VIAGGIO"
+    },
+    "577": {
+      "description": "Geben Sie an, wie viele KILOMETER Sie MIT DER U-BAHN für die EINZELNE FAHRT zurücklegen",
+      "options": "Benzin|Diesel|Hybrid|Elektro|GPL|Erdgas",
+      "_it": "Indica quanti CHILOMETRI percorri IN METRO PER IL SINGOLO VIAGGIO"
+    },
+    "578": {
+      "description": "Geben Sie an, wie viel Sie MIT DER U-BAHN für die EINZELNE FAHRT AUSGEBEN",
+      "options": "Benzin|Diesel|Hybrid|Elektro|GPL|Erdgas",
+      "_it": "Indica quanto SPENDI IN METRO PER IL SINGOLO VIAGGIO"
+    },
+    "579": {
+      "description": "GEBEN SIE DIE ABFOLGE DER VERKEHRSMITTEL AN, DIE SIE FÜR DIE FAHRT ZUR ARBEIT AN EIN UND DEMSELBEN TAG NUTZEN",
+      "options": "{\"groups\":[{\"label\":\"zu Fuß\",\"options\":[\"1\",\"2\",\"3\",\"4\",\"5\",\"6\",\"7\",\"8\"]},{\"label\":\"Auto\",\"options\":[\"1\",\"2\",\"3\",\"4\",\"5\",\"6\",\"7\",\"8\"]},{\"label\":\"Fahrrad/E-Scooter\",\"options\":[\"1\",\"2\",\"3\",\"4\",\"5\",\"6\",\"7\",\"8\"]},{\"label\":\"Motorrad/Roller\",\"options\":[\"1\",\"2\",\"3\",\"4\",\"5\",\"6\",\"7\",\"8\"]},{\"label\":\"Stadtbus\",\"options\":[\"1\",\"2\",\"3\",\"4\",\"5\",\"6\",\"7\",\"8\"]},{\"label\":\"Überlandbus\",\"options\":[\"1\",\"2\",\"3\",\"4\",\"5\",\"6\",\"7\",\"8\"]},{\"label\":\"Zug\",\"options\":[\"1\",\"2\",\"3\",\"4\",\"5\",\"6\",\"7\",\"8\"]},{\"label\":\"Taxi\",\"options\":[\"1\",\"2\",\"3\",\"4\",\"5\",\"6\",\"7\",\"8\"]}],\"allowOther\":false}",
+      "_it": "INDICA LA SEQUENZA DI MEZZI UTILIZZATI PER COMPLETARE LO SPOSTAMENTO COMPIUTO PER RECARSI AL LAVORO IN UNA STESSA GIORNATA"
+    },
+    "580": {
+      "description": "Sonstiges: ",
+      "options": "Forschungsstipendiat/in / Mitarbeiter/in|C.E.L.|Dozent/in / Forscher/in|Lehrbeauftragte/r",
+      "_it": "Altro:"
+    },
+    "581": {
+      "description": "Geben Sie an, wie viele KILOMETER Sie MIT DEM FLUGZEUG für die EINZELNE FAHRT zurücklegen",
+      "_it": "Indica quanti CHILOMETRI percorri IN AEREO per il SINGOLO VIAGGIO"
+    },
+    "582": {
+      "description": "Geben Sie an, wie viel Sie MIT DEM FLUGZEUG für die EINZELNE FAHRT AUSGEBEN",
+      "_it": "Indica quanto SPENDI percorri IN AEREO per il SINGOLO VIAGGIO"
+    },
+    "583": {
+      "description": "Nutzen Sie derzeit Carpooling, um zur Arbeit zu gelangen?",
+      "options": "Ja, regelmäßig (mindestens 3-mal pro Woche)|Ja, gelegentlich|Nein, aber ich würde es gerne nutzen|Nein, es interessiert mich nicht|Ich weiß nicht, was Carpooling ist",
+      "_it": "Usi attualmente il carpooling per recarti al lavoro?"
+    },
+    "584": {
+      "description": "Kennen und/oder nutzen Sie die Unternehmens-App zur Organisation von Carpooling?",
+      "options": "Ja, ich kenne es und nutze es|Ja, ich kenne es, nutze es aber nicht|Nein, ich kenne es nicht|Ich weiß nicht, was Carpooling ist",
+      "_it": "Conosci e/o utilizzi l’app aziendale per organizzare il carpooling?"
+    },
+    "585": {
+      "description": "Was könnten für Sie die wichtigsten Hindernisse sein?",
+      "options": "Schwierigkeiten, passende Mitfahrer zu finden|Zeitliche Unstimmigkeiten zwischen Kollegen|Mangel an Vertrauen/Sicherheit|Keine reservierte Spur oder Parkplatz|Sonstiges",
+      "_it": "Quali potrebbero essere per te i principali ostacoli?"
+    },
+    "586": {
+      "description": "Angeben",
+      "options": "Schwierigkeiten, passende Mitfahrer zu finden|Zeitliche Unstimmigkeiten zwischen Kollegen|Mangel an Vertrauen/Sicherheit|Keine reservierte Spur oder Parkplatz|Sonstiges",
+      "_it": "Specifica"
+    },
+    "587": {
+      "description": "Welche der folgenden Nebentätigkeiten wird gewöhnlich während der Fahrt ausgeübt oder mit ihr kombiniert?",
+      "options": "Begleitung Dritter (z. B. Kinder, andere Familienangehörige oder unterhaltsberechtigte Personen)|Kauf von Gütern des täglichen Bedarfs (tägliche Lebensmitteleinkäufe oder Kauf wesentlicher Güter)|Commissioni varie (svolgimento di altre commissioni e pratiche, es. servizi postali, bancari, visite mediche, ritiro/consegna pacchi)|Sportliche Aktivitäten|Ausübung weiterer Freizeit-, Unterhaltungs- oder sozialer Aktivitäten (z. B. Treffen, Hobbys, Kultur)",
+      "_it": "Quale delle seguenti attività accessorie viene abitualmente svolta o combinata durante lo spostamento?"
+    },
+    "588": {
+      "description": "Wenn das Unternehmen ein Fahrrad für die Fahrt von zu Hause zur Arbeit und für Ihre täglichen Aktivitäten zur Verfügung stellen würde, wären Sie daran interessiert, es zu nutzen?",
+      "options": "Ja|Nein",
+      "_it": "Se l'azienda mettesse a disposizione una bicicletta per gli spostamenti casa-lavoro e per le tue attività quotidiane, saresti interessato ad utilizzarla?"
+    },
+    "589": {
+      "description": "Welches der folgenden Merkmale halten Sie bei einem Fahrrad für am wichtigsten?",
+      "options": "Die elektrische Tretunterstützung|Die Möglichkeit, das Fahrrad zusammenzuklappen|Das Vorhandensein von Gepäckträgern zum Befestigen von Taschen/Rucksäcken/Kindersitzen",
+      "_it": "Quale tra le seguenti caratteristiche ritieni più importante in una bicicletta?"
+    },
+    "590": {
+      "description": "Wie zufrieden sind Sie mit Ihrer Mobilität",
+      "long_description": "Geben Sie im Folgenden an, wie zufrieden Sie mit Ihrer Fahrt sind",
+      "_it": "Quanto sei soddisfatto della tua mobilità"
+    },
+    "591": {
+      "description": "Führen Sie regelmäßige (systematische) Fahrten durch?",
+      "long_description": "Geben Sie an, ob Sie regelmäßig aus beruflichen oder schulischen/studienbedingten Gründen unterwegs sind.",
+      "options": "Zur Schule gehen|Zur Arbeit gehen |Ich führe keine regelmäßigen (systematischen) Fahrten durch",
+      "_it": "Effettui spostamenti sistematici?"
+    },
+    "592": {
+      "description": "Gibt es unter den im Folgenden genannten eine weitere Fahrt, die Sie für die Organisation Ihrer Aktivitäten für besonders wichtig halten?",
+      "long_description": "Die Fahrt könnte für die Organisation Ihrer Aktivitäten wichtig sein, weil sie wiederkehrend oder schwierig ist oder einen erheblichen Einfluss auf Ihr Leben hat.",
+      "options": "Fahrt von zu Hause zur Arbeit|Fahrt von zu Hause zur Ausbildungsstätte|−\tGesundheit (Arztbesuche, Diagnostik, wesentliche Dienstleistungen, …)|−\tBesorgungen (Behördengänge, Einkaufen, Tierarzt …)|−\tFreizeitaktivitäten (Kino, Theater, Diskothek, …)|−\tSoziale Aktivitäten (Besuche bei Freunden/Verwandten, Veranstaltungen, …)|Sonstiges|Nein",
+      "_it": "C’è un altro spostamento, fra quelli indicati di seguito, che ritieni particolarmente importante nell’organizzazione delle tue attività?"
+    },
+    "593": {
+      "description": "Wenn Sie \"Sonstiges\" geantwortet haben, versuchen Sie, weitere Informationen zu geben.",
+      "options": "Fahrt von zu Hause zur Arbeit|Fahrt von zu Hause zur Ausbildungsstätte|−\tGesundheit (Arztbesuche, Diagnostik, wesentliche Dienstleistungen, …)|−\tBesorgungen (Behördengänge, Einkaufen, Tierarzt …)|−\tFreizeitaktivitäten (Kino, Theater, Diskothek, …)|−\tSoziale Aktivitäten (Besuche bei Freunden/Verwandten, Veranstaltungen, …)|Sonstiges|Nein",
+      "_it": "Se hai risposto \"Altro\", prova a fornire maggiori informazioni."
+    },
+    "594": {
+      "description": "Die Fahrt wird durchgeführt:",
+      "options": "für direkte persönliche Bedürfnisse|um andere Personen zu begleiten (Kinder, Eltern, ältere Menschen usw.)|in Begleitung anderer Personen",
+      "_it": "Lo spostamento viene effettuato:"
+    },
+    "595": {
+      "description": "In welchen Zeitfenstern führen Sie Ihre Fahrt am häufigsten durch? (nur Hinweg) ",
+      "_it": "Quali sono le fasce orarie in qui più frequentemente effettui lo spostamento? (sola andata)"
+    },
+    "596": {
+      "description": "Wenn Sie \"Sonstiges\" geantwortet haben, geben Sie das Verkehrsmittel an, das Sie für die Fahrt nutzen.",
+      "_it": "Se hai risposto \"Altro\", indica il mezzo che utilizzi per lo spostamento."
+    },
+    "597": {
+      "description": "Wird die Fahrt im Carpooling durchgeführt, d. h. mit gemeinsamer Nutzung des Autos mit anderen Personen (die nicht zum eigenen Haushalt gehören)?",
+      "options": "ja|nein",
+      "_it": "Lo spostamento viene effettuato in modalità car pooling, ovvero condividendo l’auto con altre persone (non appartenenti al proprio nucleo famigliare)?"
+    },
+    "598": {
+      "description": "Wie kompliziert ist diese Fahrt für Sie?",
+      "options": "Überhaupt nicht kompliziert|Wenig kompliziert|Ziemlich kompliziert|Kompliziert|Sehr kompliziert",
+      "_it": "Quanto è complesso questo spostamento per te?"
+    },
+    "599": {
+      "description": "Können Sie uns mitteilen, welche Aspekte diese Fahrt kompliziert machen?",
+      "options": "Überhaupt nicht kompliziert|Wenig kompliziert|Ziemlich kompliziert|Kompliziert|Sehr kompliziert",
+      "_it": "Puoi indicarci quali aspetti rendono questo spostamento complesso?"
+    },
+    "600": {
+      "description": "Wenn in Ihrer Umgebung eine der folgenden zuverlässigen, sicheren und günstigen Mobilitätslösungen verfügbar wäre, würden Sie in Erwägung ziehen, sie für Ihre Fahrten zu nutzen?",
+      "options": "{\"groups\":[{\"label\":\"Rufbus-Dienst, öffentlich oder privat (Rufbus: Verkehrsdienst, der auf Anfrage mit flexiblen Zeiten und Strecken je nach Bedarf des Nutzers aktiviert wird)\",\"options\":[\"Ja\",\"Nein\",\"Ich weiß es nicht\"]},{\"label\":\"Carsharing-Dienst ()\",\"options\":[\"Ja\",\"Nein\",\"Ich weiß es nicht\"]}],\"allowOther\":false}",
+      "_it": "Se sul territorio fosse disponibile una delle seguenti soluzioni di mobilità, affidabile, sicura ed economica, prenderesti in considerazione di utilizzarla per i tuoi spostamenti?"
+    },
+    "601": {
+      "description": "Wenn in Ihrer Umgebung ein Rufbus-Dienst verfügbar wäre:",
+      "options": "{\"groups\":[{\"label\":\"Rufbus-Dienst, öffentlich oder privat (Rufbus: Verkehrsdienst, der auf Anfrage mit flexiblen Zeiten und Strecken je nach Bedarf des Nutzers aktiviert wird)\",\"options\":[\"Ja\",\"Nein\",\"Ich weiß es nicht\"]},{\"label\":\"Carsharing-Dienst ()\",\"options\":[\"Ja\",\"Nein\",\"Ich weiß es nicht\"]}],\"allowOther\":false}",
+      "_it": "Se fosse disponibile sul territorio un servizio di trasporto a chiamata:"
+    },
+    "602": {
+      "description": "Wenn in Ihrer Umgebung eine der folgenden zuverlässigen, sicheren und günstigen Mobilitätslösungen verfügbar wäre, würden Sie in Erwägung ziehen, sie Ihre MINDERJÄHRIGEN Kinder nutzen zu lassen?",
+      "options": "{\"groups\":[{\"label\":\"Rufbus-Dienst, öffentlich oder privat (Verkehrsdienst, der auf Anfrage mit flexiblen Zeiten und Strecken je nach Bedarf des Nutzers aktiviert wird)\",\"options\":[\"Ja\",\"Nein\",\"Ich weiß es nicht\",\"Nicht zutreffend (ich habe keine minderjährigen Kinder)\"]},{\"label\":\"Abend-/Nachtverkehrsdienst (öffentlich oder privat)\",\"options\":[\"Ja\",\"Nein\",\"Ich weiß es nicht\",\"Nicht zutreffend (ich habe keine minderjährigen Kinder)\"]}],\"allowOther\":false}",
+      "_it": "Se sul territorio fosse disponibile una delle seguenti soluzioni di mobilità, affidabile, sicura ed economica, prenderesti in considerazione la possibilità di farla utilizzare ai tuoi figli MINORENNI?"
+    },
+    "603": {
+      "description": "Wenn in Ihrer Umgebung eine der folgenden zuverlässigen, sicheren und günstigen Mobilitätslösungen verfügbar wäre, wären Sie damit einverstanden, dass Ihre VOLLJÄHRIGEN Kinder sie eigenständig nutzen?",
+      "options": "{\"groups\":[{\"label\":\"Rufbus-Dienst, öffentlich oder privat (Verkehrsdienst, der auf Anfrage mit flexiblen Zeiten und Strecken je nach Bedarf des Nutzers aktiviert wird)\",\"options\":[\"Ja\",\"Nein\",\"Ich weiß es nicht\",\"Nicht zutreffend (ich habe keine volljährigen Kinder)\"]},{\"label\":\"Organisierter Carpooling-Dienst (gemeinsame Autonutzung durch Personen aus unterschiedlichen Haushalten für ähnliche Fahrten)\",\"options\":[\"Ja\",\"Ja, sie machen es bereits\",\"Nein\",\"Ich weiß es nicht\",\"Nicht zutreffend (ich habe keine volljährigen Kinder)\"]},{\"label\":\"Carsharing-Dienst (ermöglicht die Nutzung eines Autos nur bei Bedarf, indem es für die benötigte Zeit reserviert und nutzungsabhängig bezahlt wird)\",\"options\":[\"Ja\",\"Nein\",\"Ich weiß es nicht\",\"Nicht zutreffend (ich habe keine volljährigen Kinder)\"]},{\"label\":\"Abend-/Nachtverkehrsdienst (öffentlich oder privat)\",\"options\":[\"Ja\",\"Nein\",\"Ich weiß es nicht\",\"Nicht zutreffend (ich habe keine volljährigen Kinder)\"]}],\"allowOther\":false}",
+      "_it": "Se sul territorio fosse disponibile una delle seguenti soluzioni di mobilità, affidabile, sicura ed economica, saresti favorevole al fatto che i tuoi figli MAGGIORENNI la utilizzino autonomamente?"
+    },
+    "604": {
+      "description": "Wenn Sie Ihr Verkehrsmittel zu einem nachhaltigeren wechseln müssten, welche Rolle, glauben Sie, spielt jeder dieser Akteure bei der Beeinflussung dieser Veränderung? (0 = keine, 5 = hoch) ",
+      "options": "{\"groups\":[{\"label\":\"Ich (persönliche Entscheidungen und Gewohnheiten)\",\"options\":[\"0\",\"1\",\"2\",\"3\",\"4\",\"5\"]},{\"label\":\"Mein soziales Netzwerk (Familie/Freunde/Kollegen)\",\"options\":[\"0\",\"1\",\"2\",\"3\",\"4\",\"5\"]},{\"label\":\"Die öffentliche Verwaltung (Gemeinde/Region/Staat: Regeln, Infrastruktur, Maßnahmen)\",\"options\":[\"0\",\"1\",\"2\",\"3\",\"4\",\"5\"]},{\"label\":\"Die Mobilitätsanbieter/-betreiber (öffentlicher Nahverkehr, Sharing, Apps usw.)\",\"options\":[\"0\",\"1\",\"2\",\"3\",\"4\",\"5\"]},{\"label\":\"Mein Arbeitgeber / die Schule / die Universität, z. B. Arbeitszeiten, Homeoffice, Abonnements, Anreize (Homeoffice: flexible Arbeitsweise, bei der auch außerhalb des Büros gearbeitet werden kann, unter Nutzung digitaler Werkzeuge, um verbunden zu bleiben und zusammenzuarbeiten)\",\"options\":[\"0\",\"1\",\"2\",\"3\",\"4\",\"5\"]}],\"allowOther\":false}",
+      "_it": "Se dovessi cambiare la tua modalità di trasporto verso una più sostenibile, quanto ritieni che ciascuno di questi soggetti abbia un ruolo nell’influenzare questo cambiamento? (0=nessuno, 5= elevato)"
+    },
+    "605": {
+      "description": "11.\tWelche der folgenden Dienste würden Ihnen am meisten helfen, Ihre täglichen Fahrten zu reduzieren? (Sie können bis zu 3 Optionen auswählen)",
+      "options": "Die Möglichkeit, im Coworking zu arbeiten (Coworking ist ein gemeinsam genutzter Arbeitsraum mit Arbeitsplätzen und gemeinsamen Diensten, der eine flexible Nutzung der Räume durch verschiedene Personen ermöglicht) |Die Möglichkeit, im Homeoffice zu arbeiten (flexible Arbeitsweise, bei der auch außerhalb des Büros gearbeitet werden kann, unter Nutzung digitaler Werkzeuge, um verbunden zu bleiben und zusammenzuarbeiten)|Lieferung der Einkäufe nach Hause|Lieferung von Medikamenten und lebenswichtigen Gütern nach Hause|Lieferung von Einkäufen aus lokalen Geschäften nach Hause|Zentrale Abholstelle für Einkäufe und Pakete|Online-Dienste der Gemeinde (Bescheinigungen, Anträge, Zahlungen)|Online-Buchung von Terminen und Dienstleistungen|Telemedizin-Dienste oder ferngesteuerte ärztliche Beratung|Markt oder mobile Nahversorgungsgeschäfte|Kein Dienst|Sonstiges",
+      "_it": "11.\tQuali seguenti servizi ti aiuterebbero maggiormente a ridurre gli spostamenti quotidiani? (puoi selezionare fino a 3 opzioni)"
+    },
+    "606": {
+      "description": "Wenn Sie \"Sonstiges\" geantwortet haben, versuchen Sie, dies näher zu spezifizieren",
+      "options": "Die Möglichkeit, im Coworking zu arbeiten (Coworking ist ein gemeinsam genutzter Arbeitsraum mit Arbeitsplätzen und gemeinsamen Diensten, der eine flexible Nutzung der Räume durch verschiedene Personen ermöglicht) |Die Möglichkeit, im Homeoffice zu arbeiten (flexible Arbeitsweise, bei der auch außerhalb des Büros gearbeitet werden kann, unter Nutzung digitaler Werkzeuge, um verbunden zu bleiben und zusammenzuarbeiten)|Lieferung der Einkäufe nach Hause|Lieferung von Medikamenten und lebenswichtigen Gütern nach Hause|Lieferung von Einkäufen aus lokalen Geschäften nach Hause|Zentrale Abholstelle für Einkäufe und Pakete|Online-Dienste der Gemeinde (Bescheinigungen, Anträge, Zahlungen)|Online-Buchung von Terminen und Dienstleistungen|Telemedizin-Dienste oder ferngesteuerte ärztliche Beratung|Markt oder mobile Nahversorgungsgeschäfte|Kein Dienst|Sonstiges",
+      "_it": "Se hai risposto \"Altro\", prova a specificare"
+    },
+    "607": {
+      "description": "Art des Wohnsitzes oder Aufenthaltsortes:",
+      "options": "Fest (z. B. Eigentumswohnung/Mietwohnung, dauerhaftes Zusammenleben bei Familienangehörigen/Partner, …)|Vorübergehend (z. B. Saisonarbeit, längere Dienstreise, längerer Aufenthalt bei Freunden/Verwandten, ….)",
+      "_it": "Tipologia di residenza o domicilio:"
+    },
+    "608": {
+      "description": "Geschlecht",
+      "options": "Männlich|Weiblich|Ich identifiziere mich nicht mit diesen Alternativen|Ich möchte nicht antworten",
+      "_it": "Genere"
+    },
+    "609": {
+      "description": "Wie alt sind Sie?",
+      "_it": "Quanti anni hai?"
+    },
+    "610": {
+      "description": "Sind Sie ein Saisonarbeiter? ",
+      "options": "Ja|Nein",
+      "_it": "Sei un lavoratore stagionale?"
+    },
+    "611": {
+      "description": "Identifizieren Sie sich mit einer der folgenden Kategorien?",
+      "options": "Person mit motorischen Schwierigkeiten und/oder Behinderungen|Person mit sensorischen Schwierigkeiten und/oder Behinderungen (Sehen/Hören)|Person mit kognitiven Schwierigkeiten und/oder Behinderungen|Sonstiges|Ich möchte nicht antworten|Keine Kategorie",
+      "_it": "Ti identifichi in una delle seguenti categorie?"
+    },
+    "612": {
+      "description": "Wenn Sie \"Sonstiges\" geantwortet haben, versuchen Sie, dies näher zu spezifizieren",
+      "options": "Person mit motorischen Schwierigkeiten und/oder Behinderungen|Person mit sensorischen Schwierigkeiten und/oder Behinderungen (Sehen/Hören)|Person mit kognitiven Schwierigkeiten und/oder Behinderungen|Sonstiges|Ich möchte nicht antworten|Keine Kategorie",
+      "_it": "Se hai risposto \"Altro\", prova a specificare"
+    },
+    "613": {
+      "description": "Steht Ihnen ein Auto für Ihre Fahrten zur Verfügung?",
+      "options": "Ja, und ich kann es frei nutzen|Ja, aber es wird mit anderen Haushaltsmitgliedern geteilt|Nein",
+      "_it": "Hai a disposizione un’automobile per effettuare i suoi spostamenti?"
+    },
+    "614": {
+      "description": "Wie ist Ihr Beschäftigungsstatus?",
+      "options": "Arbeiter/in|Angestellte/r|Beamte/r|Führungskraft (mittlere Ebene)|Selbstständige/r / Freiberufler/in|Unternehmer/in|Führungskraft|Lehrer/in|Student/in|Handwerker|Händler/in|Landwirt/Viehzüchter|Auszubildende/r / Praktikant/in|Arbeitslos / auf Arbeitssuche|Hausfrau/-mann|Rentner/in|Sonstiges",
+      "_it": "Qual è il tuo stato occupazionale?"
+    },
+    "615": {
+      "description": "Wenn Sie \"Sonstiges\" geantwortet haben, versuchen Sie, dies näher zu spezifizieren",
+      "options": "Arbeiter/in|Angestellte/r|Beamte/r|Führungskraft (mittlere Ebene)|Selbstständige/r / Freiberufler/in|Unternehmer/in|Führungskraft|Lehrer/in|Student/in|Handwerker|Händler/in|Landwirt/Viehzüchter|Auszubildende/r / Praktikant/in|Arbeitslos / auf Arbeitssuche|Hausfrau/-mann|Rentner/in|Sonstiges",
+      "_it": "Se hai risposto \"Altro\", prova a specificare"
+    },
+    "700": {
+      "description": "Ihre Fahrten auf der Karte (GAL)",
+      "long_description": "Geben Sie die für Sie wichtigsten oder häufigsten Fahrten an",
+      "_it": "I tuoi spostamenti su mappa (GAL)"
+    },
+    "701": {
+      "description": "Wo beginnt Ihre Fahrt?",
+      "_it": "Da dove parte il tuo viaggio?"
+    },
+    "702": {
+      "description": "Wo endet Ihre Fahrt?",
+      "_it": "Dove finisce il tuo viaggio?"
+    },
+    "703": {
+      "description": "Wo beginnt Ihre Fahrt?",
+      "_it": "Da dove parte il tuo viaggio?"
+    },
+    "704": {
+      "description": "Wo endet Ihre Fahrt?",
+      "_it": "Dove finisce il tuo viaggio?"
+    },
+    "705": {
+      "description": "Eigenständige Fahrten MINDERJÄHRIGER",
+      "long_description": "8.\tWenn in Ihrer Umgebung eine der folgenden zuverlässigen, sicheren und günstigen Mobilitätslösungen verfügbar wäre, würden Sie in Erwägung ziehen, sie Ihre MINDERJÄHRIGEN Kinder für ihre eigenständigen Fahrten nutzen zu lassen?",
+      "options": "<b>Rufbus-Dienst</b><br>(öffentlich oder privat)|<b>Abend-/Nachtverkehrsdienst</b><br> (öffentlich oder privat)|Ich weiß es nicht|Ich habe keine minderjährigen Kinder",
+      "_it": "Spostamenti MINORENNI in autonomia"
+    },
+    "706": {
+      "description": "In welchen Zeitfenstern führen Sie Ihre Fahrt am häufigsten durch? (nur Hinweg)",
+      "_it": "Quali sono le fasce orarie in qui più frequentemente effettui lo spostamento? (sola andata)"
+    },
+    "707": {
+      "description": "Wie oft pro Woche findet die Fahrt statt?",
+      "options": "1 Mal|2 Mal|3 Mal|4 Mal|5 Mal|6 Mal|7 Mal",
+      "_it": "Qual è la frequenza settimanale dello spostamento?"
+    },
+    "708": {
+      "description": "Wie lange dauert die Fahrt typischerweise (nur Hinweg)?",
+      "_it": "Qual è la durata tipica dello spostamento (sola andata)?"
+    },
+    "709": {
+      "description": "Welches Verkehrsmittel nutzen Sie überwiegend für diese Fahrt?",
+      "options": "Auto als Fahrer|Auto als Beifahrer|Bus|Taxi/Mietwagen mit Fahrer (NCC)|Zug Trenitalia/GTT|Zug anderer Anbieter|Motorrad/Roller|E-Scooter|Fahrrad|Zu Fuß|Sonstiges",
+      "_it": "Quale mezzo utilizzi in prevalenza per questo spostamento?"
+    },
+    "710": {
+      "description": "Wird die Fahrt im Carpooling durchgeführt, d. h. mit gemeinsamer Nutzung des Autos mit anderen Personen (die nicht zum eigenen Haushalt gehören)?",
+      "options": "Ja|Nein",
+      "_it": "Lo spostamento viene effettuato in modalità car pooling, ovvero condividendo l’auto con altre persone (non appartenenti al proprio nucleo famigliare)?"
+    },
+    "711": {
+      "description": "Wenn Sie \"Sonstiges\" geantwortet haben, könnten Sie weitere Informationen zum Verkehrsmittel geben, das Sie für die Fahrt nutzen?",
+      "options": "Ja|Nein",
+      "_it": "Se hai risposto \"Altro\", potresti fornire maggiori informazioni sul mezzo che utilizzi per lo spostamento?"
+    },
+    "712": {
+      "description": "Wie kompliziert ist diese Fahrt für Sie?",
+      "options": "Sehr kompliziert|Kompliziert|Ziemlich kompliziert|Wenig kompliziert|Überhaupt nicht kompliziert",
+      "_it": "Quanto è complesso questo spostamento per te?"
+    },
+    "713": {
+      "description": "Können Sie uns mitteilen, welche Aspekte diese Fahrt kompliziert machen?",
+      "options": "Sehr kompliziert|Kompliziert|Ziemlich kompliziert|Wenig kompliziert|Überhaupt nicht kompliziert",
+      "_it": "Puoi indicarci quali aspetti rendono questo spostamento complesso?"
+    },
+    "714": {
+      "description": "Die Fahrt wird durchgeführt:",
+      "options": "für direkte persönliche Bedürfnisse|um andere Personen zu begleiten (Kinder, Eltern, ältere Menschen usw.)|in Begleitung anderer Personen",
+      "_it": "Lo spostamento viene effettuato:"
+    },
+    "715": {
+      "description": "Alternative Verkehrsmittel und -arten zum Auto für Ihre Fahrt",
+      "long_description": "Wenn in Ihrer Umgebung eine der folgenden zuverlässigen, sicheren und günstigen Mobilitätslösungen verfügbar wäre, würden Sie in Erwägung ziehen, sie für Ihre Fahrten zu nutzen?\nWählen Sie alle aus, die Sie in Erwägung ziehen würden.",
+      "options": "Rufbus-<b>Dienst</b> (öffentlich oder privat)<br><small>Verkehrsdienst, der auf Anfrage mit flexiblen Zeiten und Strecken je nach Bedarf des Nutzers aktiviert wird</small>|Carsharing-<b>Dienst</b><br><small>ermöglicht die Nutzung eines Autos nur bei Bedarf, indem es für die benötigte Zeit reserviert und nutzungsabhängig bezahlt wird</small>|Abend-/Nacht<b>verkehrsdienst</b> (öffentlich oder privat)|Organisierter <b>Carpooling<b/>-Dienst <br><small>gemeinsame Autonutzung durch Personen aus unterschiedlichen Haushalten für ähnliche Fahrten</small>|Nein|Ich weiß es nicht",
+      "_it": "Mezzi e modi di trasporto alternativi all'auto per il tuo spostamento"
+    },
+    "716": {
+      "description": "Eigenständige Fahrten Volljähriger",
+      "long_description": "Wenn in Ihrer Umgebung eine der folgenden zuverlässigen, sicheren und günstigen Mobilitätslösungen verfügbar wäre, wären Sie damit einverstanden, dass Ihre VOLLJÄHRIGEN Kinder sie eigenständig für ihre Fahrten nutzen? Wählen Sie alle aus, die Sie in Erwägung ziehen würden.",
+      "options": "Rufbus-<b>Dienst</b> (öffentlich oder privat)|Organisierter<b> Carpooling</b>-Dienst|Carsharing-<b>Dienst</b>|Abend-/Nacht<b>verkehrsdienst</b> (öffentlich oder privat)|Ich weiß es nicht |Nicht zutreffend (ich habe keine volljährigen Kinder)",
+      "_it": "Spostamenti maggiorenni in autonomia"
+    },
+    "717": {
+      "description": "Können Sie uns mitteilen, welche Aspekte diese Fahrt kompliziert machen?",
+      "_it": "Puoi indicarci quali aspetti rendono questo spostamento complesso?"
+    },
+    "718": {
+      "description": "Wie kompliziert ist diese Fahrt für Sie?",
+      "_it": "Quanto è complesso questo spostamento per te?"
+    },
+    "719": {
+      "description": "Ende des Fragebogens",
+      "long_description": "Sie haben das Ende des Fragebogens erreicht. Durch Klicken auf die Schaltfläche <b>SPEICHERN UND WEITER senden Sie den Fragebogen ab und können nicht mehr zurückkehren</b>.<br> Vielen Dank für Ihre Zeit.”",
+      "_it": "Fine del questionario"
+    },
+    "720": {
+      "description": "Ende des Fragebogens",
+      "_it": "Fine del questionario"
+    },
+    "721": {
+      "description": "Ende des Fragebogens",
+      "_it": "Fine del questionario"
+    },
+    "722": {
+      "description": "Sind Sie in einer der folgenden Gemeinden wohnhaft/ansässig?",
+      "options": "Alba|Castagnito|Corneliano d'Alba|Guarene|Magliano Alfieri|Piobesi d'Alba|Vezza d'Alba|NEIN",
+      "_it": "Sei residente/domiciliato in uno dei seguenti Comuni?"
+    },
+    "723": {
+      "description": "Wie kommen Sie zur Arbeit?",
+      "_it": "Come vieni al lavoro? [pw-test]"
+    },
+    "724": {
+      "description": "Ihre Verkehrsmittel",
+      "_it": "I tuoi mezzi"
+    },
+    "725": {
+      "description": "Ihre Fahrt",
+      "_it": "Il tuo spostamento"
+    },
+    "726": {
+      "description": "Verkehrsmittel",
+      "_it": "Mezzi di trasporto"
+    },
+    "727": {
+      "description": "Ihre Entscheidungen",
+      "_it": "Le tue scelte"
+    },
+    "728": {
+      "description": "Berufliche Tätigkeit",
+      "_it": "Attività lavorativa"
+    },
+    "729": {
+      "description": "Ihre Arbeit",
+      "_it": "Il tuo lavoro"
+    },
+    "730": {
+      "description": "Veränderungsbereitschaft",
+      "_it": "Propensione al cambiamento"
+    },
+    "731": {
+      "description": "Persönliche Daten",
+      "_it": "Dati Personali"
+    },
+    "732": {
+      "description": "Persönliche Daten",
+      "_it": "Anagrafica"
+    },
+    "733": {
+      "description": "Anmerkungen und Vorschläge",
+      "_it": "Osservazioni e Suggerimenti"
+    }
+  }
+}

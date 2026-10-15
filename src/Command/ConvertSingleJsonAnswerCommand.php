@@ -22,6 +22,7 @@ use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
+use Cake\ORM\TableRegistry;
 
 class ConvertSingleJsonAnswerCommand extends Command
 {
@@ -32,8 +33,8 @@ class ConvertSingleJsonAnswerCommand extends Command
 
     public function execute(Arguments $args, ConsoleIo $io)
     {
-        $this->loadModel('Questions');
-        $this->loadModel('Answers');
+        $this->Questions = TableRegistry::getTableLocator()->get('Questions');
+        $this->Answers = TableRegistry::getTableLocator()->get('Answers');
         $type = 'text';
 
         $questions = $this->Questions->find()

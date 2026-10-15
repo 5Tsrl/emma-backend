@@ -38,78 +38,21 @@ class MonitoringsController extends AppController
      */
     public function index()
     {
-        if (!$this->request->is('json')) {
-            $this->paginate = [
-            'contain' => ['Measures', 'Offices'],
-            ];
+        $monitorings = [];
+        if ($this->request->is('json')) {
             $monitorings = $this->Monitorings->find();
-            // $monitorings_year = $this->Monitorings->find();
+            $conditions = [];
 
-            $measure_id = $this->request->getQuery('measure');
+            $measure_id = $this->request->getQuery('measure_id');
             if (!empty($measure_id)) {
-                $monitorings->where(['measure_id' => $measure_id]);
-                // $monitorings_year->where(['measure_id' => $measure_id]);
+                $conditions['measure_id'] = $measure_id;
             }
-            $year = $this->request->getQuery('year');
-            if (!(empty($year) || $year == 'TUTTI')) {
-                $monitorings->matching('Pscl', function ($q) use ($year) {
-                    return $q->where(['Pscl.year' => $year]);
-                });
-                // $monitorings_year->where(['year' => $year]);
-                // if($monitorings_year->count() != 0){
-                //     $monitorings = $monitorings_year;
-                // }
-            } elseif ($year == 'TUTTI') {
-                $monitorings->where(['pscl_id IS NULL']);
-                $office_id = $this->request->getQuery('office');
-                if (!empty($office_id)) {
-                    $monitorings->where(['Monitorings.office_id' => $office_id]);
-                    // $monitorings_year->where(['Monitorings.office_id' => $office_id]);
-                }
-                // $survey_id = $this->request->getQuery('survey');
-                // if (!empty($survey_id)) {
-                //     $monitorings->where(['Monitorings.survey_id' => $survey_id]);
-                //     // $monitorings_year->where(['Monitorings.survey_id' => $survey_id]);
-                // }
+            $pscl_id = $this->request->getQuery('pscl_id');
+            if (!empty($pscl_id)) {
+                $conditions['pscl_id'] = $pscl_id;
             }
-            $monitorings = $this->paginate($this->Monitorings);
-        } else {
-            $monitorings = $this->Monitorings->find();
-            // $monitorings_year = $this->Monitorings->find();
-
-            $measure_id = $this->request->getQuery('measure');
-            if (!empty($measure_id)) {
-                $monitorings->where(['measure_id' => $measure_id]);
-                // $monitorings_year->where(['measure_id' => $measure_id]);
-            }
-
-            // $survey_id = $this->request->getQuery('survey');
-            $office_id = $this->request->getQuery('office');
-            $year = $this->request->getQuery('year');
-            if (!(empty($year) || $year == 'TUTTI')) {
-                $company_id = $this->request->getQuery('company_id');
-                $monitorings->matching('Pscl', function ($q) use ($year, $office_id, $company_id) {
-                    if ($office_id == null) {
-                        return $q->where(['Pscl.year' => $year, 'Pscl.office_id is null', 'Pscl.company_id' => $company_id]);
-                    } else {
-                        return $q->where(['Pscl.year' => $year, 'Pscl.office_id' => $office_id]);
-                    }
-                });
-                // $monitorings_year->where(['year' => $year]);
-                // if($monitorings_year->count() != 0){
-                //     $monitorings = $monitorings_year;
-                // }
-            } elseif ($year == 'TUTTI') {
-                $monitorings->where(['pscl_id IS NULL']);
-                // if (!empty($survey_id)) {
-                //     $monitorings->where(['Monitorings.survey_id' => $survey_id]);
-                //     // $monitorings_year->where(['Monitorings.survey_id' => $survey_id]);
-                // }
-
-                if (!empty($office_id)) {
-                    $monitorings->where(['Monitorings.office_id' => $office_id]);
-                    // $monitorings_year->where(['Monitorings.office_id' => $office_id]);
-                }
+            if (!empty($conditions)) {
+                $monitorings = $monitorings->where($conditions);
             }
         }
 
@@ -127,7 +70,7 @@ class MonitoringsController extends AppController
     public function view($id = null)
     {
         $monitoring = $this->Monitorings->get($id, [
-        'contain' => ['Measures', 'Offices'],
+            'contain' => ['Measures', 'Offices'],
         ]);
 
         $this->set(compact('monitoring'));
@@ -198,17 +141,17 @@ class MonitoringsController extends AppController
         if (!$this->request->is('json')) {
             $measures = $this->Monitorings->Measures->find('list', ['limit' => 200]);
             $offices = $this->Monitorings->Offices->find('list', [
-        //'limit' => 200,
-            'keyField' => 'id',
-            'valueField' => function ($office) {
-                if (isset($office->company)) {
-                    $r = "{$office->company->name}-  {$office->name}";
-                } else {
-                    $r = $office->name;
-                }
+                //'limit' => 200,
+                'keyField' => 'id',
+                'valueField' => function ($office) {
+                    if (isset($office->company)) {
+                        $r = "{$office->company->name}-  {$office->name}";
+                    } else {
+                        $r = $office->name;
+                    }
 
-                return Text::truncate($r, 50);
-            },
+                    return Text::truncate($r, 50);
+                },
             ])->contain(['Companies' => ['fields' => ['id', 'name']]]);
             $this->set(compact('measures', 'offices'));
             $this->viewBuilder()->setOption('serialize', ['measures', 'offices']);
@@ -231,13 +174,13 @@ class MonitoringsController extends AppController
             $monitoring = $this->Monitorings->find('all')->where(['id' => $id])->first();
             if ($monitoring == null) {
                 $monitoring = $this->Monitorings->get($id, [
-                'contain' => [],
+                    'contain' => [],
                 ]);
                 // $monitoring = $this->Monitorings->find('all')->where(['id' => $id])->first();
             }
         } else {
             $monitoring = $this->Monitorings->get($id, [
-            'contain' => [],
+                'contain' => [],
             ]);
         }
 

@@ -1,0 +1,128 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: EMMA 5t.api\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-07 00:00+0000\n"
+"PO-Revision-Date: 2026-09-07 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: German\n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#
+# Messaggi di errore / autorizzazione (controllers + authenticator).
+# Il msgid è la stringa italiana sorgente passata a __(); i {0}/{1} sono i
+# placeholder ICU di CakePHP. Una chiave assente ricade sull'italiano.
+#
+
+msgid "Utente non autenticato"
+msgstr "Benutzer nicht authentifiziert"
+
+msgid "Utente non autenticato, puoi accedere di nuovo?"
+msgstr "Benutzer nicht authentifiziert, können Sie sich erneut anmelden?"
+
+msgid "Utente non autorizzato"
+msgstr "Benutzer nicht autorisiert"
+
+msgid "Non sei autorizzato ad accedere alla risorsa richiesta"
+msgstr "Sie sind nicht berechtigt, auf die angeforderte Ressource zuzugreifen"
+
+msgid "Utente non attivo"
+msgstr "Benutzer nicht aktiv"
+
+msgid "L'utente richiesto non esiste"
+msgstr "Der angeforderte Benutzer existiert nicht"
+
+msgid "Token JWT non valido"
+msgstr "Ungültiger JWT-Token"
+
+msgid "Token scaduto"
+msgstr "Token abgelaufen"
+
+msgid "Token mancante"
+msgstr "Token fehlt"
+
+msgid "Errore di validazione"
+msgstr "Validierungsfehler"
+
+#
+# Messaggi di validazione utente (UsersTable::validationDefault/buildRules):
+# mostrati nei form di creazione/modifica utente. Limitato a quelli che possono
+# comparire nei flussi di indagine.
+#
+
+msgid "Indirizzo email non valido"
+msgstr "Ungültige E-Mail-Adresse"
+
+msgid "Email già in uso"
+msgstr "E-Mail wird bereits verwendet"
+
+#
+# Nome sede predefinita creata alla creazione di una nuova azienda
+# (CompaniesController). Persistito nella lingua della richiesta.
+#
+
+msgid "Sede Principale"
+msgstr "Hauptsitz"
+
+#
+# Label indicatori (opzioni di questions.options) tradotte a runtime SOLO per
+# la visualizzazione in AnswersController::translateIndicatorLabels().
+# I valori canonici italiani restano quelli memorizzati nelle risposte: NON
+# tradurre questions.options via Translate behavior (romperebbe il conteggio).
+# Set iniziale: mezzi-usati / ripartizione_modale (estendibile agli altri).
+#
+
+msgid "Piedi"
+msgstr "Zu Fuß"
+
+msgid "Bus/Tram"
+msgstr "Bus/Straßenbahn"
+
+msgid "Metro"
+msgstr "U-Bahn"
+
+msgid "Auto"
+msgstr "Auto"
+
+msgid "Moto"
+msgstr "Motorrad"
+
+msgid "Bici"
+msgstr "Fahrrad"
+
+msgid "Monopattino"
+msgstr "E-Scooter"
+
+msgid "Taxi"
+msgstr "Taxi"
+
+msgid "Treno"
+msgstr "Zug"
+
+msgid "Servizio ferroviario altri vettori (Trenord, Italo, Alta Velocità...)"
+msgstr "Eisenbahnservice andere Anbieter (Trenord, Italo, Hochgeschwindigkeit...)"
+
+msgid "Car sharing"
+msgstr "Carsharing"
+
+msgid "Bike sharing"
+msgstr "Bike-Sharing"
+
+msgid "Moto sharing"
+msgstr "Motorradsharing"
+
+msgid "Monopattino sharing"
+msgstr "E-Scooter-Sharing"
+
+msgid "Navetta aziendale"
+msgstr "Unternehmensshuttle"
+
+msgid "Car pooling"
+msgstr "Carpooling"
+
+msgid "altro"
+msgstr "sonstiges"

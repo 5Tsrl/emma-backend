@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 //<editor-fold desc="Preamble">
@@ -19,6 +18,7 @@ declare(strict_types=1);
 //</editor-fold>
 namespace App\Geocoder;
 
+use App\Model\Entity\Origin;
 use Aws\Credentials\Credentials;
 use Aws\LocationService\LocationServiceClient;
 use Cake\Cache\Cache;
@@ -33,22 +33,25 @@ class awsGeocoder extends Geocoder
         parent::__construct();
     }
 
-    public function geocode($origin, $focusLat = null, $focusLon = null)
+    public function geocodeNoHash(Origin $origin, $focusLat = null, $focusLon = null): array|false
     {
         try {
             $coords = $this->awsGeocode($origin, $focusLat, $focusLon);
             if (isset($coords['lat']) && isset($coords['lon'])) {
-                return $coords;
+                return $coords->toArray();
             } else {
                 //Se non ha geocodificato l'indirizzo geocodifico il cap / città
                 $q = trim("{$origin['city']} {$origin['postal_code']}");
                 $coords = Cache::read($q);
-                if ($coords === null) {
-                    $coords = $this->awsGeocode($q, $focusLat, $focusLon);
+                if ($coords === null || $coords === false) {
+                    $coords = $this->awsGeocode(new Origin(['city' => $origin['city'], 'postal_code' => $origin['postal_code']]), $focusLat, $focusLon);
                     Cache::write($q, $coords);
                 }
+                if (isset($coords['lat']) && isset($coords['lon'])) {
+                    return $coords->toArray();
+                }
 
-                return $coords;
+                return false;
             }
         } catch (Exception $e) {
             Log::write('debug', 'Geocode->> Geocoding failed http error');
@@ -57,7 +60,7 @@ class awsGeocoder extends Geocoder
         }
     }
 
-    private function awsGeocode($origin, $focusLat = null, $focusLon = null, $structured = true)
+    private function awsGeocode(Origin $origin, $focusLat = null, $focusLon = null, $structured = true): Origin|array|false
     {
         $accessKey = Configure::read('Geocoding.accessKey');
         $secretKey = Configure::read('Geocoding.secretKey');
@@ -91,7 +94,9 @@ class awsGeocoder extends Geocoder
             ]);
 
             // Extract coordinates from the result
-
+            if (!isset($result['Results'][0]['Place']['Geometry']['Point'])) {
+                return false;
+            }
             $coordinates = $result['Results'][0]['Place']['Geometry']['Point'];
             if (! $coordinates) {
                 return $origin;
@@ -106,7 +111,7 @@ class awsGeocoder extends Geocoder
             if (isset($result['Results'][0]['Place']['Municipality'])) {
                 $origin['city'] = $result['Results'][0]['Place']['Municipality'];
                 Log::write('debug', " Geocoding aggiunge la città {$origin['city']})");
-            }        
+            }
             if (isset($result['Results'][0]['Place']['SubRegion'])) {
                 if (array_search($result['Results'][0]['Place']['SubRegion'], $this->province)) {
                     $origin['province'] = array_search($result['Results'][0]['Place']['SubRegion'], $this->province);
@@ -114,7 +119,8 @@ class awsGeocoder extends Geocoder
                     $origin['province'] = substr($result['Results'][0]['Place']['SubRegion'], 0, 2);
                 }
                 Log::write('debug', " Geocoding aggiunge la provincia {$origin['province']})");
-            }   
+            }
+
             return $origin;
         } catch (\Throwable $th) {
             if (is_array($origin) && isset($origin['address'])) {
@@ -130,7 +136,7 @@ class awsGeocoder extends Geocoder
     }
 
     //Compose complete address starting from the single parts
-    private function composeAddress($origin)
+    private function composeAddress(Origin $origin): string
     {
         $res = '';
         if (isset($origin['address'])) {

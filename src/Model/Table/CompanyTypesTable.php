@@ -41,6 +41,14 @@ class CompanyTypesTable extends Table
 
         $this->setTable('company_types');
         $this->setPrimaryKey('id');
+        // Localizza il nome del tipo azienda: con il LocaleSelectorMiddleware
+        // attivo, una find() in locale 'fr' restituisce automaticamente la
+        // traduzione dalla tabella i18n; in 'it' (defaultLocale) torna il
+        // valore originale. Le traduzioni FR sono seminate da CompanyTypesI18nSeed.
+        // NB: 'name' è solo display (nessun matching), quindi è sicuro tradurlo
+        // via Translate behavior (a differenza di questions.options, vedi
+        // QuestionsTable).
+        $this->addBehavior('Translate', ['fields' => ['name']]);
     }
 
     /**

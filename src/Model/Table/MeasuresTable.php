@@ -27,7 +27,6 @@ use Cake\Validation\Validator;
 /**
  * Measures Model
  *
- * @property \App\Model\Table\PillarsTable&\Cake\ORM\Association\BelongsTo $Pillars
  * @method \App\Model\Entity\Measure newEmptyEntity()
  * @method \App\Model\Entity\Measure newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\Measure[] newEntities(array $data, array $options = [])
@@ -58,9 +57,26 @@ class MeasuresTable extends Table
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
 
-        $this->belongsTo('Pillars', [
-        'foreignKey' => 'pillar_id',
+        // Pillars are no longer a separate model: an axis/pillar is a measure
+        // with type=0, ordered (with its measures) by the `weight` column.
+        // See ReorganizeSurveyMeasureModelCommand and CLAUDE.md.
+
+        $this->addBehavior('Translate', [
+            'fields' => ['name', 'description'],
+            'allowEmptyTranslations' => false,
         ]);
+    }
+
+    /**
+     * Order measures by weight so a type=0 axis-measure precedes its measures.
+     *
+     * @param \Cake\ORM\Query $query Query.
+     * @param array $options Options.
+     * @return \Cake\ORM\Query
+     */
+    public function findOrdered(\Cake\ORM\Query $query, array $options = []): \Cake\ORM\Query
+    {
+        return $query->orderAsc('Measures.weight')->orderAsc('Measures.id');
     }
 
     /**
@@ -102,6 +118,10 @@ class MeasuresTable extends Table
         ->integer('type')
         ->allowEmptyString('type');
 
+        $validator
+        ->integer('weight')
+        ->allowEmptyString('weight');
+
         return $validator;
     }
 
@@ -114,8 +134,7 @@ class MeasuresTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->existsIn(['pillar_id'], 'Pillars'), ['errorField' => 'pillar_id']);
-
+        // pillar_id removed: no Pillars association to validate against.
         return $rules;
     }
 

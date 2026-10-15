@@ -4,17 +4,11 @@ declare(strict_types=1);
 namespace App\Exporter;
 
 use Cake\Core\Configure;
-use Cake\Datasource\Exception\RecordNotFoundException;
-use Cake\Core\Exception\CakeException;
-use Cake\Datasource\FactoryLocator;
 use Cake\Log\Log;
 use Cake\Routing\Asset;
-use Cake\Utility\Text;
 use Exception;
-use InvalidArgumentException;
 use Mustache_Loader_FilesystemLoader;
 use ParsedownExtra;
-use RuntimeException;
 use TOC\MarkupFixer;
 use TOC\TocGenerator;
 
@@ -37,7 +31,6 @@ class MdExporter extends HtmlExporter implements ExporterInterface
             'comune' => $this->office['city'],
             'provincia' => $this->office['province'],
             'logo-azienda' => Asset::imageUrl(Configure::read('VUE_APP_ICON'), ['fullBase' => true]),
-            //'logo-azienda' => Router::url('/', true) . Configure::read('sitedir') . "/".  Configure::read('logodir') . "/" . $company_id . '.png',
         ];
     }
 
@@ -79,24 +72,26 @@ class MdExporter extends HtmlExporter implements ExporterInterface
         //Genera il PSCL
         //Devo generare un file md per ogni misura del PSCL
         //Devo generare un file che includa tutte le misure (index.htmls)
-        if ($this->office->PSCL) {
+        if ($this->hasOfficeAllYearsPscl()) {
             $this->fillPSCLBlock();
             $this->dumpMisure($resultPath);
         }
 
-        return $this->AllMd2Html($response);     
+        return $this->AllMd2Html($response);
     }
 
     /**
      * Prende tutti i file MD che ci sono nella cartella e genera il file complessivo HTML
-     * @param mixed $response 
-     * @return mixed 
-     * @throws InvalidArgumentException 
-     * @throws RuntimeException 
-     * @throws RecordNotFoundException 
-     * @throws CakeException 
+     *
+     * @param mixed $response
+     * @return mixed
+     * @throws \App\Exporter\InvalidArgumentException
+     * @throws \App\Exporter\RuntimeException
+     * @throws \App\Exporter\RecordNotFoundException
+     * @throws \App\Exporter\CakeException
      */
-    protected function AllMd2Html($response){
+    protected function AllMd2Html($response)
+    {
         //Copio il template-tipo nella cartella del progetto /pscl/$id_sede
         $resultPath = $this->resultPath($this->year);
 
@@ -128,7 +123,7 @@ class MdExporter extends HtmlExporter implements ExporterInterface
             $this->fillOfficeSurvey($this->office->survey);
             $this->fillSurvey();
             $this->fillPSCLBlock();
-            
+
             $rendered_pscl = $m->render($templateFile, $this->mustacheVars);
         } catch (Exception $e) {
             Log::error($e->getMessage());
@@ -148,10 +143,11 @@ class MdExporter extends HtmlExporter implements ExporterInterface
 
         // Return response object to prevent controller from trying to render
         // a view.
-        return $response; 
+        return $response;
     }
 
     //Copy the resources recursively, following the same structure
+
     private function copyResources($templatePath, $resourcePath)
     {
         $dir = opendir($templatePath);
@@ -188,7 +184,7 @@ class MdExporter extends HtmlExporter implements ExporterInterface
         $templateFile = '/../../shared/box/domanda-questionario.html';
         $template = file_get_contents($path . $templateFile);
         $m = new \Mustache_Engine([
-                'entity_flags' => ENT_QUOTES,
+            'entity_flags' => ENT_QUOTES,
         ]);
 
         if (!file_exists("$path/domande/")) {
@@ -214,7 +210,7 @@ class MdExporter extends HtmlExporter implements ExporterInterface
         file_put_contents("$path/domande/index.html", $inc);
     }
 
-    protected function dumpMisure($path, $overwrite=false)
+    protected function dumpMisure($path, $overwrite = false)
     {
         //Il file che contiene il template di ogni grafico
         //TODO: rendere parametrico
@@ -241,10 +237,10 @@ class MdExporter extends HtmlExporter implements ExporterInterface
                 } catch (Exception $e) {
                     Log::error($e->getMessage());
                 }
-                if (!file_exists("$path/misure/{$mis['slug']}.html") || $overwrite){
+                if (!file_exists("$path/misure/{$mis['slug']}.html") || $overwrite) {
                     file_put_contents("$path/misure/{$mis['slug']}.html", $rendered);
                 }
-                
+
                 //Genero l'include di tutte le domande
                 $inc .= "\n\n{{#include}}misure/{$mis['slug']}.html{{/include}}";
             }
@@ -252,6 +248,4 @@ class MdExporter extends HtmlExporter implements ExporterInterface
 
         file_put_contents("$path/misure/index.html", $inc);
     }
-
-
 }

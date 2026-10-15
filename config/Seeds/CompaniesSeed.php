@@ -23,30 +23,24 @@ class CompaniesSeed extends AbstractSeed
         $data = [
             [
                 'id' => '1',
-                'name' => 'Agenzia delle Entrate',
-                'address' => '',
-                'cap' => '',
-                'city' => 'Torino',
-                'province' => 'TO',
-                'country' => 'IT',
-                'num_employees' => '10',
-                'moma_id' => '7aab5817-8f9f-4a34-91b2-3c22a0c6e3d7',
-                'company_type_id' => 'ente',
-                'ateco' => '21.23.22',
-            ],
-            [
-                'id' => '2',
-                'name' => 'Avigliana',
-                'address' => '',
-                'cap' => '',
-                'city' => 'Avigliana',
-                'province' => 'TO',
-                'country' => 'IT',
+                'name' => 'Azienda Test',
                 'num_employees' => null,
-                'moma_id' => '7aab5817-8f9f-4a34-91b2-3c22a0c6e3d7',
-                'company_type_id' => 'azienda',
-                'ateco' => '',
-            ],
+                'ateco' => null,
+                'company_code' => null,
+                'web' => null,
+                'email' => null,
+                'city' => null,
+                'province' => null,
+                'address' => null,
+                'pec' => null,
+                'tel' => null,
+                'type' => '1',
+                'survey' => '{"cap": "00101", "nome": "test", "comune": "test", "mm_eta": "meno di 30 anni", "nr_sedi": "1", "district": "Primo Maggio", "mm_email": "test", "mm_sesso": "F", "indirizzo": "test", "mm_telefono": "test", "pec_azienda": "test", "codice_ateco": "test", "nr_dipendenti": "9", "mm_nome_cognome": "test", "mm_orario_lavoro": "part time", "mm_luogo_servizio": "test", "rapporto_lavorativo": "Dipendente aziendale", "nome_mobility_manager": "si", "inquadramento_lavorativo": "impiegato", "inquadramento_lavorativo_altro": null}',
+                'emissions' => null,
+                'partner' => null,
+                'additional_data' => null,
+                'years' => '[]'
+            ]
         ];
 
         $table = $this->table('companies');

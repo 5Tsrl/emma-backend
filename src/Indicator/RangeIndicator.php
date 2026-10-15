@@ -22,8 +22,10 @@ use Cake\Core\Configure;
 use Cake\Database\Expression\QueryExpression;
 use Cake\Datasource\ModelAwareTrait;
 use Cake\Http\Exception\NotFoundException;
+use Cake\I18n\I18n;
 use Cake\Log\LogTrait;
 use Cake\ORM\Locator\LocatorAwareTrait;
+use Cake\ORM\TableRegistry;
 
 class RangeIndicator extends baseIndicator
 {
@@ -39,10 +41,21 @@ class RangeIndicator extends baseIndicator
     public function __construct($slug, $survey_id = null, $office_id = null, $filters = [], $subcompany = null)
     {
         $this->slug = $slug;
+
+        // Forza la lingua di default sui find di Questions/QuestionsSurveys: gli
+        // indicatori operano su dati canonici e il Translate behavior, sotto una
+        // lingua ≠ default, farebbe il join della tabella i18n (id ambiguo + opzioni
+        // tradotte che romperebbero il match risposta↔opzione). Vedi baseIndicator
+        // e la nota i18n in CLAUDE.md. Va impostato prima di getQuestion().
+        $defaultLocale = I18n::getDefaultLocale();
+        $this->Questions = TableRegistry::getTableLocator()->get('Questions');
+        $this->Questions->setLocale($defaultLocale);
+        TableRegistry::getTableLocator()->get('QuestionsSurveys')->setLocale($defaultLocale);
+
         $this->question = $this->getQuestion($slug);
         $question_id = $this->question->id;
 
-        $this->loadModel('Answers');
+        $this->Answers = TableRegistry::getTableLocator()->get('Answers');
         $query = $this->Answers->find()
             ->where(['question_id' => $question_id]);
 
@@ -57,6 +70,10 @@ class RangeIndicator extends baseIndicator
         if (!empty($survey_id)) {
             $query->where(['survey_id' => $survey_id]);
             $altro->where(['survey_id' => $survey_id]);
+        }
+        // Normalize office id: convert string 'null' to real null
+        if (is_string($office_id) && strtolower($office_id) === 'null') {
+            $office_id = null;
         }
 
         if (!empty($office_id)) {
@@ -97,16 +114,8 @@ class RangeIndicator extends baseIndicator
                     //Purtroppo non posso usare il filtro in SQL perchè il valore è memorizzato in json e sbaglia
                     //Devo iterare sui risultati ;-(
                     foreach ($answ_usr as $a) {
-                        //Se la risposta è un array cerco un valore dentro l'array
-                        if (is_array($a->answer)) {
-                            if (in_array($answ, $a->answer)) {
-                                $answ_usr_ids_2[] = $a->user_id;
-                            }
-                        } else {
-                        //Altrimenti cerco il valore esatto
-                            if ($answ == $a->answer) {
-                                $answ_usr_ids_2[] = $a->user_id;
-                            }
+                        if ($this->answerMatchesFilter($qst_name, $answ, $a->answer)) {
+                            $answ_usr_ids_2[] = $a->user_id;
                         }
                     }
                     if (empty($answ_usr_ids_1)) {
@@ -148,11 +157,11 @@ class RangeIndicator extends baseIndicator
 
         //cerco ancora nella tabella delle question se ce n'è una con quel nome (sostituendo _ con -)
         if (empty($question_id)) {
-            $this->loadModel('Questions');
+            $this->Questions = TableRegistry::getTableLocator()->get('Questions');
             $slug = str_replace('_', '-', $slug);
             $this->question = $this->Questions->find()
-                ->select(['id', 'type', 'options'])
-                ->where(['name' => $slug])
+                ->select(['Questions.id', 'Questions.type', 'Questions.options'])
+                ->where(['Questions.name' => $slug])
                 ->first();
             if (!empty($this->question)) {
                 $question_id = $this->question->id;
@@ -166,10 +175,10 @@ class RangeIndicator extends baseIndicator
         }
 
         if (empty($this->question)) {
-            $this->loadModel('Questions');
+            $this->Questions = TableRegistry::getTableLocator()->get('Questions');
             $this->question = $this->Questions->find()
-                ->select(['id', 'type', 'options'])
-                ->where(['id' => $question_id])
+                ->select(['Questions.id', 'Questions.type', 'Questions.options'])
+                ->where(['Questions.id' => $question_id])
                 ->first();
         }
 
@@ -455,30 +464,7 @@ class RangeIndicator extends baseIndicator
 
             $this->series[$numSerie] = [];
         }
-        // $publishedCase = $this->query->newExpr()
-        // ->addCase(
-        //     $this->query->newExpr()->add(['answer <=' => 10]),
-        //     'meno di 30 €/mese'
-        // );
 
-    //     $unpublishedCase = $this->query->newExpr()
-    //     ->case()
-    // ->when(['answer <=' => 200])
-    // ->then('meno di 30 €/mese')
-    // ->when($this->query->newExpr()->between('answer', 200, 400))
-    // ->then('tra 30 e 50 €/mese')
-    // ->when(['answer >=' => 400])
-    // ->then('più di 200 €/mese');
-
-        // $this->query->select([
-        // $this->query->func()->count($publishedCase),
-        // ]);
-
-        // $this->query->select([
-        //     'size' =>$unpublishedCase
-        //     ])
-        //     ->group(['size'])
-        //     ;
         $res = $this->query->toArray();
         //sqld($query);
 

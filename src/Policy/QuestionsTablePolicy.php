@@ -4,8 +4,6 @@ declare(strict_types=1);
 namespace App\Policy;
 
 use Authorization\Policy\BeforeScopeInterface;
-use Cake\Database\Expression\QueryExpression;
-use Cake\Database\Query;
 
 /**
  * Companies policy
@@ -16,9 +14,8 @@ class QuestionsTablePolicy implements BeforeScopeInterface
     {
         //If the user is moma-area can only see if province and its area
         if ($user->role == 'moma_area') {
-
             return $query->where(['moma_area' =>  true]);
-        }else{
+        } else {
             return $query;
         }
     }

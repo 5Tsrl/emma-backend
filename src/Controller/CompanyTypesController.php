@@ -30,7 +30,6 @@ class CompanyTypesController extends AppController
     public function initialize(): void
     {
         parent::initialize();
-        $this->Authorization->skipAuthorization();
         $this->loadComponent('Security');
 
         $this->Security->setConfig('unlockedActions', ['edit', 'add']);

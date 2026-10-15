@@ -26,17 +26,18 @@ use Notifications\Notification\mustacheNotification;
 class psclNotification extends mustacheNotification
 {
     public function __construct($toUser, $subject, $mustacheTemplate, $mustacheVars, $mailer = 'default', $logo = null)
-  {
+    {
     // todo: il link deve contenere la corretta sintassi di vue
-    $frontEnd = Configure::read('FrontendUrl');
-    $pscl_link = Router::url("$frontEnd/pscl", true);
-    $mustacheVars['link'] = "<a href=\"{$pscl_link}\">{$pscl_link}</a>";
-    parent::__construct(
-        $toUser, 
-        $subject, 
-        $mustacheTemplate, 
-        $mustacheVars, 
-        $mailer, 
-        $logo);
-  }
+        $frontEnd = Configure::read('FrontendUrl');
+        $pscl_link = Router::url("$frontEnd/pscl", true);
+        $mustacheVars['link'] = "<a href=\"{$pscl_link}\">{$pscl_link}</a>";
+        parent::__construct(
+            $toUser,
+            $subject,
+            $mustacheTemplate,
+            $mustacheVars,
+            $mailer,
+            $logo
+        );
+    }
 }

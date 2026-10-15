@@ -54,7 +54,7 @@ class CompanyPolicy
      */
     public function canView(IdentityInterface $user, Company $company)
     {
-        if ($user->role == 'moma_area' || $user->role == 'admin') {
+        if ($user->role == 'moma_area' || $user->role == 'admin' || $user->role == 'moma') {
             return new Result(true);
         } else {
             if ($user->company_id == $company->id) {

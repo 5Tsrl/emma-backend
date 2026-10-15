@@ -17,7 +17,6 @@
 //Invece di milligram uso questo fork che ha qualche elemento in più
 //https://kidgodzilla.github.io/minimalist-css-framework/
 use Cake\Core\Configure;
-use Composer\Config;
 ?>
 <!DOCTYPE html>
 <html class="h-100">
@@ -35,14 +34,14 @@ use Composer\Config;
   <link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet">
 
   <!-- Load required Bootstrap and BootstrapVue CSS -->
-  <?= $this->Html->css('/js/node_modules/bootstrap/dist/css/bootstrap.min.css') ?>
+  <?= $this->Html->css('https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.1/css/bootstrap.min.css') ?>
 
-  <?= $this->Html->css("/js/node_modules/bootstrap-vue/dist/bootstrap-vue.min.css") ?>
+  <?= $this->Html->css("https://cdnjs.cloudflare.com/ajax/libs/bootstrap-vue/2.23.1/bootstrap-vue-icons.min.css") ?>
 
   <!-- Load Vue followed by BootstrapVue -->
-  <?= $this->Html->script("/js/node_modules/vue/dist/vue.min.js") ?>
-  <?= $this->Html->script("/js/node_modules/bootstrap-vue/dist/bootstrap-vue.min.js") ?>
-  <?= $this->Html->script("/js/node_modules/bootstrap-vue/dist/bootstrap-vue-icons.min.js") ?>
+  <?= $this->Html->script("https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.16/vue.js") ?>
+  <?= $this->Html->script("https://cdnjs.cloudflare.com/ajax/libs/bootstrap-vue/2.23.1/bootstrap-vue.min.js") ?>
+  <?= $this->Html->script("https://cdnjs.cloudflare.com/ajax/libs/bootstrap-vue/2.23.1/bootstrap-vue-icons.min.js") ?>
 
   <?= $this->Html->css('style') ?>
   <?= $this->fetch('meta') ?>

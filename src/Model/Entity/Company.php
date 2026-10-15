@@ -34,6 +34,7 @@ use Cake\ORM\Entity;
  * @property int|null $moma_id
  * @property string|null $company_type_id
  * @property string|null $ateco
+ * @property int|null $pscl_template_id
  *
  * @property \App\Model\Entity\Moma $moma
  * @property \App\Model\Entity\CompanyType $company_type
@@ -53,4 +54,40 @@ class Company extends Entity
     protected $_accessible = [
         '*' => true,
     ];
+
+    /**
+     * Check if company is complete (name and survey are not empty)
+     *
+     * @return bool True if name and survey are not empty
+     */
+    public function checkComplete(): bool
+    {
+        // Check if name is not empty
+        if (empty($this->name)) {
+            return false;
+        }
+
+        // Check if survey field is not empty (adjust field name if different)
+        if (empty($this->survey)) {
+            return false;
+        }
+
+        // Check if survey array contains null values
+        foreach ($this->survey as $name => $value) {
+            if ($value === null && stripos($name, 'altro') === false) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function getNumEmployees()
+    {
+        if (!empty($this->survey) && isset($this->survey['nr_dipendenti'])) {
+            return $this->survey['nr_dipendenti'];
+        } else {
+            return -1;
+        }
+    }
 }

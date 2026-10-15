@@ -20,6 +20,11 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use ArrayObject;
+use Cake\Core\Configure;
+use Cake\Datasource\EntityInterface;
+use Cake\Event\EventInterface;
+use Cake\Log\Log;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -92,6 +97,42 @@ class SurveyDeliveryConfigsTable extends Table
             ->boolean('is_active');
 
         return $validator;
+    }
+
+    /**
+     * Mittente effettivo delle email di indagine. Se `Surveys.forcedSenderEmail`
+     * (env SURVEY_FORCED_SENDER_EMAIL) è un indirizzo valido, sovrascrive sempre
+     * il valore salvato o inviato dal client. Vuoto/non valido = nessun forzamento.
+     *
+     * @param string|null $stored Mittente salvato nella configurazione.
+     * @return string|null
+     */
+    public static function effectiveSenderEmail(?string $stored): ?string
+    {
+        $forced = trim((string)Configure::read('Surveys.forcedSenderEmail'));
+        if ($forced === '') {
+            return $stored;
+        }
+        if (!filter_var($forced, FILTER_VALIDATE_EMAIL)) {
+            Log::write('warning', "SURVEY_FORCED_SENDER_EMAIL non valido: '$forced', mittente non forzato");
+
+            return $stored;
+        }
+
+        return $forced;
+    }
+
+    /**
+     * Unico punto di scrittura: copre salvataggi diretti e annidati (es. da SurveysController::edit).
+     *
+     * @param \Cake\Event\EventInterface $event Evento beforeSave.
+     * @param \Cake\Datasource\EntityInterface $entity Configurazione di invio.
+     * @param \ArrayObject $options Opzioni di salvataggio.
+     * @return void
+     */
+    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options): void
+    {
+        $entity->sender_email = self::effectiveSenderEmail($entity->sender_email);
     }
 
     /**

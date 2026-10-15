@@ -20,8 +20,11 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Database\Query;
+use Cake\Http\Exception\ForbiddenException;
+use Cake\Http\Exception\HttpException;
 use Cake\I18n\FrozenTime;
 use Cake\I18n\I18n;
 use Cake\Log\Log;
@@ -56,7 +59,6 @@ class QuestionsController extends AppController
                 ]
             );
         }
-        $this->Authorization->skipAuthorization();
         $this->loadComponent('Paginator');
     }
 
@@ -72,7 +74,7 @@ class QuestionsController extends AppController
         $query = $this->Questions->find()
             ->contain('Surveys', function (Query $q) {
                 return $q
-                ->select(['id','name','year']);
+                ->select(['Surveys.id','name','year']);
                 // ->limit(2000);
             })
             ->contain('Answers', function (Query $q) {
@@ -80,7 +82,7 @@ class QuestionsController extends AppController
                 ->select(['question_id','count' => $q->func()->count('question_id')])
                 ->group(['question_id']);
             })
-            ->select(['id','name', 'description', 'options']);
+            ->select(['Questions.id','name', 'description', 'options']);
 
         // $this->set(compact('questions'));
         // $this->viewBuilder()->setOption('serialize', ['questions']);
@@ -95,7 +97,7 @@ class QuestionsController extends AppController
         $this->allowRolesOnly(['admin', 'moma', 'moma_area']);
 
         $questions = $this->Questions->find()
-            ->select(['id','name', 'description','moma_area'])
+            ->select(['Questions.id','name', 'description','moma_area'])
             ->order(['name' => 'ASC']);
         $this->Authorization->applyScope($questions);
         $this->set(compact('questions'));
@@ -122,6 +124,27 @@ class QuestionsController extends AppController
     }
 
     /**
+     * Brescia #522: `type='section'` questions (the survey section headers) can be
+     * created/renamed by admin only. Throws 403 for any other role when either the
+     * submitted payload type or the STORED type of the question is 'section'.
+     *
+     * @param mixed $payloadType `type` value from the request payload (may be null).
+     * @param mixed $storedType `type` currently stored in the DB (null for a new question).
+     * @return void
+     * @throws \Cake\Http\Exception\ForbiddenException
+     */
+    private function assertCanManageSection($payloadType, $storedType = null): void
+    {
+        $identity = $this->Authentication->getIdentity();
+        if ($identity !== null && $identity->get('role') === 'admin') {
+            return;
+        }
+        if ($payloadType === 'section' || $storedType === 'section') {
+            throw new ForbiddenException(__('Solo un amministratore può creare o rinominare le sezioni'));
+        }
+    }
+
+    /**
      * Add method
      *
      * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
@@ -132,6 +155,7 @@ class QuestionsController extends AppController
 
         $question = $this->Questions->newEmptyEntity();
         if ($this->request->is('post')) {
+            $this->assertCanManageSection($this->request->getData('type'));
             $question = $this->Questions->patchEntity($question, $this->request->getData());
             if ($this->Questions->save($question)) {
                 if (!$this->request->is('json')) {
@@ -165,9 +189,10 @@ class QuestionsController extends AppController
 
         if (!empty($id)) {
             $question = $this->Questions->find()
-                ->where(['id' => $id])
+                ->where(['Questions.id' => $id])
                 ->contain(['Surveys'])
                 ->first();
+            $this->assertCanManageSection($this->request->getData('type'), $question['type'] ?? null);
 
             if (
                 (isset($question['survey']['opening_date']) && $question['survey']['opening_date'] > date('Y-m-d H:i:s')) ||
@@ -176,6 +201,7 @@ class QuestionsController extends AppController
                 throw new Exception('Survey is closed');
             }
         } else {
+            $this->assertCanManageSection($this->request->getData('type'));
             $question = $this->Questions->newEntity($this->request->getData(), ['associated' => ['Surveys._joinData']]);
         }
 
@@ -192,7 +218,7 @@ class QuestionsController extends AppController
                     // $question->surveys = ['_ids' => [$jd['survey_id']]]; - non funziona in nessun variante
                     $survey = $this->Questions->Surveys->findById($jd['survey_id'])->first();
                     $this->Questions->Surveys->link($question, [$survey]);
-                    $question->surveys[0]->_joinData->section_id = $question->section_id;
+                    // section_id removed: section grouping is now inline type='section' questions.
                 }
             }
 
@@ -232,8 +258,8 @@ class QuestionsController extends AppController
         $question = $this->Questions->get($id);
         // search if the question is used in any conditions of other questions where conditions is a json
         $conditions = $this->Questions->find()
-            ->where(function ($exp) use ($id) {
-                return $exp->in('JSON_UNQUOTE(JSON_EXTRACT(conditions, "$.question"))', [$id]);
+            ->where(function ($exp, $query) use ($id) {
+                return $exp->add($query->newExpr('JSON_UNQUOTE(JSON_EXTRACT(conditions, "$.question")) = ' . (int)$id));
             });
         // debug($conditions); die;
         $conditionsCount = $conditions->count();
@@ -243,11 +269,11 @@ class QuestionsController extends AppController
             $condition->conditions = '';
             $this->Questions->save($condition);
         }
-        
+
         // empty conditions of the questionsurveys
         $questionSurveys = $this->Questions->QuestionsSurveys->find()
-            ->where(function ($exp) use ($id) {
-                return $exp->in('JSON_UNQUOTE(JSON_EXTRACT(conditions, "$.question"))', [$id]);
+            ->where(function ($exp, $query) use ($id) {
+                return $exp->add($query->newExpr('JSON_UNQUOTE(JSON_EXTRACT(conditions, "$.question")) = ' . (int)$id));
             });
         // count the number of questionsurveys with conditions
         $questionSurveysCount = $questionSurveys->count();
@@ -256,8 +282,7 @@ class QuestionsController extends AppController
             $questionSurvey->conditions = '';
             $this->Questions->QuestionsSurveys->save($questionSurvey);
         }
-        
-        
+
         if ($this->Questions->delete($question)) {
             $this->Flash->success(__('The question has been deleted.'));
         } else {
@@ -287,6 +312,16 @@ class QuestionsController extends AppController
     public function originFilters()
     {
         $this->allowRolesOnly(['admin', 'moma','moma_area']);
+
+        // Stessa guardia di unused()/special() qui sotto: la nested
+        // QuestionsSurveys usa find('translations'), che sotto una locale
+        // diversa dalla default sostituirebbe `options` con la riga i18n
+        // tradotta (stringa pipe-delimited) invece di lasciarla canonica.
+        // Vedi CLAUDE.md "Part 16" / docs/dev-notes/questions-surveys-options-string-corruption.md.
+        $defaultLocale = I18n::getDefaultLocale();
+        $this->Questions->setLocale($defaultLocale);
+        $this->Questions->QuestionsSurveys->setLocale($defaultLocale);
+
         $questions = $this->request->getQuery('q');
         $questionsArray = explode(',', $questions);
         $survey_id = $this->request->getQuery('survey_id');        if ($survey_id == 'null' || $survey_id == 'undefined') {
@@ -314,9 +349,9 @@ class QuestionsController extends AppController
             if ($survey_id == 'null' || $survey_id == 'undefined') {
                 $filter['options'] = $filter['options'];
             } else {
-                if (!empty($filter->questions_surveys[0]['options'])){
+                if (!empty($filter->questions_surveys[0]['options'])) {
                     $filter['options'] = $filter->questions_surveys[0]['options'];
-                }                
+                }
             }
             if ($filter['type'] == 'multiple') {
                 // ottieni le effettive opzioni
@@ -338,6 +373,21 @@ class QuestionsController extends AppController
     public function unused($survey_id)
     {
         $this->allowRolesOnly(['admin', 'moma']);
+
+        // Regressione i18n (Part 16, seconda occorrenza della stessa classe di
+        // bug del Part 15): QuestionsTable::unused() usa find('translations'),
+        // che sotto una locale diversa dalla default (es. Accept-Language: fr)
+        // fa sì che il Translate behavior sostituisca le colonne base
+        // (`description`/`long_description`/`options`) con la riga i18n
+        // tradotta invece che lasciarle canoniche italiane — per `options`
+        // (colonna json array) questo restituisce una STRINGA pipe-delimited
+        // al posto dell'array, rompendo silenziosamente la validazione
+        // `Array.isArray(options)` del frontend (edit.vue::submitQuestion()).
+        // Stesso pattern di guardia già presente in editFromSurvey()/edit().
+        $defaultLocale = I18n::getDefaultLocale();
+        $this->Questions->setLocale($defaultLocale);
+        $this->Questions->QuestionsSurveys->setLocale($defaultLocale);
+
         $this->set('questions', $this->Questions->unused($survey_id));
         $this->viewBuilder()->setOption('serialize', ['questions']);
     }
@@ -345,6 +395,13 @@ class QuestionsController extends AppController
     public function special($survey_id)
     {
         $this->allowRolesOnly(['admin', 'moma']);
+
+        // Stessa guardia di unused() qui sopra — special() ha la stessa
+        // find('translations') non protetta. Vedi CLAUDE.md "Part 16".
+        $defaultLocale = I18n::getDefaultLocale();
+        $this->Questions->setLocale($defaultLocale);
+        $this->Questions->QuestionsSurveys->setLocale($defaultLocale);
+
         $this->set('questions', $this->Questions->special($survey_id));
         $this->viewBuilder()->setOption('serialize', ['questions']);
     }
@@ -355,14 +412,31 @@ class QuestionsController extends AppController
      */
     public function getTranslations($id, $survey_id)
     {
+        // Regressione i18n (defense-in-depth): getTranslations() usa find('translations'),
+        // che sotto una locale diversa dalla default potrebbe fare sì che il Translate
+        // behavior sostituisca la colonna `options` (JSON array) con una stringa
+        // pipe-delimited, rompendo silenziosamente la validazione del frontend.
+        // Questo metodo non è attualmente il live trigger del bug (i call site in
+        // edit.vue/fill.vue sono commentati), ma il guard previene il riemergere della
+        // landmine se un call site viene ri-abilitato. Stesso pattern già presente in
+        // unused(), special(), e editFromSurvey().
+        $defaultLocale = I18n::getDefaultLocale();
+        $this->Questions->setLocale($defaultLocale);
+        $this->QuestionSurveys = TableRegistry::getTableLocator()->get('QuestionsSurveys');
+        $this->QuestionSurveys->setLocale($defaultLocale);
+
         $question = $this->Questions->find('translations')
-            ->where(['id' => $id])
+            ->where(['Questions.id' => $id])
             ->first();
 
         $t = $question->_translations;
-        //TODO: Generalizzare per altre lingue, al momento funziona sono con l'inglese
-        if (!empty($t['en']->options) && !is_array($t['en']->options)) {
-            $t['en']->options = json_decode($t['en']->options);
+        // Part 11: generalizzato da solo 'en' a 'en'+'fr'. `empty($t[$lang]->…)`
+        // resta sicuro anche quando una lingua non ha alcuna riga i18n
+        // (`$t[$lang]` è null in quel caso: `empty()` valuta a true senza errore).
+        foreach (['en', 'fr', 'de'] as $lang) {
+            if (!empty($t[$lang]->options) && !is_array($t[$lang]->options)) {
+                $t[$lang]->options = json_decode($t[$lang]->options);
+            }
         }
 
         $this->QuestionSurveys = TableRegistry::getTableLocator()->get('QuestionsSurveys');
@@ -371,8 +445,10 @@ class QuestionsController extends AppController
             ->where(['question_id' => $id])
             ->first();
         $tqs = $qs->_translations;
-        if (!empty($tqs['en']->options) && !is_array($tqs['en']->options)) {
-            $tqs['en']->options = json_decode($tqs['en']->options);
+        foreach (['en', 'fr', 'de'] as $lang) {
+            if (!empty($tqs[$lang]->options) && !is_array($tqs[$lang]->options)) {
+                $tqs[$lang]->options = json_decode($tqs[$lang]->options);
+            }
         }
         $this->set(compact('t'));
         $this->set(compact('tqs'));
@@ -389,23 +465,62 @@ class QuestionsController extends AppController
         $company_id = $identity->get('company_id');
         $isMomaAzienda = $role == 'moma' && !empty($company_id);
 
+        // Regressione i18n (Part 11): senza questo guard, sotto una lingua
+        // diversa dalla default (es. fr, con Accept-Language: fr), il Translate
+        // behavior instrada get()/patchEntity()/save() su `description`/
+        // `long_description`/`options` (Questions e QuestionsSurveys) come righe
+        // i18n di traduzione invece che sulle colonne base — l'utente scrive il
+        // testo canonico italiano nel campo "principale" e questo finisce come
+        // riga i18n fr (mai scritto nella colonna base, ed è la causa più
+        // probabile delle righe fr "options" pipe-delimited spurie già presenti
+        // in DB). Stesso pattern del guard in SurveysController::edit(). Le
+        // traduzioni esplicite continuano a passare da `->translation($lang)`,
+        // indipendente dalla locale della tabella. Vedi CLAUDE.md i18n.
+        $defaultLocale = I18n::getDefaultLocale();
+        $this->Questions->setLocale($defaultLocale);
+        $this->Questions->QuestionsSurveys->setLocale($defaultLocale);
+
         if ($this->request->is(['post', 'put'])) {
             $errorMsg = false;
             try {
                 $data_all = $this->request->getData();
                 $globalmodification = $data_all['globalmodification'];
                 $data = $data_all['question'];
-                $survey_id = $data['questions_surveys'][0]['survey_id'];
+                $this->assertCanManageSection($data['type'] ?? null);
+                // Una patch globale della sola domanda (es. rename di una sezione:
+                // {id, type:'section', description}) può arrivare SENZA
+                // questions_surveys: in quel caso non c'è riga di collegamento da
+                // gestire e survey_id resta null.
+                $survey_id = $data['questions_surveys'][0]['survey_id'] ?? null;
                 $question_id = $data['id'];
 
                 // if (!empty($data['long_description']) && !is_array($data['long_description'])) {
                 //     $data['long_description'] =array('description' => $data['long_description']);
                 // }
                 if (!empty($data['id'])) {
-                    $question = $this->Questions->get($data['id']);
+                    // Bugfix (Part 17, stessa classe di bug del Part 15/16): un
+                    // plain get() NON carica `_translations`. Il flusso "aggiungi
+                    // domanda speciale" del frontend (submitNewQuestionFromSpecial())
+                    // rispedisce sempre indietro le traduzioni EN/FR ESISTENTI del
+                    // catalogo (popolate perché special()/unused() usano
+                    // find('translations')), anche se l'utente non le ha toccate.
+                    // Su un'entity senza `_translations` pre-caricate, il marshalling
+                    // automatico di patchEntity() (TranslateStrategyTrait::buildMarshalMap)
+                    // costruisce sotto-entity di traduzione NUOVE invece di aggiornare
+                    // quelle esistenti, e save() tenta un INSERT che collide con la riga
+                    // i18n già presente (es. domande speciali 560/561/562, che hanno già
+                    // righe i18n EN per description/long_description/options) ->
+                    // SQLSTATE[23000] duplicate entry su i18n.I18N_LOCALE_FIELD. Stesso
+                    // pattern già corretto altrove in questo file/tabella: vedi
+                    // unused(), special() e il blocco Questions_spos qui sotto.
+                    $question = $this->Questions->find('translations')
+                        ->where(['Questions.id' => $data['id']])
+                        ->first();
                     if (empty($question)) {
                         throw new \Exception("Domanda {$data['id']} non trovata");
                     }
+                    // Brescia #522: a non-admin cannot rename/patch an existing section
+                    $this->assertCanManageSection($data['type'] ?? null, $question['type'] ?? null);
                     // domanda esistente, verifica che l'utente sia abilitato a modificarla
                     if ($isMomaAzienda && $question['creator_id'] != $userId) { // altimenti può sempre se ha un altro ruolo
                         // non posso modificare nulla della domanda (solo i joinData)
@@ -420,28 +535,169 @@ class QuestionsController extends AppController
                 }
                 // $joinData = $data['questions_surveys'][0];
                 unset($data['_joinData']); // per tranquillità
-                $question = $this->Questions->patchEntity($question, $data);
-
-                // Gestione della traduzione: mi aspetto di ricevere un array [en] => ['campo' => traduzione, 'campo2'=>traduzione]
-                //TODO: Gestire più lingue, trasformando $langs in un array e questo in un loop
-                $lang = 'en';
-                if (isset($data['_translations'][$lang])) {
-                    foreach ($data['_translations'][$lang] as $field => $value) {
-                        // if ($field == 'options') {
-                        //     $question->translation($lang)->$field = json_decode($value);
-                        // } else {
-                            $question->translation($lang)->$field = $value;
-                        // }
+                // Bugfix (deployment fr): il payload arriva spesso con un
+                // `_locale`/`_i18n` residuo di una GET precedente — `unused()`/
+                // `special()` usano find('translations'), che sotto
+                // Accept-Language: fr timbra `_locale:"fr"` sull'entity
+                // restituita (EavStrategy::rowMapper), e il frontend spreadda
+                // l'intera domanda nel payload di save (question._locale =
+                // "fr"). Una entity con `_locale` valorizzato VINCE SEMPRE sul
+                // `setLocale($defaultLocale)` di tabella impostato sopra: è la
+                // stessa TranslateStrategyTrait::setLocale() di CakePHP a
+                // documentarlo ("in case an entity has a `_locale` property
+                // set, that locale will win over the locale set via this
+                // method"). patchEntity() da solo rimetterebbe quindi la
+                // entity in fr e beforeSave() proverebbe a instradare
+                // `options` (colonna json, array PHP) come riga i18n
+                // `content` (colonna stringa) => "Cannot convert value of
+                // type `array` to string". Stessa esposizione per
+                // l'associazione annidata questions_surveys[0]. Rimossi qui
+                // PRIMA di patchEntity(); belt-and-suspenders subito dopo
+                // patchEntity() più sotto (vedi CLAUDE.md i18n).
+                unset($data['_locale'], $data['_i18n']);
+                if (isset($data['questions_surveys'][0]) && is_array($data['questions_surveys'][0])) {
+                    unset($data['questions_surveys'][0]['_locale'], $data['questions_surveys'][0]['_i18n']);
+                    // `moma_can_edit_options`/`disabled_options` must ONLY ever be
+                    // settable via SurveysController::toggleQuestionOptionsPermission()/
+                    // setQuestionDisabledOptions() — never through this general
+                    // question-edit save (privilege escalation / grant bypass
+                    // otherwise). Same "strip before patchEntity()" treatment as
+                    // `_locale`/`_i18n` above. Belt-and-suspenders: also blocked at
+                    // the entity level, see QuestionsSurvey::$_accessible.
+                    unset(
+                        $data['questions_surveys'][0]['moma_can_edit_options'],
+                        $data['questions_surveys'][0]['disabled_options']
+                    );
+                    // Brescia #523: `compulsory`/`hidden` are likewise admin-only here
+                    // (hide/compulsory are changed through SurveysController::
+                    // toggleQuestionVisibility()/toggleQuestionCompulsory(), which
+                    // enforce the rule). Without this a moma could bypass those guards
+                    // through the general question-edit save.
+                    if (($role ?? null) !== 'admin') {
+                        unset(
+                            $data['questions_surveys'][0]['compulsory'],
+                            $data['questions_surveys'][0]['hidden']
+                        );
                     }
                 }
-                if (isset($question['questions_surveys'][0][$lang])) {
+                // Part 11: skip-empty deve avvenire PRIMA di patchEntity() — il
+                // Translate behavior marshalla automaticamente `_translations`
+                // dentro patchEntity() (TranslateStrategyTrait::buildMarshalMap):
+                // crea comunque una sotto-entity di traduzione per ogni lingua
+                // presente nel payload, indipendentemente dal contenuto dei
+                // campi. Un controllo skip-empty fatto SOLO nel ciclo manuale
+                // sotto (dopo patchEntity) arriva troppo tardi per evitare quella
+                // sotto-entity (e quindi la riga i18n) dall'essere creata —
+                // filtrare i dati grezzi qui è l'unico punto che previene
+                // davvero una riga i18n "vuota". Di conseguenza una traduzione
+                // non può oggi essere CANCELLATA dall'editor (limite noto, vedi
+                // CLAUDE.md).
+                //
+                // IMPORTANTE: la STESSA marshalling automatica si applica anche
+                // all'associazione questions_surveys — se il payload include
+                // `question.questions_surveys[0]._translations`, patchEntity()
+                // la marshalla con la Translate behavior PROPRIA di
+                // QuestionsSurveysTable (non letta da nessun ciclo manuale sopra
+                // o sotto, che leggono solo la chiave letterale `en`/`fr`).
+                // Scoperto dal vivo (2026-07-14): un valore vuoto lì ha
+                // SOVRASCRITTO una traduzione EN preesistente e reale con una
+                // stringa vuota — non solo "crea una riga vuota", ma può
+                // CORROMPERE dati esistenti. Filtrata qui per lo stesso motivo.
+                if (isset($data['questions_surveys'][0]['_translations'])) {
+                    $data['questions_surveys'][0]['_translations'] = $this->stripEmptyTranslations(
+                        $data['questions_surveys'][0]['_translations']
+                    );
+                }
+                $data['_translations'] = $this->stripEmptyTranslations($data['_translations'] ?? null);
+                // Bugfix (Part 17, continuazione): find('translations') da solo
+                // (vedi sopra) NON basta quando la riga i18n preesistente ha
+                // `content = ''`. `QuestionsTable` ha `allowEmptyTranslations =>
+                // false` (Part 15): questo aggiunge una condizione `content !=
+                // ''` DIRETTAMENTE sull'associazione hasMany `i18n` usata sia da
+                // find('translations') per il caricamento di `_translations` SIA
+                // dal meccanismo di dedup di salvataggio del Translate behavior
+                // (EavStrategy::bundleTranslatedFields()/findExistingTranslations()
+                // — stessa associazione, stessa condizione). Una riga i18n
+                // preesistente ma con contenuto vuoto è quindi invisibile a
+                // ENTRAMBI i lati, indipendentemente da get() vs
+                // find('translations'): quando l'utente compila per la prima
+                // volta quella traduzione (valore NON vuoto in arrivo), l'ORM
+                // non può individuare la riga esistente e tenta sempre un
+                // INSERT, che collide con essa (SQLSTATE 23000 duplicate entry).
+                // Verificato empiricamente con test dedicato prima di questo fix
+                // (fallisce senza, passa con). Soluzione: per ogni traduzione
+                // ancora presente nel payload dopo lo skip-empty sopra,
+                // aggiorniamo qui DIRETTAMENTE l'eventuale riga i18n
+                // preesistente tramite la tabella I18n "nuda" (senza Translate
+                // behavior, quindi senza il filtro content != '') e la
+                // rimuoviamo da $data['_translations'] così patchEntity()/save()
+                // non tenta più di marshallarla: il Translate behavior gestisce
+                // da solo, correttamente, solo le traduzioni genuinamente nuove
+                // (nessuna riga preesistente => nessun rischio di collisione).
+                if (!empty($data['id']) && !empty($data['_translations'])) {
+                    $data['_translations'] = $this->syncExistingTranslationRows(
+                        (int)$data['id'],
+                        'Questions',
+                        $data['_translations']
+                    );
+                }
+                $question = $this->Questions->patchEntity($question, $data);
+
+                // Belt-and-suspenders (vedi nota sopra): anche se `_locale`
+                // non sopravvive più nel payload grezzo, forziamo
+                // esplicitamente la entity — e la sua associazione
+                // questions_surveys[0], se presente — sulla locale di
+                // default DOPO patchEntity(). Così un `_locale` che fosse
+                // comunque sopravvissuto (es. un futuro campo
+                // mass-assignabile diverso, o un refactor di questo metodo)
+                // non può più dirottare il save canonico verso una riga i18n.
+                $question->set('_locale', $defaultLocale, ['setter' => false]);
+                if (isset($question['questions_surveys'][0])) {
+                    $question['questions_surveys'][0]->set('_locale', $defaultLocale, ['setter' => false]);
+                }
+
+                // Gestione della traduzione: array [en|fr|de] => ['campo' => traduzione, ...].
+                // Part 11: esteso da solo 'en' a 'en'+'fr'. Ridondante con il
+                // marshalling automatico di cui sopra (stessa sotto-entity,
+                // stesso valore) ma innocuo — mantenuto per coerenza con la
+                // struttura preesistente del metodo.
+                foreach (['en', 'fr', 'de'] as $lang) {
+                    if (!isset($data['_translations'][$lang])) {
+                        continue;
+                    }
+                    foreach ($data['_translations'][$lang] as $field => $value) {
+                        $question->translation($lang)->$field = $value;
+                    }
+                }
+                // Tutta la gestione questions_surveys (join per-survey) si applica SOLO
+                // se il payload la include. Una patch globale della sola domanda (es.
+                // rename della description di una sezione: {id, type:'section',
+                // description}) non tocca alcuna riga di collegamento.
+                $hasJoinData = isset($data['questions_surveys'][0]);
+
+                // NOTE (Part 11): questo blocco legge una chiave letterale
+                // dell'entity ($question['questions_surveys'][0]['en'/'fr']), NON
+                // $data['_translations'][$lang] come sopra. Verificato dal vivo con
+                // una save reale (payload con questions_surveys[0].fr = {...}): il
+                // blocco SI attiva — il marshaller di CakePHP imposta qualunque
+                // chiave non mappata dell'array associato come proprietà dinamica
+                // dell'entity, quindi isset(...) risulta true e la traduzione viene
+                // scritta. Non è quindi "codice morto" in senso stretto. Però il
+                // payload REALE inviato dal frontend (question.service.js/edit.vue)
+                // non popola mai questa chiave letterale — annida sempre le
+                // traduzioni sotto `_translations` — quindi nell'uso applicativo
+                // normale questo ramo è oggi IRRAGGIUNGIBILE. Esteso a 'fr'/'de' per
+                // coerenza/difesa in profondità nel caso un payload futuro la
+                // valorizzi (es. una chiamata API diretta).
+                foreach (['en', 'fr', 'de'] as $lang) {
+                    if (!$hasJoinData || !isset($question['questions_surveys'][0][$lang])) {
+                        continue;
+                    }
                     foreach ($question['questions_surveys'][0][$lang] as $field => $value) {
-                        // if ($field == 'options') {
-                        //     $qs->translation($lang)->$field = json_encode($value);
-                        // } else {
-                            // $qs->_translations[$lang]->$field = $value;
-                            $question['questions_surveys'][0]->translation($lang)->$field = $value;
-                        // }
+                        if (trim((string)$value) === '') {
+                            continue;
+                        }
+                        $question['questions_surveys'][0]->translation($lang)->$field = $value;
                     }
                 }
 
@@ -467,11 +723,15 @@ class QuestionsController extends AppController
                 //     $joinData['question_id'] = empty($question['id']) ? 1 : $question['id'];
                 // }
 
-                if (empty($question['questions_surveys'][0]['id'])) { // insert
+                if ($hasJoinData && empty($question['questions_surveys'][0]['id'])) { // insert
                     // normalizza "compulsory" e "hidden"
                     // $joinData['compulsory'] = $joinData['compulsory'] ? 1 : 0;
                     // $joinData['hidden'] = $joinData['hidden'] ? 1 : 0;
-                    $question = $this->insertQuestionSurvey($question, $lang);
+                    // Part 11: $lang non è più una singola variabile di scope (loop
+                    // en/fr qui sopra) — insertQuestionSurvey() ora itera entrambe
+                    // le lingue internamente, quindi il valore passato qui non è
+                    // più significativo; mantenuto per compatibilità di firma.
+                    $question = $this->insertQuestionSurvey($question, 'en');
                 }
                 //  else {
                 //     // rimuovi compulsory e hidden (che sono gestiti a parte), salvo in pratica solo la section_id
@@ -494,7 +754,7 @@ class QuestionsController extends AppController
 
                         if (!empty($q_map_id)) {
                             // $question = $this->Questions->find('translations')->where(['id'=>$q_map_id]);
-                            $question_map = $this->Questions->find('translations')->where(['id' => $q_map_id])->contain([
+                            $question_map = $this->Questions->find('translations')->where(['Questions.id' => $q_map_id])->contain([
                                 'QuestionsSurveys' => function ($query) use ($survey_id) {
                                     return $query->find('translations')->where(['survey_id' => $survey_id]);
                                 },
@@ -524,14 +784,14 @@ class QuestionsController extends AppController
                                     // $joinData['hidden'] = 1;
                                     // $connection->insert('questions_surveys', $joinData);
                                     $question_map['questions_surveys'][0] = $this->Questions->QuestionsSurveys->newEmptyEntity();
-                                    $question_map['questions_surveys'][0]['section_id'] = $question['questions_surveys'][0]['section_id'];
                                     $question_map['questions_surveys'][0]['survey_id'] = $survey_id;
                                     $question_map['questions_surveys'][0]['weight'] = empty($question['questions_surveys'][0]['weight']) ? -100 : $question['questions_surveys'][0]['weight'];
                                     $question_map['questions_surveys'][0]['hidden'] = $question_map['hidden'] != null ? $question_map['hidden'] : 1;
                                     $question_map['questions_surveys'][0]['compulsory'] = $question_map['compulsory'] != null ? $question_map['compulsory'] : 0;
-                                    $question_map = $this->insertQuestionSurvey($question_map, $lang);
+                                    // Part 11: vedi nota sopra, $lang non è più una
+                                    // singola variabile di scope qui.
+                                    $question_map = $this->insertQuestionSurvey($question_map, 'en');
                                 } else {
-                                    $question_map['questions_surveys'][0]['section_id'] = $question['questions_surveys'][0]['section_id'];
                                     $question_map['questions_surveys'][0]['weight'] = empty($question['questions_surveys'][0]['weight']) ? -100 : $question['questions_surveys'][0]['weight'];
                                 }
                                 // else {
@@ -553,6 +813,10 @@ class QuestionsController extends AppController
                         }
                     }
                 }
+            } catch (HttpException $e) {
+                // 403/404 raised by the authorization guards above must reach the
+                // client as a real HTTP error, not be swallowed into errorMsg.
+                throw $e;
             } catch (\Exception $e) {
                 $errorMsg = $e->getMessage();
             } catch (Exception $e) {
@@ -563,6 +827,104 @@ class QuestionsController extends AppController
         }
     }
 
+    /**
+     * Part 11 (i18n en+fr): strips empty/whitespace field VALUES out of a raw
+     * `_translations` payload (`[lang => [field => value]]`) before it reaches
+     * `patchEntity()`. Necessary because the Translate behavior's
+     * `buildMarshalMap()` auto-marshals `_translations` INSIDE `patchEntity()`,
+     * creating a translation sub-entity for every language key present
+     * regardless of field content — a skip-empty check applied only AFTER
+     * `patchEntity()` is too late to stop that sub-entity (and its i18n row)
+     * from being persisted on save. `SurveysController::edit()` has its own
+     * private copy of this same logic (no shared base class for it).
+     *
+     * @param mixed $translations The raw `_translations` value from request data.
+     * @return array The filtered translations, with any language left empty
+     *   after filtering removed entirely.
+     */
+    private function stripEmptyTranslations($translations): array
+    {
+        if (!is_array($translations)) {
+            return [];
+        }
+        foreach ($translations as $lang => $fields) {
+            if (!is_array($fields)) {
+                unset($translations[$lang]);
+                continue;
+            }
+            foreach ($fields as $field => $value) {
+                if (trim((string)$value) === '') {
+                    unset($translations[$lang][$field]);
+                }
+            }
+            if (empty($translations[$lang])) {
+                unset($translations[$lang]);
+            }
+        }
+
+        return $translations;
+    }
+
+    /**
+     * Part 17: directly UPDATEs any i18n row that already exists for the given
+     * (model, foreign_key, locale, field) — bypassing the Translate behavior's
+     * `i18n` association entirely, which (when the table sets
+     * `allowEmptyTranslations => false`, as `QuestionsTable` does — see Part 15)
+     * carries a baked-in `content != ''` condition. That condition makes an
+     * EXISTING but empty-content i18n row invisible to BOTH `find('translations')`
+     * reads and the behavior's own save-time dedup
+     * (`EavStrategy::bundleTranslatedFields()`/`findExistingTranslations()`,
+     * the same association). When a user later fills in a translation the ORM
+     * therefore always attempts an INSERT for that row and collides with the
+     * pre-existing (empty) one — `SQLSTATE[23000] Duplicate entry
+     * '<locale>-<model>-<foreign_key>-<field>'`. Verified live against
+     * `demo_5t_moma_angelcake`: the special catalog questions (560/561/562)
+     * carry exactly this shape (empty 'en' `description`/`long_description`
+     * i18n rows). Any (lang, field) pair whose row is updated here is removed
+     * from the returned array so `patchEntity()`/`save()` never re-marshals it
+     * through the Translate behavior — genuinely NEW translations (no
+     * pre-existing row) are left untouched and continue to flow through the
+     * normal ORM path, which already handles that case correctly.
+     *
+     * @param int $foreignKey The owning record's id (`i18n.foreign_key`).
+     * @param string $model The i18n `model` value (e.g. `'Questions'`).
+     * @param array $translations `_translations` shaped as `[lang => [field => value]]`,
+     *   already passed through `stripEmptyTranslations()`.
+     * @return array The same shape, with any (lang, field) pair that already had
+     *   an existing row removed (that row was updated directly).
+     */
+    private function syncExistingTranslationRows(int $foreignKey, string $model, array $translations): array
+    {
+        $i18n = TableRegistry::getTableLocator()->get('I18n');
+        foreach ($translations as $lang => $fields) {
+            if (!is_array($fields)) {
+                continue;
+            }
+            foreach ($fields as $field => $value) {
+                $existing = $i18n->find()
+                    ->where([
+                        'model' => $model,
+                        'foreign_key' => $foreignKey,
+                        'locale' => $lang,
+                        'field' => $field,
+                    ])
+                    ->first();
+                if (empty($existing)) {
+                    continue;
+                }
+                $existing->content = (string)$value;
+                if (!$i18n->save($existing)) {
+                    throw new \Exception("Impossibile aggiornare la traduzione $lang/$field per $model#$foreignKey");
+                }
+                unset($translations[$lang][$field]);
+            }
+            if (empty($translations[$lang])) {
+                unset($translations[$lang]);
+            }
+        }
+
+        return $translations;
+    }
 
     //Aggiorna la tabella di passaggio questions_surveys
 
@@ -570,6 +932,18 @@ class QuestionsController extends AppController
     {
         // $this->QuestionSurveys = $this->getTableLocator()->get('QuestionsSurveys');
 
+        // Belt-and-suspenders (stessa vulnerabilità `_locale` documentata in
+        // editFromSurvey()): questo metodo scrive campi CANONICI (options,
+        // conditions, description, long_description) sull'associazione
+        // questions_surveys[0] appena creata — se quella entity portasse
+        // ancora una `_locale` diversa dalla default (es. un futuro chiamante
+        // che non passa dal guard di editFromSurvey), il save la
+        // instraderebbe come riga i18n invece che come colonna base. Forziamo
+        // qui la locale di default indipendentemente da chi ha chiamato
+        // questo metodo.
+        if (isset($question['questions_surveys'][0])) {
+            $question['questions_surveys'][0]->set('_locale', I18n::getDefaultLocale(), ['setter' => false]);
+        }
         // $qs = $this->QuestionSurveys->newEmptyEntity();
         // $question['questions_surveys'][0]->survey_id = $survey_id;
         $question['questions_surveys'][0]['question_id'] = $question['id'];
@@ -585,8 +959,16 @@ class QuestionsController extends AppController
         // $question_trans = $this->QuestionSurveys->find('translations')
         //     ->where(['id' => $joinData['id']])
         //     ->first();
-        $lang = 'en';
-        if (isset($question['_translations'][$lang])) {
+        // Part 11: la riga `$lang = 'en';` qui shadowava il parametro $lang del
+        // metodo (bug reale — la lingua richiesta dal chiamante era ignorata).
+        // Rimossa: ora si itera su tutte le lingue supportate, salvando le
+        // traduzioni della DOMANDA (Questions._translations) sulla riga
+        // questions_surveys appena creata. Skip-empty per non creare righe i18n
+        // vuote (una traduzione non può oggi essere cancellata dall'editor).
+        foreach (['en', 'fr', 'de'] as $lang) {
+            if (!isset($question['_translations'][$lang])) {
+                continue;
+            }
             // if array
             if (!is_array($question['_translations'][$lang])) {
                 $translations = $question['_translations'][$lang]->toArray();
@@ -594,12 +976,10 @@ class QuestionsController extends AppController
                 $translations = $question['_translations'][$lang];
             }
             foreach ($translations as $field => $value) {
-                // if ($field == 'options') {
-                //     $qs->translation($lang)->$field = json_encode($value);
-                // } else {
-                    // $qs->_translations[$lang]->$field = $value;
-                    $question['questions_surveys'][0]->translation($lang)->$field = $value;
-                // }
+                if (trim((string)$value) === '') {
+                    continue;
+                }
+                $question['questions_surveys'][0]->translation($lang)->$field = $value;
             }
         }
 
@@ -619,7 +999,7 @@ class QuestionsController extends AppController
     {
         //delete FROM questions where id not in  (select question_id from answers);
         $subquery = $this->Questions->find()
-                           ->select(['id']);
+                           ->select(['Questions.id']);
         $subquery1 = $this->fetchTable('questions_surveys')->find()
                            ->select(['question_id']);
 
@@ -635,6 +1015,7 @@ class QuestionsController extends AppController
             $result1 = $this->Questions->deleteAll(['id NOT IN' => $subquery1]);
             $this->Flash->success("La pulizia è stata effettuata. $result1 domande cancellate non associato ad alcun questionario.");
             $result = $this->Questions->Answers->deleteAll(['question_id NOT IN' => $subquery]);
+            Cache::clearGroup('dashboard');
             $this->Flash->success("La pulizia è stata effettuata. $result risposte di domande cancellate.");
         } catch (\Exception $e) {
             $this->Flash->error('Errore durante la cancellazione delle domande doppie.');
@@ -784,13 +1165,13 @@ class QuestionsController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $remove_question_id = $this->request->getData('remove_question_id');
             $destination_question_id = $this->request->getData('destination_question_id');
-            $this->loadModel('UnionRollback');
+            $this->UnionRollback = TableRegistry::getTableLocator()->get('UnionRollback');
             if (
                 empty($this->UnionRollback->find()->where(['OR' => [['destination_question_id' => $destination_question_id],
                 ['remove_question_id' => $destination_question_id]]])->toarray())
                 && ($remove_question_id != $destination_question_id)
             ) {
-                $this->loadModel('QuestionsSurveys');
+                $this->QuestionsSurveys = TableRegistry::getTableLocator()->get('QuestionsSurveys');
                 $subquery = $this->QuestionsSurveys->find();
                 $subquery
                 ->select(['survey_id'])
@@ -810,7 +1191,7 @@ class QuestionsController extends AppController
                     if (!empty($answers->toArray()) && !empty($answers_destinations->toArray())) {
                         $query = $this->QuestionsSurveys->find();
                         $query->select([
-                            'id_questions' => $query->func()->group_concat(['id' => 'identifier'])]);
+                            'id_questions' => $query->func()->group_concat(['QuestionsSurveys.id' => 'identifier'])]);
                         $query->where(['question_id' => $remove_question_id]);
                         $query->group(['question_id']);
 
@@ -883,8 +1264,8 @@ class QuestionsController extends AppController
                         // delete conditions of remove question
                          // search if the question is used in any conditions of other questions where conditions is a json
                         $conditions = $this->Questions->find()
-                        ->where(function ($exp) use ($remove_question_id) {
-                            return $exp->in('JSON_UNQUOTE(JSON_EXTRACT(conditions, "$.question"))', [$remove_question_id]);
+                        ->where(function ($exp, $query) use ($remove_question_id) {
+                            return $exp->add($query->newExpr('JSON_UNQUOTE(JSON_EXTRACT(conditions, "$.question")) = ' . (int)$remove_question_id));
                         });
                         // debug($conditions); die;
                         $conditionsCount = $conditions->count();
@@ -894,11 +1275,11 @@ class QuestionsController extends AppController
                             $condition->conditions = '';
                             $this->Questions->save($condition);
                         }
-                        
+
                         // empty conditions of the questionsurveys
                         $questionSurveys = $this->Questions->QuestionsSurveys->find()
-                            ->where(function ($exp) use ($remove_question_id) {
-                                return $exp->in('JSON_UNQUOTE(JSON_EXTRACT(conditions, "$.question"))', [$remove_question_id]);
+                            ->where(function ($exp, $query) use ($remove_question_id) {
+                                return $exp->add($query->newExpr('JSON_UNQUOTE(JSON_EXTRACT(conditions, "$.question")) = ' . (int)$remove_question_id));
                             });
                         // count the number of questionsurveys with conditions
                         $questionSurveysCount = $questionSurveys->count();
@@ -944,7 +1325,7 @@ class QuestionsController extends AppController
     public function rollback($destination_question_id, $rollback_questions_id = null)
     {
         $this->allowRolesOnly(['admin', 'moma']);
-        $this->loadModel('UnionRollback');
+        $this->UnionRollback = TableRegistry::getTableLocator()->get('UnionRollback');
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             // $remove_question_id = $this->request->getData('remove_question_id');
@@ -957,8 +1338,8 @@ class QuestionsController extends AppController
                     throw new \Exception('Si è verificato un errore durante il salvataggio');
                 }
                 foreach (explode(',', $union->questions_survey_id) as $id) {
-                    $this->loadModel('QuestionsSurveys');
-                    $q_survey = $this->QuestionsSurveys->find()->where(['id' => $id])->first();
+                    $this->QuestionsSurveys = TableRegistry::getTableLocator()->get('QuestionsSurveys');
+                    $q_survey = $this->QuestionsSurveys->find()->where(['QuestionsSurveys.id' => $id])->first();
                     $q_survey->question_id = $union->remove_question_id;
                     if (!$this->QuestionsSurveys->save($q_survey)) {
                         throw new \Exception('Si è verificato un errore durante il salvataggio');
@@ -1019,7 +1400,7 @@ class QuestionsController extends AppController
                 if (!is_array($conditions)) {
                     $conditions = json_decode($conditions, true);
                 }
-                $question_condition = $this->Questions->find()->where(['id' => $conditions['question']]);
+                $question_condition = $this->Questions->find()->where(['Questions.id' => $conditions['question']]);
                 $options = $question_condition->first()->options;
                 $values = $conditions['value'];
                 // from arrays options and values find indexes
@@ -1062,6 +1443,18 @@ class QuestionsController extends AppController
 
     public function correctQuestionsSurveys($id = null)
     {
+        // Stessa guardia di unused()/special()/originFilters(): questo metodo
+        // legge `options`/`description`/`long_description` CANONICI da
+        // Questions per riscriverli su QuestionsSurveys - sotto una locale
+        // diversa dalla default il Translate behavior sostituirebbe quei
+        // valori con la riga i18n tradotta (es. `options` come stringa
+        // pipe-delimited al posto dell'array), e save() li persisterebbe
+        // corrotti nella colonna base. Vedi
+        // docs/dev-notes/questions-surveys-options-string-corruption.md.
+        $defaultLocale = I18n::getDefaultLocale();
+        $this->Questions->setLocale($defaultLocale);
+        $this->Questions->QuestionsSurveys->setLocale($defaultLocale);
+
         try {
             $questions_surveys = $this->Questions->QuestionsSurveys->find('translations')->where([
 
@@ -1070,7 +1463,7 @@ class QuestionsController extends AppController
             ]);
             $count = 0;
             foreach ($questions_surveys as $qs) {
-                    $question = $this->Questions->find('translations')->where(['id' => $qs['question_id']])->first();
+                    $question = $this->Questions->find('translations')->where(['Questions.id' => $qs['question_id']])->first();
 
                     $qs['options'] = $question['options'];
                     $qs['description'] = $question['description'];
@@ -1144,7 +1537,7 @@ class QuestionsController extends AppController
                 $survey_id = $question->survey_id;
                 // find Questions_spos that are not in the survey
                 foreach ($q_maps as $q_map_id) {
-                    $question_map = $this->Questions->find('translations')->where(['id' => $q_map_id])->contain([
+                    $question_map = $this->Questions->find('translations')->where(['Questions.id' => $q_map_id])->contain([
                         'QuestionsSurveys' => function ($query) use ($survey_id) {
                             return $query->find('translations')->where(['survey_id' => $survey_id]);
                         },
@@ -1152,7 +1545,6 @@ class QuestionsController extends AppController
                     if (empty($question_map['questions_surveys'][0])) {
                         // $question_map = $this->Questions->find('translations')->where(['id'=>$q_map_id])->first();
                         $question_map['questions_surveys'][0] = $this->Questions->QuestionsSurveys->newEmptyEntity();
-                        $question_map['questions_surveys'][0]['section_id'] = $question['section_id'];
                         $question_map['questions_surveys'][0]['survey_id'] = $survey_id;
                         $question_map['questions_surveys'][0]['weight'] = $question['weight'];
                         $question_map['questions_surveys'][0]['hidden'] = 1;
@@ -1163,7 +1555,6 @@ class QuestionsController extends AppController
                         }
                         $count++;
                     } else {
-                        $question_map['questions_surveys'][0]['section_id'] = $question['section_id'];
                         $question_map['questions_surveys'][0]['survey_id'] = $survey_id;
                         if (!$this->Questions->QuestionsSurveys->save($question_map['questions_surveys'][0])) {
                             throw new \Exception('Si è verificato un errore durante il salvataggio');
@@ -1180,6 +1571,7 @@ class QuestionsController extends AppController
     }
 
     // correct translations of questions
+
     public function correctTranslations()
     {
         try {
@@ -1220,7 +1612,9 @@ class QuestionsController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
     // change state moma_area field
+
     public function changeStateMomaArea()
     {
         try {
@@ -1231,9 +1625,24 @@ class QuestionsController extends AppController
             $errorMsg = false;
         } catch (Exception $e) {
             $errorMsg = $e->getMessage();
-        } 
+        }
 
         $this->set(compact('question', 'errorMsg'));
         $this->viewBuilder()->setOption('serialize', ['question', 'errorMsg']);
+    }
+
+    public function listMapQuestions($survey_id)
+    {
+        $this->allowRolesOnly(['admin', 'moma','moma_area']);
+        try {
+            $questions = $this->Questions->getMapQuestions($survey_id);
+            $errorMsg = false;
+        } catch (Exception $e) {
+            $questions = null;
+            $errorMsg = $e->getMessage();
+        }
+
+        $this->set(compact('questions', 'errorMsg'));
+        $this->viewBuilder()->setOption('serialize', ['questions', 'errorMsg']);
     }
 }

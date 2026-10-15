@@ -14,7 +14,6 @@
  * @license   https://eupl.eu/1.2/it/ EUPL-1.2 license
  */
 //</editor-fold>
-
 declare(strict_types=1);
 
 namespace App\Model\Entity;

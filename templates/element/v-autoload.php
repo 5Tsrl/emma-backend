@@ -6,9 +6,10 @@ if (empty($v)) {
     $vue_name = "vue/$v";
 }
 
-$vue_path = $this->Url->script($vue_name);
+// $vue_path = $this->Url->script($vue_name);
+$vue_path = $vue_name;
 
 if (!file_exists(WWW_ROOT . $vue_path)) {
-    $vue_path = $this->Url->script("vue/app.js");
+    $vue_path = "vue/app.js";
 }
 echo $this->Html->script($vue_path);

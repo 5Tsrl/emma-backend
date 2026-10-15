@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Model\Entity\Origin;
 use Cake\Core\Configure;
 
 class GeocoderController extends AppController
@@ -42,7 +43,7 @@ class GeocoderController extends AppController
         }
     }
 
-    public function index()
+    public function index($geocodingEngine = null)
     {
         $q = $this->request->getQuery('q');
         if ($q) {
@@ -51,17 +52,19 @@ class GeocoderController extends AppController
             $origin['city'] = '';
             $origin['postal_code'] = '';
             $origin['province'] = '';
+            $origin['district'] = '';
         } else {
             $origin['address'] = $this->request->getQuery('address');
             $origin['city'] = $this->request->getQuery('city');
             $origin['postal_code'] = $this->request->getQuery('postal_code');
             $origin['province'] = $this->request->getQuery('province');
+            $origin['district'] = $this->request->getQuery('district');
         }
         //Se il geocoder lo supporta lo uso per focalizzare la ricerca
         $focusLat = $this->request->getQuery('lat');
         $focusLon = $this->request->getQuery('lon');
 
-        $this->geocodingEngine = Configure::read('Geocoding.Engine', 'komootGeocoder');
+        $this->geocodingEngine = $geocodingEngine ?? Configure::read('Geocoding.Engine', 'komootGeocoder');
         //Creo dinamicamente l'oggetto geocoder, in base al parametro di configurazione
         //https://www.php.net/manual/en/functions.variable-functions.php
         $geocoderName = '\\App\\Geocoder\\' . $this->geocodingEngine;
@@ -73,19 +76,21 @@ class GeocoderController extends AppController
             'postal_code' => '',
             'precision' => -1,
         ];
-        //Si potrebbe usare l'operatore ... da php 7.4 ma per compatibilità lascio array_merge
-        $res = $geocoderClass->geocode($origin, $focusLon, $focusLat);
+
+        $originEntity = new Origin($origin);
+        $res = $geocoderClass->geocode($originEntity, $focusLat, $focusLon);
         if (isset($res['lat']) && isset($res['lon'])) {
             $coords = array_merge($coords, $res);
         }
 
         $this->set('lat', $coords['lat']);
         $this->set('lon', $coords['lon']);
-        $this->set('address', $coords['address']);
-        $this->set('postal_code', $coords['postal_code']);
-        $this->set('city', $coords['city']);
-        $this->set('province', $coords['province']);
+        $this->set('address', $coords['address'] ?? $origin['address']);
+        $this->set('postal_code', $coords['postal_code'] ?? $origin['postal_code']);
+        $this->set('city', $coords['city'] ?? $origin['city']);
+        $this->set('province', $coords['province'] ?? $origin['province']);
         $this->set('precision', 1);
-        $this->viewBuilder()->setOption('serialize', ['lat', 'lon','address' ,'postal_code', 'city', 'province', 'precision']);
+        $this->set('geohash', $coords['geohash'] ?? null);
+        $this->viewBuilder()->setOption('serialize', ['lat', 'lon','address' ,'postal_code', 'city', 'province', 'precision','geohash']);
     }
 }

@@ -27,7 +27,9 @@ use Cake\Database\Expression\QueryExpression;
 use Cake\Database\Query;
 use Cake\Http\Exception\NotAcceptableException;
 use Cake\Http\Exception\NotFoundException;
+use Cake\ORM\TableRegistry;
 use Exception;
+use Sk\Geohash\Geohash;
 
 class OriginsController extends AppController
 {
@@ -52,16 +54,17 @@ class OriginsController extends AppController
         }
 
         $conditions = [
-            'lat IS NOT' => null,
-            'lon IS NOT' => null,
+            'geohash IS NOT' => null,
         ];
 
         $origins = $this->Origins->find()
             ->select([
                 'id', // mi serve come chiave per v-for
-                'lon',
-                'lat',
+                // 'lon', //tolgo lat, lon per essere privacy compliant
+                // 'lat',
                 'user_id',
+                'year',
+                'geohash',
             ])
             ->where($conditions);
 
@@ -92,6 +95,11 @@ class OriginsController extends AppController
         }
 
         $y = $this->request->getQuery('year');
+        // filter origins by year
+        if (!(empty($y) || $y == 'TUTTI')) {
+            $origins->where(['Origins.year' => $y]);
+        }
+        // filter users.years JSON field
         if (!(empty($y) || $y == 'TUTTI')) {
             $origins->matching('Users', function ($q) use ($y) {
                 return $q->where(function ($exp) {
@@ -99,25 +107,12 @@ class OriginsController extends AppController
                 });
             });
             $origins->bind(':year', json_encode($y), 'string');
-        }else{
+        } else {
             $origins->matching('Users');
         }
         //print_r($origins->toArray()); die;
         // echo $origins;
-        //Se mi hanno chiesto excel aggiungo dei campi
-        if ($this->request->getParam('_ext') == 'xls') {
-            $origins->select([
-                'Origins.id', 'Origins.address', 'Origins.postal_code', 'Origins.city', 'Origins.province',
-                'Origins.modified',
-                'Companies.name', 'Companies.id', 'Companies.company_code', 'Companies.city', 'Companies.province',
-                'Companies.type',
-                'Employees.gender', 'Employees.dob', 'Employees.shift', 'Employees.office_id', 'Employees.role_description',
-                'Users.email', 'Users.id',
-            ])
-                ->contain(['Companies', 'Users' => 'Employees']);
-        }
-        // print_r($origins->sql()); die;
-        // sql($origins);
+
         if ($source == 'answers') {
             $origins = $this->originsFromAnswers($origins);
             $survey_id = $this->request->getQuery('survey_id');
@@ -130,31 +125,203 @@ class OriginsController extends AppController
             throw new NotAcceptableException(h("Il tipo di sorgente richiesta non esiste: $source"));
         }
 
-        $count = $this->request->getQuery('count');
-        if (!empty($count)) {
-            $count = $origins->count();
-            $this->set('count', $count);
-            $this->viewBuilder()->setOption('serialize', 'count');
-        } else {
-            //sqld($origins);
-            $q = md5($_SERVER['QUERY_STRING']);
-            $short = "origins-$company_id-$subcompany-$office_id-$source-$y-" . md5(serialize($origins->clause('where')) . "$q");
-            $origins_res = Cache::read($short, 'origins');
-            $origins_res = null;
-            if ($origins_res === null) {
-                $origins_res = $origins->toArray();
-                Cache::write($short, $origins_res, 'origins');
-            }
-            $origins = $origins_res;
-            foreach ($origins as $key => $value) {
-                $origs[$key]['color'] = 'red';
-                $origs[$key]['radius'] = 6;
-            }
-            // debug sql($origins);
-            // debug($origins); die;
-            $this->set('origins', $origins);
+        //Se mi hanno chiesto excel aggiungo dei campi
+        if ($this->request->getParam('_ext') == 'xls') {
+            // Configure contains with specific fields to limit data
+            $containConfig = [
+                'Companies' => [
+                    'fields' => ['Companies.name', 'Companies.id', 'Companies.company_code', 'Companies.city', 'Companies.province', 'Companies.type'],
+                ],
+                'Users' => [
+                    'fields' => ['Users.email', 'Users.id', 'Users.office_id'],
+                    'Offices' => [
+                        'fields' => [
+                            'id',
+                            'name',
+                            'address',
+                            'province',
+                            'district',
+                            'lat',
+                            'lon',
+                        ],
+                    ],
+                ],
+            ];
 
+            // Add Employee association for employees source
+            if ($source == 'employees') {
+                $containConfig['Users']['Employees'] = [
+                    'fields' => [
+                        'Employees.user_id', // Required foreign key field for association
+                        'Employees.gender',
+                        'Employees.dob',
+                        'Employees.shift',
+                        'Employees.office_id',
+                        'Employees.role_description',
+                    ],
+                ];
+            }
+
+            // Override any previous contain() calls to ensure we get all required data for Excel
+            $origins->contain($containConfig, true); // true parameter overwrites existing contains
+
+            // Include both Origins fields AND associated table fields in select
+            $selectFields = [
+                'Origins.id',
+                //'Origins.address', Tolgo address per essere privacy compliant
+                'Origins.postal_code',
+                'Origins.city',
+                'Origins.province',
+                'Origins.district',
+                //'Origins.lat',
+                //'Origins.lon',
+                'Origins.geohash',
+                'Origins.modified',
+                'Origins.user_id', // Required foreign key field for Users association
+                'Origins.company_id', // Required foreign key field for Companies association
+                // Company fields
+                'Companies.name',
+                'Companies.id',
+                'Companies.company_code',
+                'Companies.city',
+                'Companies.province',
+                'Companies.type',
+                // User fields
+                'Users.email',
+                'Users.id',
+                'Users.office_id',
+            ];
+
+            // Note: Don't add Employee fields to select() because they're accessed through Users association
+            // CakePHP will handle the nested relationship: Origins -> Users -> Employees
+
+            $origins->select($selectFields);
+
+            $origins_res = $origins->toArray();
+
+            // Convert entities to arrays with proper nested data extraction
+            $originsArray = [];
+            foreach ($origins as $origin) {
+                $originData = $origin->toArray();
+
+                // Extract nested entity data properly
+                if (isset($origin->user) && is_object($origin->user)) {
+                    $userData = $origin->user->toArray();
+                    foreach ($userData as $key => $value) {
+                        // Skip nested arrays/objects - they'll be handled separately
+                        if (!is_array($value) && !is_object($value)) {
+                            $originData['user.' . $key] = $value;
+                        }
+                    }
+                }
+
+                if (isset($origin->company) && is_object($origin->company)) {
+                    $companyData = $origin->company->toArray();
+                    foreach ($companyData as $key => $value) {
+                        // Skip nested arrays/objects
+                        if (!is_array($value) && !is_object($value)) {
+                            $originData['company.' . $key] = $value;
+                        }
+                    }
+                }
+
+                if (isset($origin->user->office) && is_object($origin->user->office)) {
+                    $officeData = $origin->user->office->toArray();
+                    foreach ($officeData as $key => $value) {
+                        if (!is_array($value) && !is_object($value)) {
+                            $originData['office.' . $key] = $value;
+                        }
+                    }
+                }
+
+                // Extract employee data if available
+                if (isset($origin->user->employee) && is_object($origin->user->employee)) {
+                    $employeeData = $origin->user->employee->toArray();
+                    foreach ($employeeData as $key => $value) {
+                        $originData['employee.' . $key] = $value;
+                    }
+                }
+
+                //Add Lat Lon from geohash for backwards compatibility with old excel template, if geohash is present
+                if (isset($originData['geohash']) && !empty($originData['geohash'])) {
+                    $h = new Geohash();
+
+                    $latlon = $h->decode($originData['geohash']);
+                    $originData['lat'] = $latlon[0];
+                    $originData['lon'] = $latlon[1];
+                } else {
+                    $originData['lat'] = null;
+                    $originData['lon'] = null;
+                }
+
+                $originsArray[] = $originData;
+            }
+
+            // Process arrays for PhpSpreadsheet compatibility - process each record individually
+            foreach ($originsArray as &$origin) {
+                // Only flatten nested arrays and objects within each record, not the record itself
+                foreach ($origin as $key => &$value) {
+                    if (is_array($value)) {
+                        // Convert nested arrays to JSON strings for Excel compatibility
+                        $value = json_encode($value, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+                    } elseif (is_object($value)) {
+                        // Convert objects to strings
+                        if (method_exists($value, '__toString')) {
+                            $value = (string)$value;
+                        } else {
+                            $value = json_encode($value, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+                        }
+                    } elseif (is_resource($value)) {
+                        $value = 'Resource';
+                    } elseif (is_null($value)) {
+                        $value = '';
+                    }
+                }
+            }
+
+            $this->set('origins', $originsArray);
+            // if VUE_APP_THEME_BRESCIA is true, use Brescia template for excel
+            if (Configure::read('VUE_APP_THEME_BRESCIA')) {
+                $this->viewBuilder()->setPlugin('Brescia');
+            }
             $this->viewBuilder()->setOption('serialize', ['origins']);
+        } else {
+            // print_r($origins->sql()); die;
+            // sql($origins);
+
+            $count = $this->request->getQuery('count');
+            if (!empty($count)) {
+                $count = $origins->count();
+                $this->set('count', $count);
+                $this->viewBuilder()->setOption('serialize', 'count');
+            } else {
+                //sqld($origins);
+                $q = md5($_SERVER['QUERY_STRING']);
+                $short = "origins-$company_id-$subcompany-$office_id-$source-$y-" . md5(serialize($origins->clause('where')) . "$q");
+                $origins_res = Cache::read($short, 'origins');
+                $origins_res = null;
+                if ($origins_res === null) {
+                    // Memory-safety cap: an unfiltered (or accidentally-broad)
+                    // origins query on this table can hold 100k+ rows, which
+                    // exhausts PHP's memory limit before it can even respond
+                    // with an error. Never applies to the count=1 branch
+                    // above, which must always report the real total. See
+                    // CLAUDE.md "Origins index memory-safety cap".
+                    $origins->limit((int)Configure::read('Origins.maxResults'));
+                    $origins_res = $origins->toArray();
+                    Cache::write($short, $origins_res, 'origins');
+                }
+                $origins = $origins_res;
+                foreach ($origins as $key => $value) {
+                    $origs[$key]['color'] = 'red';
+                    $origs[$key]['radius'] = 6;
+                }
+                // debug sql($origins);
+                // debug($origins); die;
+                $this->set('origins', $origins);
+
+                $this->viewBuilder()->setOption('serialize', ['origins']);
+            }
         }
     }
 
@@ -182,20 +349,32 @@ class OriginsController extends AppController
             fn($flt) => str_starts_with($flt, 'filter'),
             ARRAY_FILTER_USE_KEY
         );
+        // filter origins by filter_quartiere and filter_comune from filters
+        $quartiere = $filters['filter_quartiere'] ?? null;
+        $comune = $filters['filter_comune'] ?? null;
+        if ($quartiere) {
+            $origins->where(['Origins.district' => $quartiere]);
+        }
+        if ($comune) {
+            $origins->where(['Origins.city' => $comune]);
+        }
+        // remove filter_quartiere and filter_comune from filters
+        unset($filters['filter_quartiere']);
+        unset($filters['filter_comune']);
         $answ_usr_ids = [];
 
         if (!empty($filters)) {
-            $this->loadModel('Questions');
-            $this->loadModel('Answers');
+            $this->Questions = TableRegistry::getTableLocator()->get('Questions');
+            $this->Answers = TableRegistry::getTableLocator()->get('Answers');
             foreach ($filters as $flt => $answ) {
                 $filter_name = str_replace('_', '-', str_replace('filter_', '', $flt));
                 $question = $this->Questions->find()
-                                ->where(['name' => $filter_name])
-                                ->select(['id'])
-                                ->firstOrFail();
+                    ->where(['Questions.name' => $filter_name])
+                    ->select(['Questions.id'])
+                    ->firstOrFail();
                 $answers = $this->Answers->find()
-                                ->select(['Answers.user_id', 'Answers.answer'])
-                                ->where(['Answers.question_id' => $question->id]);
+                    ->select(['Answers.user_id', 'Answers.answer'])
+                    ->where(['Answers.question_id' => $question->id]);
                 if ($survey_id != null) {
                     $answers->where(['Answers.survey_id' => $survey_id]);
                 }
@@ -224,7 +403,7 @@ class OriginsController extends AppController
                             }
                         } else {
                             //Altrimenti cerco il valore esatto
-                            if ($answ == $a->answer) {
+                            if (trim((string)$answ) == trim((string)$a->answer)) {
                                 $answ_usr_ids[] = $a->user_id;
                             }
                         }
@@ -249,6 +428,8 @@ class OriginsController extends AppController
         $ageRange = $this->request->getQuery('filter_fascia-di-età');
         $office_ids = $this->request->getQuery('office_id');
         $cap = $this->request->getQuery('filter_cap');
+        $comune = $this->request->getQuery('filter_comune');
+        $quartiere = $this->request->getQuery('filter_quartiere');
 
         $origins->where(['survey_id IS' => null])
             ->contain(['Employees']);
@@ -300,6 +481,14 @@ class OriginsController extends AppController
         if ($cap) {
             $origins->where(['Origins.postal_code' => $cap]);
         }
+        // filter comune
+        if ($comune) {
+            $origins->where(['Origins.city' => $comune]);
+        }
+        // filter quartiere
+        if ($quartiere) {
+            $origins->where(['Origins.district' => $quartiere]);
+        }
 
         //sqld($origins);
         // debug($origins); die;
@@ -308,25 +497,39 @@ class OriginsController extends AppController
 
     public function resetGeocoding($company_id)
     {
-        // // // delete origins that user_id not exist in table users
-        // $this->Origins->deleteAll([
-        //     'company_id' => $company_id,
-        //     'NOT EXISTS (SELECT 1 FROM users WHERE users.id = user_id)',
-        // ]);
-        // // delete employess that user_id not exist in table users
-        // $employees=$this->Origins->Employees->find()->matching('Users', function ($q) use ($company_id) {
-        //     return $q->where(['Users.company_id' => $company_id]);
-        // });
-        // find origins that user_id not exist in table users
-        // $origins = $this->Origins->find()->where([
-        //     'company_id' => $company_id,
-        //     'NOT EXISTS (SELECT 1 FROM users WHERE users.id = user_id)',
-        // ])->toArray();
-        $this->Origins->updateAll(
-            ['lat' => null, 'lon' => null],
-            ['company_id' => $company_id]
-        );
+        // // delete origins that user_id not exist in table users
+        try {
+            $this->Origins->deleteAll([
+                'company_id' => $company_id,
+                'NOT EXISTS (SELECT 1 FROM users WHERE users.id = user_id)',
+            ]);
 
+            //Elimino tutte le origin che hanno null address, postal_code, city, province e geohash, in quanto non geocodificabili
+            $this->Origins->deleteAll([
+                'company_id' => $company_id,
+                [
+                    ['address IS' => null],
+                    ['postal_code IS' => null],
+                    ['city IS' => null],
+                    ['province IS' => null],
+                    ['geohash IS' => null],
+                ],
+            ]);
+
+            $this->Origins->updateAll(
+                //Non voglio più lat/lon ma solo geohash, per essere più privacy compliant, quindi resetto solo quello
+                //['lat' => null, 'lon' => null],
+                ['geohash' => null],
+                ['company_id' => $company_id, 'address IS NOT' => null]
+            );
+        } catch (Exception $e) {
+            $this->set('success', false);
+            $this->set('msg', $e->getMessage());
+            $this->viewBuilder()->setOption('serialize', ['success', 'msg']);
+
+            return;
+        }
+        $this->set('success', true);
         $this->viewBuilder()->setOption('serialize', ['success']);
     }
 
@@ -358,6 +561,51 @@ class OriginsController extends AppController
         }
     }
 
+    public function missingDistrict($company_id, $city)
+    {
+        $this->allowRolesOnly(['admin', 'moma', 'moma_area']);
+
+        $ids = $this->Origins->getAllMissingDistrict($company_id, $city);
+        $this->set('ids', $ids);
+        $this->viewBuilder()->setOption('serialize', ['ids']);
+    }
+
+    public function addDistrict($originId = null): void
+    {
+        $this->allowRolesOnly(['admin', 'moma', 'moma_area']);
+
+        if ($this->request->is(['post'])) {
+            $originId = $this->request->getData('originId');
+        }
+        if (!empty($originId)) {
+            $origin = $this->Origins->get($originId);
+            $origin->addDistrict();
+
+            if ($origin->district === null) {
+                // get user email
+                $user = $this->Origins->Users->get($origin->user_id);
+                $userEmail = $user ? $user->email : 'unknown';
+                $this->set('success', false);
+                $msg = "Impossibile trovare il quartiere per l'origin: $originId, {$origin->address}, user email: $userEmail";
+                $this->set('msg', $msg);
+                // set user email
+                $this->set('user_email', $userEmail);
+                $this->viewBuilder()->setOption('serialize', ['success', 'msg', 'user_email']);
+
+                return;
+                // throw new Exception("Impossibile trovare il quartiere per l'origin: $originId, {$origin->address}, user email: $userEmail");
+            }
+
+            if ($this->Origins->save($origin)) {
+                $this->set('success', true);
+            } else {
+                throw new Exception("Impossibile salvare l'origin dopo aver aggiunto il quartiere: $originId, {$origin->address}");
+            }
+
+            $this->viewBuilder()->setOption('serialize', ['success']);
+        }
+    }
+
     public function importFromAnswers()
     {
         $this->allowRolesOnly(['admin', 'moma', 'moma_area']);
@@ -374,8 +622,8 @@ class OriginsController extends AppController
     {
         $this->allowWhoCanSeeSurveyOnly($survey_id);
 
-        $this->loadModel('Surveys');
-        $this->loadModel('Answers');
+        $this->Surveys = TableRegistry::getTableLocator()->get('Surveys');
+        $this->Answers = TableRegistry::getTableLocator()->get('Answers');
         $survey = $this->Surveys->get($survey_id);
         if (!$survey) {
             throw new Exception("Survey $survey_id not found");
@@ -387,9 +635,8 @@ class OriginsController extends AppController
                 'question_id' => $origin_map_question,
             ])->order(['user_id', 'question_id'])->toArray();
         $map_question = true;
-
+        $origin_question_ids = Configure::read('Origins.origin_question_ids_map');
         if (empty($answers)) {
-            $origin_question_ids = Configure::read('Origins.origin_question_ids_map');
             // la risposta alla domanda legata alla città restituisce un risultato che sembra essere un array json stringified e non
             // una stringa pulita, il che richiede ulteriori elaborazioni prima di poter comporre l'indirizzo completo
             // Per tali motivi elaboro gli indirizzi via php a partire dalle entità Answer
@@ -405,75 +652,100 @@ class OriginsController extends AppController
 
         foreach ($answers as $a) {
             $user_id = $a['user_id'];
-            if (!isset($originsData[$user_id])) {
-                if ($map_question) {
-                    $a_map = json_decode($a['answer'], true);
-                    $originsData[$user_id] = [
-                    'user_id' => $user_id, // devo obbligatoriamente valorizzarlo, diversamente non potrei filtrare le origini in base alle risposte al questionario
-                    'survey_id' => $survey_id,
-                    'company_id' => $survey['company_id'],
-                    'address' => $a_map['origin']['address'],
-                    'postal_code' => $a_map['origin']['postal_code'],
-                    'province' => $a_map['origin']['province'],
-                    'city' => $a_map['origin']['city'],
-                    'lat' => $a_map['origin']['lat'],
-                    'lon' => $a_map['origin']['lon'],
-                    ];
-                } else {
+            if ($map_question) {
+                // Map branch: a single answer carries the whole origin payload
+                // already structured under origin.{address,city,...,lat,lon}.
+                // Persist only the non-PII fields plus an encoded geohash; the
+                // address column is intentionally not populated on new rows
+                // (privacy-by-design — see OriginsTable::beforeSave()).
+                if (!isset($originsData[$user_id])) {
+                    $a_map = $a['answer'];
+                    $row = \App\Geocoder\OriginPayloadHelper::extractOriginRowData($a_map['origin'] ?? null);
+                    $row['user_id'] = $user_id; // devo obbligatoriamente valorizzarlo, diversamente non potrei filtrare le origini in base alle risposte al questionario
+                    $row['survey_id'] = $survey_id;
+                    $row['company_id'] = $survey['company_id'];
+                    $originsData[$user_id] = $row;
+                }
+            } else {
+                // Non-map branch: one Answer row per field. Skip legacy
+                // `address` field — it is no longer persisted.
+                $field = $origin_question_ids[$a['question_id']]['field'];
+                if ($field === 'address') {
+                    continue;
+                }
+
+                if (!isset($originsData[$user_id])) {
                     $originsData[$user_id] = [
                         'user_id' => $user_id, // devo obbligatoriamente valorizzarlo, diversamente non potrei filtrare le origini in base alle risposte al questionario
                         'survey_id' => $survey_id,
                         'company_id' => $survey['company_id'],
-                        'address' => '',
                         'postal_code' => '',
                         'city' => '',
                     ];
                 }
-            }
-            $field = $origin_question_ids[$a['question_id']]['field'];
-            $maxlen = 0;
-            if (isset($origin_question_ids[$a['question_id']]['maxlen'])) {
-                $maxlen = $origin_question_ids[$a['question_id']]['maxlen'];
-            }
 
-            $formatter = function ($s) use ($maxlen) {
-                if (!is_null($maxlen)) {
-                    return mb_convert_encoding(substr($s == null ? '' : $s, 0, $maxlen), 'ASCII');
+                $maxlen = 0;
+                if (isset($origin_question_ids[$a['question_id']]['maxlen'])) {
+                    $maxlen = $origin_question_ids[$a['question_id']]['maxlen'];
                 }
 
-                return $s;
-            }; // default ('self') formatter
-
-            if ($origin_question_ids[$a['question_id']]['formatter'] == 'json_array') {
                 $formatter = function ($s) use ($maxlen) {
-                    //$s = json_decode($s, true); //Massimoi: importante passare true, se no non restituisce Array, ma Obj
-                    if (!is_array($s)) {
-                        $s = [$s];
+                    if (!is_null($maxlen)) {
+                        return mb_convert_encoding(substr($s == null ? '' : $s, 0, $maxlen), 'ASCII');
                     }
 
-                    $s1 =  implode(' ', $s);
+                    return $s;
+                }; // default ('self') formatter
 
-                    return mb_convert_encoding(substr($s1 == null ? '' : $s1, 0, $maxlen), 'ASCII');
-                };
+                if ($origin_question_ids[$a['question_id']]['formatter'] == 'json_array') {
+                    $formatter = function ($s) use ($maxlen) {
+                        //$s = json_decode($s, true); //Massimoi: importante passare true, se no non restituisce Array, ma Obj
+                        if (!is_array($s)) {
+                            $s = [$s];
+                        }
+
+                        $s1 =  implode(' ', $s);
+
+                        return mb_convert_encoding(substr($s1 == null ? '' : $s1, 0, $maxlen), 'ASCII');
+                    };
+                }
+                // Run on every iteration so users with multiple answers get
+                // all their fields populated (previously this lived inside
+                // the !isset() guard and only the first field was saved).
+                $originsData[$user_id][$field] = $formatter($a['answer']);
             }
-            $originsData[$user_id][$field] = $formatter($a['answer']);
         }
 
+        // Empty-answers path: don't wipe existing rows for the survey when
+        // the questionnaire has no usable answers (e.g. mis-configured
+        // origin_question_ids_map). Otherwise a single bad request would
+        // silently delete every origin previously imported for the survey.
+        if (empty($originsData)) {
+            return;
+        }
+
+        // Flatten the user-keyed map into a sequential list once, after the
+        // loop. Calling array_values() inside the loop (the previous bug)
+        // re-indexed by integer mid-iteration and broke the !isset() guard.
         $originsData = array_values($originsData);
         $origins = $this->Origins->newEntities($originsData);
 
-        // rimpiazza le precedenti
-        $this->Origins->deleteAll([
-            'survey_id' => $survey_id,
-        ]);
+        // Wrap the destructive replace in a transaction so a save failure
+        // rolls back the deleteAll() too.
+        $this->Origins->getConnection()->transactional(function () use ($origins, $survey_id) {
+            // rimpiazza le precedenti
+            $this->Origins->deleteAll([
+                'survey_id' => $survey_id,
+            ]);
 
-        //Faccio il ciclo individuale anche se è più lengto,
-        // così riesco a beccare la riga che dà l'errore (nel caso ci fosse qualche valore inaccetabile)
-        foreach ($origins as $o) {
-            if (!$this->Origins->save($o)) {
-                throw new NotFoundException('Origin: ' . $o->id);
+            //Faccio il ciclo individuale anche se è più lengto,
+            // così riesco a beccare la riga che dà l'errore (nel caso ci fosse qualche valore inaccetabile)
+            foreach ($origins as $o) {
+                if (!$this->Origins->save($o)) {
+                    throw new NotFoundException('Origin: ' . $o->id);
+                }
             }
-        }
+        });
     }
 
     public function getAnswer($origin_id): void
@@ -583,5 +855,77 @@ class OriginsController extends AppController
                 return 'Dati non validi';
             }
         }
+    }
+
+    // originFilters by survey_id
+    public function originFilters($company_id, $survey_id)
+    {
+        $this->allowRolesOnly(['admin', 'moma', 'moma_area']);
+        // read cache first
+        $comune = Cache::read("origin_filters_comune_{$company_id}_{$survey_id}", 'hour');
+        $district = Cache::read("origin_filters_district_{$company_id}_{$survey_id}", 'hour');
+        if ($comune == false && $district == false) {
+            // if survey_id is null change where to survey_id IS NULL
+            if ($survey_id === 'null') {
+                // comune
+                $comune = array_map(function ($r) {
+                    return $r['city'];
+                }, $this->Origins->find()
+                    ->select(
+                        'city'
+                    )->distinct('city')
+                    ->orderAsc('city')
+                    ->where(['city IS NOT' => null, 'city IS NOT' => '', 'company_id' => $company_id, 'survey_id is not' => null])
+                    ->toArray());
+                // district
+                $district = array_map(function ($r) {
+                    return $r['district'];
+                }, $this->Origins->find()
+                    ->select(
+                        'district'
+                    )->distinct('district')
+                    ->orderAsc('district')
+                    ->where(['district IS NOT' => null, 'district IS NOT' => '', 'company_id' => $company_id, 'survey_id is not' => null])
+                    ->toArray());
+            } else {
+                // comune
+                $comune = array_map(function ($r) {
+                    return $r['city'];
+                }, $this->Origins->find()
+                    ->select(
+                        'city'
+                    )->distinct('city')
+                    ->orderAsc('city')
+                    ->where(['city IS NOT' => null, 'city IS NOT' => '', 'company_id' => $company_id, 'survey_id' => $survey_id])
+                    ->toArray());
+                // district
+                $district = array_map(function ($r) {
+                    return $r['district'];
+                }, $this->Origins->find()
+                    ->select(
+                        'district'
+                    )->distinct('district')
+                    ->orderAsc('district')
+                    ->where(['district IS NOT' => null, 'district IS NOT' => '', 'company_id' => $company_id, 'survey_id' => $survey_id])
+                    ->toArray());
+            }
+            // write cache in long
+            Cache::write("origin_filters_comune_{$company_id}_{$survey_id}", $comune, 'hour');
+            Cache::write("origin_filters_district_{$company_id}_{$survey_id}", $district, 'hour');
+        }
+        $filters = [
+            [
+                'name' => 'comune',
+                'options' => $comune,
+            ],
+            ...(empty($district) ? [] : [
+                [
+                    'name' => 'quartiere',
+                    'options' => $district,
+                ],
+            ]),
+        ];
+        $this->set('filters', $filters);
+        $this->viewBuilder()->setOption('serialize', ['filters']);
     }
 }

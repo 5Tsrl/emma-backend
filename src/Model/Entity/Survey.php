@@ -28,6 +28,7 @@ use Cake\ORM\Entity;
  * @property int $id
  * @property string|null $name
  * @property int|null $company_id
+ * @property int|null $office_id Sede (scope 'sede' dei questionari dinamici Azienda/Scuola/Uni; null = scope 'generale')
  * @property string|null $version_tag
  * @property string|null $description
  * @property \Cake\I18n\FrozenDate|null $date
@@ -36,6 +37,7 @@ use Cake\ORM\Entity;
  * @property int|null $user_id
  *
  * @property \App\Model\Entity\Company $company
+ * @property \App\Model\Entity\Office $office
  * @property \App\Model\Entity\Answer[] $answers
  */
 class Survey extends Entity
@@ -55,4 +57,15 @@ class Survey extends Entity
         'id' => false,
     ];
     use TranslateTrait;
+
+    public function checkComplete(): bool
+    {
+        $answersTable = \Cake\ORM\TableRegistry::getTableLocator()->get('Answers');
+        $count = $answersTable->find()->where(['survey_id' => $this->id])->count();
+        if ($count < 2) {
+            return false;
+        }
+
+        return true;
+    }
 }

@@ -22,6 +22,7 @@ use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
+use Cake\ORM\TableRegistry;
 
 class ForceOfficeIdFromSurveyCommand extends Command
 {
@@ -32,8 +33,8 @@ class ForceOfficeIdFromSurveyCommand extends Command
 
     public function execute(Arguments $args, ConsoleIo $io)
     {
-        $this->loadModel('Answers');
-        $this->loadModel('Users');
+        $this->Answers = TableRegistry::getTableLocator()->get('Answers');
+        $this->Users = TableRegistry::getTableLocator()->get('Users');
         //TODO: Valutare se trasformare in parametri
         $qid = 302; //Domanda mappa
         $survey_id = 152; // Survey di riferimento

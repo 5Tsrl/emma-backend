@@ -1,5 +1,6 @@
 <?php
 //<editor-fold desc="Preamble">
+
 /**
  * EMMA(tm) : Electronic Mobility Management Applications
  * Copyright (c) 5T Torino, Regione Piemonte, Città Metropolitana di Torino
@@ -14,7 +15,6 @@
  * @license   https://eupl.eu/1.2/it/ EUPL-1.2 license
  */
 //</editor-fold>
-
 declare(strict_types=1);
 
 namespace App\Model\Entity;
@@ -47,15 +47,6 @@ class Monitoring extends Entity
      * @var array
      */
     protected $_accessible = [
-    'title' => true,
-    'monitoring_date' => true,
-    'created' => true,
-    'modified' => true,
-    'measure_id' => true,
-    'office_id' => true,
-    'measure' => true,
-    'office' => true,
-    'values' => true,
-    'year' => true,
+        '*' => true,
     ];
 }

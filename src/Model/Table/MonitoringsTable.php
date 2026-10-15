@@ -63,16 +63,16 @@ class MonitoringsTable extends Table
         $this->addBehavior('Timestamp');
 
         $this->belongsTo('Measures', [
-        'foreignKey' => 'measure_id',
+            'foreignKey' => 'measure_id',
         ]);
         $this->belongsTo('Offices', [
-        'foreignKey' => 'office_id',
-        'className' => 'Offices',
+            'foreignKey' => 'office_id',
+            'className' => 'Offices',
         ]);
         $this->belongsTo('Pscl', [
             'foreignKey' => 'pscl_id',
             'className' => 'Pscl',
-            ]);
+        ]);
     }
 
     /**
@@ -84,18 +84,17 @@ class MonitoringsTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-        ->integer('id')
-        ->allowEmptyString('id', null, 'create');
+            ->integer('id')
+            ->allowEmptyString('id', null, 'create');
 
         $validator
-        ->scalar('title')
-        ->maxLength('title', 45)
-        ->requirePresence('title', 'create')
-        ->notEmptyString('title');
+            ->scalar('name')
+            ->maxLength('name', 45)
+            ->allowEmptyString('name');
 
         $validator
-        ->dateTime('monitoring_date')
-        ->allowEmptyDateTime('monitoring_date');
+            ->dateTime('dt')
+            ->allowEmptyDateTime('dt');
 
         return $validator;
     }
@@ -110,7 +109,7 @@ class MonitoringsTable extends Table
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->existsIn(['measure_id'], 'Measures'), ['errorField' => 'measure_id']);
-        $rules->add($rules->existsIn(['office_id'], 'Offices'), ['errorField' => 'office_id']);
+        $rules->add($rules->existsIn(['pscl_id'], 'Pscl'), ['errorField' => 'pscl_id']);
 
         return $rules;
     }
@@ -118,7 +117,7 @@ class MonitoringsTable extends Table
     // Definisco questo campo come json così è trasparente la conversione
     protected function _initializeSchema(TableSchemaInterface $schema): TableSchemaInterface
     {
-        $schema->setColumnType('values', 'json');
+        $schema->setColumnType('jvalues', 'json');
 
         return $schema;
     }

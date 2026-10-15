@@ -7,3 +7,6 @@
 [submodule "Notifications"]
 	path = plugins/Notifications
 	url = git@github.com:5Tsrl/emma-backend-notifications.git
+[submodule "SecretField"]
+	path = plugins/SecretField
+	url = https://github.com/impronta48/cake-secret-field-plugin.git

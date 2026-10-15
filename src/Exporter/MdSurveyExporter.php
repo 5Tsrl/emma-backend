@@ -22,7 +22,7 @@ class MdSurveyExporter extends MdExporter implements ExporterInterface
      * @throws \App\Exporter\BadMethodCallException
      */
     public function generatePSCL($response)
-    {        
+    {
         $resultPath = $this->resultPath($this->year);
 
         //devo salvare i due grafici della domanda con il $question->name-histogram.png e $question->name-pie.png
@@ -31,7 +31,7 @@ class MdSurveyExporter extends MdExporter implements ExporterInterface
         // Riporta il questionario e l'analisi
         $this->fillSurvey();
         $this->dumpSurvey($resultPath);
-        
+
         // Return response object to prevent controller from trying to render
         // a view.
         return $response;

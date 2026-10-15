@@ -1,0 +1,1463 @@
+{
+  "questions": {
+    "340": {
+      "mapqs_de": {
+        "do": "Klicken Sie auf das",
+        "Cap": "PLZ",
+        "del": "Dieses Verkehrsmittel löschen",
+        "back": "Zurück",
+        "city": "Stadt",
+        "mean": "Verkehrsmittel, das Sie beim Verlassen Ihres Hauses benutzen",
+        "next": "WEITER",
+        "click": "Klicken Sie hier, um sich auf der Karte zu lokalisieren",
+        "meters": "für mindestens 500 Meter",
+        "address": "Adresse",
+        "cc_auto": "Wie hoch ist der Hubraum Ihres Autos?",
+        "cc_moto": "Wie hoch ist der Hubraum Ihres Motorrads oder Mopeds?",
+        "province": "Provinz",
+        "research": "Suche läuft ...",
+        "set_cost": "Geben Sie einen Kostenwert größer als 0 und kleiner als 100000 ein.",
+        "amb_class": "Welcher Umweltklasse gehört Ihr Auto an?",
+        "but_descr": "Nutzen Sie ein anderes Verkehrsmittel? Fügen Sie es hinzu",
+        "type_auto": {
+          "Taxi": "Taxi",
+          "Personal": "Privat",
+          "Car pooling": "Car pooling",
+          "Car sharing": "Car sharing",
+          "company_car": "Firmenwagen"
+        },
+        "type_bike": {
+          "Personal": "Privat",
+          "Bike sharing": "Bike sharing"
+        },
+        "type_mono": {
+          "Personal": "Privat",
+          "Scooter sharing": "Scooter-Sharing"
+        },
+        "type_moto": {
+          "Personal": "Privat",
+          "Moto sharing": "Moto sharing"
+        },
+        "insert_Cap": "Geben Sie eine Postleitzahl ein, z. B. 10036",
+        "mean_label": "Verkehrsmittel",
+        "type_train": {
+          "Servizio ferroviario Trenitalia/GTT": "Bahnservice von Trenitalia/GTT",
+          "Servizio ferroviario altri vettori (Trenord, Italo, Alta Velocità, ...)": "Bahnservice anderer Anbieter (Trenord, Italo, Hochgeschwindigkeitszüge, ...)"
+        },
+        "which_cost": "Wie viel geben Sie monatlich aus (Hin- und Rückfahrt)?",
+        "car_fueling": "Welche Antriebsart hat Ihr Auto?",
+        "insert_city": "Geben Sie eine Stadt ein, z. B. Settimo Torinese",
+        "only_ci_pro": "nur Stadt und Provinz.",
+        "privacy_que": "Bedenken hinsichtlich des Datenschutzes? Sie geben keine vertraulichen Informationen preis. Die Adresse ist Ihrem Arbeitgeber bereits bekannt. Sie wird nur für Zwecke im Zusammenhang mit dem Arbeitsweg verwendet und nicht an Dritte weitergegeben, es sei denn in anonymer Form.",
+        "select_auto": "Welchen Autotyp wählen Sie?",
+        "stepStrings": [
+          "ERSTER",
+          "ZWEITER",
+          "DRITTER",
+          "VIERTER",
+          "FÜNFTER",
+          "SECHSTER",
+          "SIEBTER",
+          "ACHTER",
+          "NEUNTER",
+          "ZEHNTER"
+        ],
+        "which_modes": "Welche Verkehrsmittel nutzen Sie?",
+        "leavingpoint": "1. Von wo aus starten Sie, um zur Arbeit zu kommen?",
+        "moto_fueling": "Welche Antriebsart hat Ihr Motorrad oder Moped?",
+        "set_distance": "Geben Sie eine Distanz größer als 0 und kleiner als 100000 ein.",
+        "next_continue": "Speichern und Fortfahren",
+        "sel_type_auto": "Welchen Autotyp wählen Sie?",
+        "sel_type_bike": "Welchen Fahrradtyp wählen Sie?",
+        "sel_type_mono": "Welchen Scooter-Typ wählen Sie?",
+        "sel_type_moto": "Welchen Motorradtyp wählen Sie?",
+        "type_Personal": {
+          "Conducive": "Privat als Fahrer",
+          "Passenger": "Privat als Beifahrer"
+        },
+        "Insert_address": "Geben Sie eine Adresse ein, z. B. Via Roma 20, Settimo Torinese",
+        "amb_class_moto": "Welcher Umweltklasse gehört Ihr Motorrad an?",
+        "insert_address": "Geben Sie die Adresse ein, von der aus Sie am häufigsten losfahren, auch wenn es sich nicht um Ihren Wohnsitz oder Aufenthaltsort handelt",
+        "sel_type_train": "Welchen Zugtyp wählen Sie?",
+        "which_distance": "Wie viel Strecke legen Sie mit diesem Verkehrsmittel zurück (Hin- und Rückfahrt)?",
+        "meansOfTransport": {
+          "Auto": "Auto",
+          "Bike": "Fahrrad",
+          "Moto": "Motorrad",
+          "Metro": "Metro",
+          "Train": "Zug",
+          "On_foot": "Zu Fuß",
+          "Scooter": "Scooter",
+          "Bus/Tram": "Bus/Tram"
+        },
+        "impossible_search": "Diese Adresse konnte nicht gefunden werden, versuchen Sie es mit ",
+        "sel_type_personal": "Wählen Sie, ob Sie Fahrer oder Beifahrer sind?",
+        "unavalible_adress": "Wenn die Adresse nicht korrekt erkannt wird, können Sie die Position durch Klicken auf die Karte anpassen.",
+        "Mandatory_question": "Pflichtfrage",
+        "step_which_company": "In welchem Büro/Unternehmen beginnen Sie am häufigsten mit der Arbeit?"
+      }
+    }
+  },
+  "questions_surveys": {
+    "37": {
+      "mapqs_de": {
+        "do": "Klicken Sie auf das",
+        "Cap": "PLZ",
+        "del": "Dieses Verkehrsmittel löschen",
+        "back": "Zurück",
+        "city": "Stadt",
+        "mean": "Verkehrsmittel, das Sie beim Verlassen Ihres Hauses benutzen",
+        "next": "WEITER",
+        "click": "Klicken Sie hier, um sich auf der Karte zu lokalisieren",
+        "meters": "für mindestens 500 Meter",
+        "address": "Adresse",
+        "cc_auto": "Wie hoch ist der Hubraum Ihres Autos?",
+        "cc_moto": "Wie hoch ist der Hubraum Ihres Motorrads oder Mopeds?",
+        "province": "Provinz",
+        "research": "Suche läuft ...",
+        "set_cost": "Geben Sie einen Kostenwert größer als 0 und kleiner als 100000 ein.",
+        "amb_class": "Welcher Umweltklasse gehört Ihr Auto an?",
+        "but_descr": "Nutzen Sie ein anderes Verkehrsmittel? Fügen Sie es hinzu",
+        "type_auto": {
+          "Taxi": "Taxi",
+          "Personal": "Privat",
+          "Car pooling": "Car pooling",
+          "Car sharing": "Car sharing",
+          "company_car": "Firmenwagen"
+        },
+        "type_bike": {
+          "Personal": "Privat",
+          "Bike sharing": "Bike sharing"
+        },
+        "type_mono": {
+          "Personal": "Privat",
+          "Scooter sharing": "Scooter-Sharing"
+        },
+        "type_moto": {
+          "Personal": "Privat",
+          "Moto sharing": "Moto sharing"
+        },
+        "insert_Cap": "Geben Sie eine Postleitzahl ein, z. B. 10036",
+        "mean_label": "Verkehrsmittel",
+        "type_train": {
+          "Servizio ferroviario Trenitalia/GTT": "Bahnservice von Trenitalia/GTT",
+          "Servizio ferroviario altri vettori (Trenord, Italo, Alta Velocità, ...)": "Bahnservice anderer Anbieter (Trenord, Italo, Hochgeschwindigkeitszüge, ...)"
+        },
+        "which_cost": "Wie viel geben Sie monatlich aus (Hin- und Rückfahrt)?",
+        "car_fueling": "Welche Antriebsart hat Ihr Auto?",
+        "insert_city": "Geben Sie eine Stadt ein, z. B. Settimo Torinese",
+        "only_ci_pro": "nur Stadt und Provinz.",
+        "privacy_que": "Bedenken hinsichtlich des Datenschutzes? Sie geben keine vertraulichen Informationen preis. Die Adresse ist Ihrem Arbeitgeber bereits bekannt. Sie wird nur für Zwecke im Zusammenhang mit dem Arbeitsweg verwendet und nicht an Dritte weitergegeben, es sei denn in anonymer Form.",
+        "select_auto": "Welchen Autotyp wählen Sie?",
+        "stepStrings": [
+          "ERSTER",
+          "ZWEITER",
+          "DRITTER",
+          "VIERTER",
+          "FÜNFTER",
+          "SECHSTER",
+          "SIEBTER",
+          "ACHTER",
+          "NEUNTER",
+          "ZEHNTER"
+        ],
+        "which_modes": "Welche Verkehrsmittel nutzen Sie?",
+        "leavingpoint": "1. Von wo aus starten Sie, um zur Arbeit zu kommen?",
+        "moto_fueling": "Welche Antriebsart hat Ihr Motorrad oder Moped?",
+        "set_distance": "Geben Sie eine Distanz größer als 0 und kleiner als 100000 ein.",
+        "next_continue": "Speichern und Fortfahren",
+        "sel_type_auto": "Welchen Autotyp wählen Sie?",
+        "sel_type_bike": "Welchen Fahrradtyp wählen Sie?",
+        "sel_type_mono": "Welchen Scooter-Typ wählen Sie?",
+        "sel_type_moto": "Welchen Motorradtyp wählen Sie?",
+        "type_Personal": {
+          "Conducive": "Privat als Fahrer",
+          "Passenger": "Privat als Beifahrer"
+        },
+        "Insert_address": "Geben Sie eine Adresse ein, z. B. Via Roma 20, Settimo Torinese",
+        "amb_class_moto": "Welcher Umweltklasse gehört Ihr Motorrad an?",
+        "insert_address": "Geben Sie die Adresse ein, von der aus Sie am häufigsten losfahren, auch wenn es sich nicht um Ihren Wohnsitz oder Aufenthaltsort handelt",
+        "sel_type_train": "Welchen Zugtyp wählen Sie?",
+        "which_distance": "Wie viel Strecke legen Sie mit diesem Verkehrsmittel zurück (Hin- und Rückfahrt)?",
+        "meansOfTransport": {
+          "Auto": "Auto",
+          "Bike": "Fahrrad",
+          "Moto": "Motorrad",
+          "Metro": "Metro",
+          "Train": "Zug",
+          "On_foot": "Zu Fuß",
+          "Scooter": "Scooter",
+          "Bus/Tram": "Bus/Tram"
+        },
+        "impossible_search": "Diese Adresse konnte nicht gefunden werden, versuchen Sie es mit ",
+        "sel_type_personal": "Wählen Sie, ob Sie Fahrer oder Beifahrer sind?",
+        "unavalible_adress": "Wenn die Adresse nicht korrekt erkannt wird, können Sie die Position durch Klicken auf die Karte anpassen.",
+        "Mandatory_question": "Pflichtfrage",
+        "step_which_company": "In welchem Büro/Unternehmen beginnen Sie am häufigsten mit der Arbeit?"
+      }
+    },
+    "123": {
+      "mapqs_de": {
+        "do": "Klicken Sie auf das",
+        "Cap": "PLZ",
+        "del": "Dieses Verkehrsmittel löschen",
+        "back": "Zurück",
+        "city": "Stadt",
+        "mean": "Verkehrsmittel, das Sie beim Verlassen Ihres Hauses benutzen",
+        "next": "WEITER",
+        "click": "Klicken Sie hier, um sich auf der Karte zu lokalisieren",
+        "meters": "für mindestens 500 Meter",
+        "address": "Adresse",
+        "cc_auto": "Wie hoch ist der Hubraum Ihres Autos?",
+        "cc_moto": "Wie hoch ist der Hubraum Ihres Motorrads oder Mopeds?",
+        "province": "Provinz",
+        "research": "Suche läuft ...",
+        "set_cost": "Geben Sie einen Kostenwert größer als 0 und kleiner als 100000 ein. test",
+        "amb_class": "Welcher Umweltklasse gehört Ihr Auto an?",
+        "but_descr": "Nutzen Sie ein anderes Verkehrsmittel? Fügen Sie es hinzu",
+        "type_auto": {
+          "Taxi": "Taxi",
+          "Personal": "Privat",
+          "Car pooling": "Car pooling",
+          "Car sharing": "Car sharing",
+          "company_car": "Firmenwagen"
+        },
+        "type_bike": {
+          "Personal": "Privat",
+          "Bike sharing": "Bike sharing"
+        },
+        "type_mono": {
+          "Personal": "Privat",
+          "Scooter sharing": "Scooter-Sharing"
+        },
+        "type_moto": {
+          "Personal": "Privat",
+          "Moto sharing": "Moto sharing"
+        },
+        "insert_Cap": "Geben Sie eine Postleitzahl ein, z. B. 10036",
+        "mean_label": "Verkehrsmittel",
+        "type_train": {
+          "Servizio ferroviario Trenitalia/GTT": "Bahnservice von Trenitalia/GTT",
+          "Servizio ferroviario altri vettori (Trenord, Italo, Alta Velocità, ...)": "Bahnservice anderer Anbieter (Trenord, Italo, Hochgeschwindigkeitszüge, ...)"
+        },
+        "which_cost": "Wie viel geben Sie monatlich aus (Hin- und Rückfahrt)?",
+        "car_fueling": "Welche Antriebsart hat Ihr Auto?",
+        "insert_city": "Geben Sie eine Stadt ein, z. B. Settimo Torinese",
+        "only_ci_pro": "nur Stadt und Provinz.",
+        "privacy_que": "Bedenken hinsichtlich des Datenschutzes? Sie geben keine vertraulichen Informationen preis. Die Adresse ist Ihrem Arbeitgeber bereits bekannt. Sie wird nur für Zwecke im Zusammenhang mit dem Arbeitsweg verwendet und nicht an Dritte weitergegeben, es sei denn in anonymer Form.",
+        "select_auto": "Welchen Autotyp wählen Sie?",
+        "stepStrings": [
+          "ERSTER",
+          "ZWEITER",
+          "DRITTER",
+          "VIERTER",
+          "FÜNFTER",
+          "SECHSTER",
+          "SIEBTER",
+          "ACHTER",
+          "NEUNTER",
+          "ZEHNTER"
+        ],
+        "which_modes": "Welche Verkehrsmittel nutzen Sie?",
+        "leavingpoint": "1. Von wo aus starten Sie, um zur Arbeit zu kommen?",
+        "moto_fueling": "Welche Antriebsart hat Ihr Motorrad oder Moped?",
+        "set_distance": "Geben Sie eine Distanz größer als 0 und kleiner als 1000 ein. test",
+        "next_continue": "Speichern und Fortfahren",
+        "sel_type_auto": "Welchen Autotyp wählen Sie?",
+        "sel_type_bike": "Welchen Fahrradtyp wählen Sie?",
+        "sel_type_mono": "Welchen Scooter-Typ wählen Sie?",
+        "sel_type_moto": "Welchen Motorradtyp wählen Sie?",
+        "type_Personal": {
+          "Conducive": "Privat als Fahrer",
+          "Passenger": "Privat als Beifahrer"
+        },
+        "Insert_address": "Geben Sie eine Adresse ein, z. B. Via Roma 20, Settimo Torinese",
+        "amb_class_moto": "Welcher Umweltklasse gehört Ihr Motorrad an?",
+        "insert_address": "Geben Sie die Adresse ein, von der aus Sie am häufigsten losfahren, auch wenn es sich nicht um Ihren Wohnsitz oder Aufenthaltsort handelt",
+        "sel_type_train": "Welchen Zugtyp wählen Sie?",
+        "which_distance": "Wie viel Strecke legen Sie mit diesem Verkehrsmittel zurück (Hin- und Rückfahrt)?",
+        "meansOfTransport": {
+          "Auto": "Auto",
+          "Bike": "Fahrrad",
+          "Moto": "Motorrad",
+          "Metro": "Metro",
+          "Train": "Zug",
+          "On_foot": "Zu Fuß",
+          "Scooter": "Scooter",
+          "Bus/Tram": "Bus/Tram"
+        },
+        "impossible_search": "Diese Adresse konnte nicht gefunden werden, versuchen Sie es mit ",
+        "sel_type_personal": "Wählen Sie, ob Sie Fahrer oder Beifahrer sind?",
+        "unavalible_adress": "Wenn die Adresse nicht korrekt erkannt wird, können Sie die Position durch Klicken auf die Karte anpassen.",
+        "Mandatory_question": "Pflichtfrage",
+        "step_which_company": "In welchem Büro/Unternehmen beginnen Sie am häufigsten mit der Arbeit?"
+      }
+    },
+    "213": {
+      "mapqs_de": {
+        "do": "Klicken Sie auf das",
+        "Cap": "PLZ",
+        "del": "Dieses Verkehrsmittel löschen",
+        "back": "Zurück",
+        "city": "Stadt",
+        "mean": "Verkehrsmittel, das Sie beim Verlassen Ihres Hauses benutzen",
+        "next": "WEITER",
+        "click": "Klicken Sie hier, um sich auf der Karte zu lokalisieren",
+        "meters": "für mindestens 500 Meter",
+        "address": "Adresse",
+        "cc_auto": "Wie hoch ist der Hubraum Ihres Autos?",
+        "cc_moto": "Wie hoch ist der Hubraum Ihres Motorrads oder Mopeds?",
+        "district": "TO",
+        "province": "Provinz",
+        "research": "Suche läuft ...",
+        "set_cost": "Geben Sie einen Kostenwert größer als 0 und kleiner als 100000 ein.",
+        "amb_class": "Welcher Umweltklasse gehört Ihr Auto an?",
+        "but_descr": "Nutzen Sie ein anderes Verkehrsmittel? Fügen Sie es hinzu",
+        "type_auto": {
+          "Taxi": "Taxi",
+          "Personal": "Privat",
+          "Car pooling": "Car pooling",
+          "Car sharing": "Car sharing",
+          "company_car": "Firmenwagen"
+        },
+        "type_bike": {
+          "Personal": "Privat",
+          "Bike sharing": "Bike sharing"
+        },
+        "type_mono": {
+          "Personal": "Privat",
+          "Scooter sharing": "Scooter-Sharing"
+        },
+        "type_moto": {
+          "Personal": "Privat",
+          "Moto sharing": "Moto sharing"
+        },
+        "insert_Cap": "Geben Sie eine Postleitzahl ein, z. B. 10036",
+        "mean_label": "Verkehrsmittel",
+        "type_train": {
+          "Servizio ferroviario Trenitalia/GTT": "Bahnservice von Trenitalia/GTT",
+          "Servizio ferroviario altri vettori (Trenord, Italo, Alta Velocità, ...)": "Bahnservice anderer Anbieter (Trenord, Italo, Hochgeschwindigkeitszüge, ...)"
+        },
+        "which_cost": "Wie viel geben Sie monatlich aus (Hin- und Rückfahrt)?",
+        "car_fueling": "Welche Antriebsart hat Ihr Auto?",
+        "insert_city": "Geben Sie eine Stadt ein, z. B. Settimo Torinese",
+        "only_ci_pro": "nur Stadt und Provinz.",
+        "privacy_que": "Bedenken hinsichtlich des Datenschutzes? Sie geben keine vertraulichen Informationen preis. Die Adresse ist Ihrem Arbeitgeber bereits bekannt. Sie wird nur für Zwecke im Zusammenhang mit dem Arbeitsweg verwendet und nicht an Dritte weitergegeben, es sei denn in anonymer Form.",
+        "select_auto": "Welchen Autotyp wählen Sie?",
+        "stepStrings": [
+          "ERSTER",
+          "ZWEITER",
+          "DRITTER",
+          "VIERTER",
+          "FÜNFTER",
+          "SECHSTER",
+          "SIEBTER",
+          "ACHTER",
+          "NEUNTER",
+          "ZEHNTER"
+        ],
+        "which_modes": "Welche Verkehrsmittel nutzen Sie?",
+        "leavingpoint": "1. Von wo aus starten Sie, um zur Arbeit zu kommen?",
+        "moto_fueling": "Welche Antriebsart hat Ihr Motorrad oder Moped?",
+        "set_distance": "Geben Sie eine Distanz größer als 0 und kleiner als 100000 ein.",
+        "next_continue": "Speichern und Fortfahren",
+        "sel_type_auto": "Welchen Autotyp wählen Sie?",
+        "sel_type_bike": "Welchen Fahrradtyp wählen Sie?",
+        "sel_type_mono": "Welchen Scooter-Typ wählen Sie?",
+        "sel_type_moto": "Welchen Motorradtyp wählen Sie?",
+        "type_Personal": {
+          "Conducive": "Privat als Fahrer",
+          "Passenger": "Privat als Beifahrer"
+        },
+        "Insert_address": "Geben Sie eine Adresse ein, z. B. Via Roma 20, Settimo Torinese",
+        "amb_class_moto": "Welcher Umweltklasse gehört Ihr Motorrad an?",
+        "insert_address": "Geben Sie die Adresse ein, von der aus Sie am häufigsten losfahren, auch wenn es sich nicht um Ihren Wohnsitz oder Aufenthaltsort handelt",
+        "sel_type_train": "Welchen Zugtyp wählen Sie?",
+        "which_distance": "Wie viel Strecke legen Sie mit diesem Verkehrsmittel zurück (Hin- und Rückfahrt)?",
+        "meansOfTransport": {
+          "Auto": "Auto",
+          "Bike": "Fahrrad",
+          "Moto": "Motorrad",
+          "Metro": "Metro",
+          "Train": "Zug",
+          "On_foot": "Zu Fuß",
+          "Scooter": "Scooter",
+          "Bus/Tram": "Bus/Tram"
+        },
+        "impossible_search": "Diese Adresse konnte nicht gefunden werden, versuchen Sie es mit ",
+        "sel_type_personal": "Wählen Sie, ob Sie Fahrer oder Beifahrer sind?",
+        "unavalible_adress": "Wenn die Adresse nicht korrekt erkannt wird, können Sie die Position durch Klicken auf die Karte anpassen.",
+        "Mandatory_question": "Pflichtfrage",
+        "step_which_company": "In welchem Büro/Unternehmen beginnen Sie am häufigsten mit der Arbeit?"
+      }
+    },
+    "244": {
+      "mapqs_de": {
+        "do": "Klicken Sie auf das",
+        "Cap": "PLZ",
+        "del": "Dieses Verkehrsmittel löschen",
+        "back": "Zurück",
+        "city": "Stadt",
+        "mean": "Verkehrsmittel, das Sie beim Verlassen Ihres Hauses benutzen",
+        "next": "WEITER",
+        "click": "Klicken Sie hier, um sich auf der Karte zu lokalisieren",
+        "meters": "für mindestens 500 Meter",
+        "address": "Adresse",
+        "cc_auto": "Wie hoch ist der Hubraum Ihres Autos?",
+        "cc_moto": "Wie hoch ist der Hubraum Ihres Motorrads oder Mopeds?",
+        "province": "Provinz",
+        "research": "Suche läuft ...",
+        "set_cost": "Geben Sie einen Kostenwert größer als 0 und kleiner als 100000 ein.",
+        "amb_class": "Welcher Umweltklasse gehört Ihr Auto an?",
+        "but_descr": "Nutzen Sie ein anderes Verkehrsmittel? Fügen Sie es hinzu",
+        "type_auto": {
+          "Taxi": "Taxi",
+          "Personal": "Privat",
+          "Car pooling": "Car pooling",
+          "Car sharing": "Car sharing",
+          "company_car": "Firmenwagen"
+        },
+        "type_bike": {
+          "Personal": "Privat",
+          "Bike sharing": "Bike sharing"
+        },
+        "type_mono": {
+          "Personal": "Privat",
+          "Scooter sharing": "Scooter-Sharing"
+        },
+        "type_moto": {
+          "Personal": "Privat",
+          "Moto sharing": "Moto sharing"
+        },
+        "insert_Cap": "Geben Sie eine Postleitzahl ein, z. B. 10036",
+        "mean_label": "Verkehrsmittel",
+        "type_train": {
+          "Servizio ferroviario Trenitalia/GTT": "Bahnservice von Trenitalia/GTT",
+          "Servizio ferroviario altri vettori (Trenord, Italo, Alta Velocità, ...)": "Bahnservice anderer Anbieter (Trenord, Italo, Hochgeschwindigkeitszüge, ...)"
+        },
+        "which_cost": "Wie viel geben Sie monatlich aus (Hin- und Rückfahrt)?",
+        "car_fueling": "Welche Antriebsart hat Ihr Auto?",
+        "insert_city": "Geben Sie eine Stadt ein, z. B. Settimo Torinese",
+        "only_ci_pro": "nur Stadt und Provinz.",
+        "privacy_que": "Bedenken hinsichtlich des Datenschutzes? Sie geben keine vertraulichen Informationen preis. Die Adresse ist Ihrem Arbeitgeber bereits bekannt. Sie wird nur für Zwecke im Zusammenhang mit dem Arbeitsweg verwendet und nicht an Dritte weitergegeben, es sei denn in anonymer Form.",
+        "select_auto": "Welchen Autotyp wählen Sie?",
+        "stepStrings": [
+          "ERSTER",
+          "ZWEITER",
+          "DRITTER",
+          "VIERTER",
+          "FÜNFTER",
+          "SECHSTER",
+          "SIEBTER",
+          "ACHTER",
+          "NEUNTER",
+          "ZEHNTER"
+        ],
+        "which_modes": "Welche Verkehrsmittel nutzen Sie?",
+        "leavingpoint": "1. Von wo aus starten Sie, um zur Arbeit zu kommen?",
+        "moto_fueling": "Welche Antriebsart hat Ihr Motorrad oder Moped?",
+        "set_distance": "Geben Sie eine Distanz größer als 0 und kleiner als 100000 ein.",
+        "next_continue": "Speichern und Fortfahren",
+        "sel_type_auto": "Welchen Autotyp wählen Sie?",
+        "sel_type_bike": "Welchen Fahrradtyp wählen Sie?",
+        "sel_type_mono": "Welchen Scooter-Typ wählen Sie?",
+        "sel_type_moto": "Welchen Motorradtyp wählen Sie?",
+        "type_Personal": {
+          "Conducive": "Privat als Fahrer",
+          "Passenger": "Privat als Beifahrer"
+        },
+        "Insert_address": "Geben Sie eine Adresse ein, z. B. Via Roma 20, Settimo Torinese",
+        "amb_class_moto": "Welcher Umweltklasse gehört Ihr Motorrad an?",
+        "insert_address": "Geben Sie die Adresse ein, von der aus Sie am häufigsten losfahren, auch wenn es sich nicht um Ihren Wohnsitz oder Aufenthaltsort handelt",
+        "sel_type_train": "Welchen Zugtyp wählen Sie?",
+        "which_distance": "Wie viel Strecke legen Sie mit diesem Verkehrsmittel zurück (Hin- und Rückfahrt)?",
+        "meansOfTransport": {
+          "Auto": "Auto",
+          "Bike": "Fahrrad",
+          "Moto": "Motorrad",
+          "Metro": "Metro",
+          "Train": "Zug",
+          "On_foot": "Zu Fuß",
+          "Scooter": "Scooter",
+          "Bus/Tram": "Bus/Tram"
+        },
+        "impossible_search": "Diese Adresse konnte nicht gefunden werden, versuchen Sie es mit ",
+        "sel_type_personal": "Wählen Sie, ob Sie Fahrer oder Beifahrer sind?",
+        "unavalible_adress": "Wenn die Adresse nicht korrekt erkannt wird, können Sie die Position durch Klicken auf die Karte anpassen.",
+        "Mandatory_question": "Pflichtfrage",
+        "step_which_company": "In welchem Büro/Unternehmen beginnen Sie am häufigsten mit der Arbeit?"
+      }
+    },
+    "324": {
+      "mapqs_de": {
+        "do": "Klicken Sie auf das",
+        "Cap": "PLZ",
+        "del": "Dieses Verkehrsmittel löschen",
+        "back": "Zurück",
+        "city": "Stadt",
+        "mean": "Verkehrsmittel, das Sie beim Verlassen Ihres Hauses benutzen",
+        "next": "WEITER",
+        "click": "Klicken Sie hier, um sich auf der Karte zu lokalisieren",
+        "meters": "für mindestens 500 Meter",
+        "address": "Adresse",
+        "cc_auto": "Wie hoch ist der Hubraum Ihres Autos?",
+        "cc_moto": "Wie hoch ist der Hubraum Ihres Motorrads oder Mopeds?",
+        "province": "Provinz",
+        "research": "Suche läuft ...",
+        "set_cost": "Geben Sie einen Kostenwert größer als 0 und kleiner als 100000 ein. test",
+        "amb_class": "Welcher Umweltklasse gehört Ihr Auto an?",
+        "but_descr": "Nutzen Sie ein anderes Verkehrsmittel? Fügen Sie es hinzu",
+        "type_auto": {
+          "Taxi": "Taxi",
+          "Personal": "Privat",
+          "Car pooling": "Car pooling",
+          "Car sharing": "Car sharing",
+          "company_car": "Firmenwagen"
+        },
+        "type_bike": {
+          "Personal": "Privat",
+          "Bike sharing": "Bike sharing"
+        },
+        "type_mono": {
+          "Personal": "Privat",
+          "Scooter sharing": "Scooter-Sharing"
+        },
+        "type_moto": {
+          "Personal": "Privat",
+          "Moto sharing": "Moto sharing"
+        },
+        "insert_Cap": "Geben Sie eine Postleitzahl ein, z. B. 10036",
+        "mean_label": "Verkehrsmittel",
+        "type_train": {
+          "Servizio ferroviario Trenitalia/GTT": "Bahnservice von Trenitalia/GTT",
+          "Servizio ferroviario altri vettori (Trenord, Italo, Alta Velocità, ...)": "Bahnservice anderer Anbieter (Trenord, Italo, Hochgeschwindigkeitszüge, ...)"
+        },
+        "which_cost": "Wie viel geben Sie monatlich aus (Hin- und Rückfahrt)?",
+        "car_fueling": "Welche Antriebsart hat Ihr Auto?",
+        "insert_city": "Geben Sie eine Stadt ein, z. B. Settimo Torinese",
+        "only_ci_pro": "nur Stadt und Provinz.",
+        "privacy_que": "Bedenken hinsichtlich des Datenschutzes? Sie geben keine vertraulichen Informationen preis. Die Adresse ist Ihrem Arbeitgeber bereits bekannt. Sie wird nur für Zwecke im Zusammenhang mit dem Arbeitsweg verwendet und nicht an Dritte weitergegeben, es sei denn in anonymer Form.",
+        "select_auto": "Welchen Autotyp wählen Sie?",
+        "stepStrings": [
+          "ERSTER",
+          "ZWEITER",
+          "DRITTER",
+          "VIERTER",
+          "FÜNFTER",
+          "SECHSTER",
+          "SIEBTER",
+          "ACHTER",
+          "NEUNTER",
+          "ZEHNTER"
+        ],
+        "which_modes": "Welche Verkehrsmittel nutzen Sie?",
+        "leavingpoint": "1. Von wo aus starten Sie, um zur Arbeit zu kommen?",
+        "moto_fueling": "Welche Antriebsart hat Ihr Motorrad oder Moped?",
+        "set_distance": "Geben Sie eine Distanz größer als 0 und kleiner als 1000 ein. test",
+        "next_continue": "Speichern und Fortfahren",
+        "sel_type_auto": "Welchen Autotyp wählen Sie?",
+        "sel_type_bike": "Welchen Fahrradtyp wählen Sie?",
+        "sel_type_mono": "Welchen Scooter-Typ wählen Sie?",
+        "sel_type_moto": "Welchen Motorradtyp wählen Sie?",
+        "type_Personal": {
+          "Conducive": "Privat als Fahrer",
+          "Passenger": "Privat als Beifahrer"
+        },
+        "Insert_address": "Geben Sie eine Adresse ein, z. B. Via Roma 20, Settimo Torinese",
+        "amb_class_moto": "Welcher Umweltklasse gehört Ihr Motorrad an?",
+        "insert_address": "Geben Sie die Adresse ein, von der aus Sie am häufigsten losfahren, auch wenn es sich nicht um Ihren Wohnsitz oder Aufenthaltsort handelt",
+        "sel_type_train": "Welchen Zugtyp wählen Sie?",
+        "which_distance": "Wie viel Strecke legen Sie mit diesem Verkehrsmittel zurück (Hin- und Rückfahrt)?",
+        "meansOfTransport": {
+          "Auto": "Auto",
+          "Bike": "Fahrrad",
+          "Moto": "Motorrad",
+          "Metro": "Metro",
+          "Train": "Zug",
+          "On_foot": "Zu Fuß",
+          "Scooter": "Scooter",
+          "Bus/Tram": "Bus/Tram"
+        },
+        "impossible_search": "Diese Adresse konnte nicht gefunden werden, versuchen Sie es mit ",
+        "sel_type_personal": "Wählen Sie, ob Sie Fahrer oder Beifahrer sind?",
+        "unavalible_adress": "Wenn die Adresse nicht korrekt erkannt wird, können Sie die Position durch Klicken auf die Karte anpassen.",
+        "Mandatory_question": "Pflichtfrage",
+        "step_which_company": "In welchem Büro/Unternehmen beginnen Sie am häufigsten mit der Arbeit?"
+      }
+    },
+    "921": {
+      "mapqs_de": {
+        "do": "Klicken Sie auf das",
+        "Cap": "PLZ",
+        "del": "Dieses Verkehrsmittel löschen",
+        "back": "Zurück",
+        "city": "Stadt",
+        "mean": "Verkehrsmittel, das Sie beim Verlassen Ihres Hauses benutzen",
+        "next": "WEITER",
+        "click": "Klicken Sie hier, um sich auf der Karte zu lokalisieren",
+        "meters": "für mindestens 500 Meter",
+        "address": "Adresse",
+        "cc_auto": "Wie hoch ist der Hubraum Ihres Autos?",
+        "cc_moto": "Wie hoch ist der Hubraum Ihres Motorrads oder Mopeds?",
+        "province": "Provinz",
+        "research": "Suche läuft ...",
+        "set_cost": "Geben Sie einen Kostenwert größer als 0 und kleiner als 100000 ein.",
+        "amb_class": "Welcher Umweltklasse gehört Ihr Auto an?",
+        "but_descr": "Nutzen Sie ein anderes Verkehrsmittel? Fügen Sie es hinzu",
+        "type_auto": {
+          "Taxi": "Taxi",
+          "Personal": "Privat",
+          "Car pooling": "Car pooling",
+          "Car sharing": "Car sharing",
+          "company_car": "Firmenwagen"
+        },
+        "type_bike": {
+          "Personal": "Privat",
+          "Bike sharing": "Bike sharing"
+        },
+        "type_mono": {
+          "Personal": "Privat",
+          "Scooter sharing": "Scooter-Sharing"
+        },
+        "type_moto": {
+          "Personal": "Privat",
+          "Moto sharing": "Moto sharing"
+        },
+        "insert_Cap": "Geben Sie eine Postleitzahl ein, z. B. 10036",
+        "mean_label": "Verkehrsmittel",
+        "type_train": {
+          "Servizio ferroviario Trenitalia/GTT": "Bahnservice von Trenitalia/GTT",
+          "Servizio ferroviario altri vettori (Trenord, Italo, Alta Velocità, ...)": "Bahnservice anderer Anbieter (Trenord, Italo, Hochgeschwindigkeitszüge, ...)"
+        },
+        "which_cost": "Wie viel geben Sie monatlich aus (Hin- und Rückfahrt)?",
+        "car_fueling": "Welche Antriebsart hat Ihr Auto?",
+        "insert_city": "Geben Sie eine Stadt ein, z. B. Settimo Torinese",
+        "only_ci_pro": "nur Stadt und Provinz.",
+        "privacy_que": "Bedenken hinsichtlich des Datenschutzes? Sie geben keine vertraulichen Informationen preis. Die Adresse ist Ihrem Arbeitgeber bereits bekannt. Sie wird nur für Zwecke im Zusammenhang mit dem Arbeitsweg verwendet und nicht an Dritte weitergegeben, es sei denn in anonymer Form.",
+        "select_auto": "Welchen Autotyp wählen Sie?",
+        "stepStrings": [
+          "ERSTER",
+          "ZWEITER",
+          "DRITTER",
+          "VIERTER",
+          "FÜNFTER",
+          "SECHSTER",
+          "SIEBTER",
+          "ACHTER",
+          "NEUNTER",
+          "ZEHNTER"
+        ],
+        "which_modes": "Welche Verkehrsmittel nutzen Sie?",
+        "leavingpoint": "1. Von wo aus starten Sie, um zur Arbeit zu kommen?",
+        "moto_fueling": "Welche Antriebsart hat Ihr Motorrad oder Moped?",
+        "set_distance": "Geben Sie eine Distanz größer als 0 und kleiner als 100000 ein.",
+        "next_continue": "Speichern und Fortfahren",
+        "sel_type_auto": "Welchen Autotyp wählen Sie?",
+        "sel_type_bike": "Welchen Fahrradtyp wählen Sie?",
+        "sel_type_mono": "Welchen Scooter-Typ wählen Sie?",
+        "sel_type_moto": "Welchen Motorradtyp wählen Sie?",
+        "type_Personal": {
+          "Conducive": "Privat als Fahrer",
+          "Passenger": "Privat als Beifahrer"
+        },
+        "Insert_address": "Geben Sie eine Adresse ein, z. B. Via Roma 20, Settimo Torinese",
+        "amb_class_moto": "Welcher Umweltklasse gehört Ihr Motorrad an?",
+        "insert_address": "Geben Sie die Adresse ein, von der aus Sie am häufigsten losfahren, auch wenn es sich nicht um Ihren Wohnsitz oder Aufenthaltsort handelt",
+        "sel_type_train": "Welchen Zugtyp wählen Sie?",
+        "which_distance": "Wie viel Strecke legen Sie mit diesem Verkehrsmittel zurück (Hin- und Rückfahrt)?",
+        "insert_province": "TO",
+        "meansOfTransport": {
+          "Auto": "Auto",
+          "Bike": "Fahrrad",
+          "Moto": "Motorrad",
+          "Metro": "Metro",
+          "Train": "Zug",
+          "On_foot": "Zu Fuß",
+          "Scooter": "Scooter",
+          "Bus/Tram": "Bus/Tram"
+        },
+        "impossible_search": "Diese Adresse konnte nicht gefunden werden, versuchen Sie es mit ",
+        "sel_type_personal": "Wählen Sie, ob Sie Fahrer oder Beifahrer sind?",
+        "unavalible_adress": "Wenn die Adresse nicht korrekt erkannt wird, können Sie die Position durch Klicken auf die Karte anpassen.",
+        "Mandatory_question": "Pflichtfrage",
+        "step_which_company": "In welchem Büro/Unternehmen beginnen Sie am häufigsten mit der Arbeit?"
+      }
+    },
+    "1016": {
+      "mapqs_de": {
+        "do": "Klicken Sie auf das",
+        "Cap": "PLZ",
+        "del": "Dieses Verkehrsmittel löschen",
+        "back": "Zurück",
+        "city": "Stadt",
+        "mean": "Verkehrsmittel, das Sie beim Verlassen Ihres Hauses benutzen",
+        "next": "WEITER",
+        "click": "Klicken Sie hier, um sich auf der Karte zu lokalisieren",
+        "meters": "für mindestens 500 Meter",
+        "address": "Adresse",
+        "cc_auto": "Wie hoch ist der Hubraum Ihres Autos?",
+        "cc_moto": "Wie hoch ist der Hubraum Ihres Motorrads oder Mopeds?",
+        "province": "Provinz",
+        "research": "Suche läuft ...",
+        "set_cost": "Geben Sie einen Kostenwert größer als 0 und kleiner als 100000 ein. test",
+        "amb_class": "Welcher Umweltklasse gehört Ihr Auto an?",
+        "but_descr": "Nutzen Sie ein anderes Verkehrsmittel? Fügen Sie es hinzu",
+        "type_auto": {
+          "Taxi": "Taxi",
+          "Personal": "Privat",
+          "Car pooling": "Car pooling",
+          "Car sharing": "Car sharing",
+          "company_car": "Firmenwagen"
+        },
+        "type_bike": {
+          "Personal": "Privat",
+          "Bike sharing": "Bike sharing"
+        },
+        "type_mono": {
+          "Personal": "Privat",
+          "Scooter sharing": "Scooter-Sharing"
+        },
+        "type_moto": {
+          "Personal": "Privat",
+          "Moto sharing": "Moto sharing"
+        },
+        "insert_Cap": "Geben Sie eine Postleitzahl ein, z. B. 10036",
+        "mean_label": "Verkehrsmittel",
+        "type_train": {
+          "Servizio ferroviario Trenitalia/GTT": "Bahnservice von Trenitalia/GTT",
+          "Servizio ferroviario altri vettori (Trenord, Italo, Alta Velocità, ...)": "Bahnservice anderer Anbieter (Trenord, Italo, Hochgeschwindigkeitszüge, ...)"
+        },
+        "which_cost": "Wie viel geben Sie monatlich aus (Hin- und Rückfahrt)?",
+        "car_fueling": "Welche Antriebsart hat Ihr Auto?",
+        "insert_city": "Geben Sie eine Stadt ein, z. B. Settimo Torinese",
+        "only_ci_pro": "nur Stadt und Provinz.",
+        "privacy_que": "Bedenken hinsichtlich des Datenschutzes? Sie geben keine vertraulichen Informationen preis. Die Adresse ist Ihrem Arbeitgeber bereits bekannt. Sie wird nur für Zwecke im Zusammenhang mit dem Arbeitsweg verwendet und nicht an Dritte weitergegeben, es sei denn in anonymer Form.",
+        "select_auto": "Welchen Autotyp wählen Sie?",
+        "stepStrings": [
+          "ERSTER",
+          "ZWEITER",
+          "DRITTER",
+          "VIERTER",
+          "FÜNFTER",
+          "SECHSTER",
+          "SIEBTER",
+          "ACHTER",
+          "NEUNTER",
+          "ZEHNTER"
+        ],
+        "which_modes": "Welche Verkehrsmittel nutzen Sie?",
+        "leavingpoint": "1. Von wo aus starten Sie, um zur Arbeit zu kommen?",
+        "moto_fueling": "Welche Antriebsart hat Ihr Motorrad oder Moped?",
+        "set_distance": "Geben Sie eine Distanz größer als 0 und kleiner als 1000 ein. test",
+        "next_continue": "Speichern und Fortfahren",
+        "sel_type_auto": "Welchen Autotyp wählen Sie?",
+        "sel_type_bike": "Welchen Fahrradtyp wählen Sie?",
+        "sel_type_mono": "Welchen Scooter-Typ wählen Sie?",
+        "sel_type_moto": "Welchen Motorradtyp wählen Sie?",
+        "type_Personal": {
+          "Conducive": "Privat als Fahrer",
+          "Passenger": "Privat als Beifahrer"
+        },
+        "Insert_address": "Geben Sie eine Adresse ein, z. B. Via Roma 20, Settimo Torinese",
+        "amb_class_moto": "Welcher Umweltklasse gehört Ihr Motorrad an?",
+        "insert_address": "Geben Sie die Adresse ein, von der aus Sie am häufigsten losfahren, auch wenn es sich nicht um Ihren Wohnsitz oder Aufenthaltsort handelt",
+        "sel_type_train": "Welchen Zugtyp wählen Sie?",
+        "which_distance": "Wie viel Strecke legen Sie mit diesem Verkehrsmittel zurück (Hin- und Rückfahrt)?",
+        "meansOfTransport": {
+          "Auto": "Auto",
+          "Bike": "Fahrrad",
+          "Moto": "Motorrad",
+          "Metro": "Metro",
+          "Train": "Zug",
+          "On_foot": "Zu Fuß",
+          "Scooter": "Scooter",
+          "Bus/Tram": "Bus/Tram"
+        },
+        "impossible_search": "Diese Adresse konnte nicht gefunden werden, versuchen Sie es mit ",
+        "sel_type_personal": "Wählen Sie, ob Sie Fahrer oder Beifahrer sind?",
+        "unavalible_adress": "Wenn die Adresse nicht korrekt erkannt wird, können Sie die Position durch Klicken auf die Karte anpassen.",
+        "Mandatory_question": "Pflichtfrage",
+        "step_which_company": "In welchem Büro/Unternehmen beginnen Sie am häufigsten mit der Arbeit?"
+      }
+    },
+    "1062": {
+      "mapqs_de": {
+        "do": "Klicken Sie auf das",
+        "Cap": "PLZ",
+        "del": "Dieses Verkehrsmittel löschen",
+        "back": "Zurück",
+        "city": "Stadt",
+        "mean": "Verkehrsmittel, das Sie beim Verlassen Ihres Hauses benutzen",
+        "next": "WEITER",
+        "click": "Klicken Sie hier, um sich auf der Karte zu lokalisieren",
+        "meters": "für mindestens 500 Meter",
+        "address": "Adresse",
+        "cc_auto": "Wie hoch ist der Hubraum Ihres Autos?",
+        "cc_moto": "Wie hoch ist der Hubraum Ihres Motorrads oder Mopeds?",
+        "province": "Provinz",
+        "research": "Suche läuft ...",
+        "set_cost": "Geben Sie einen Kostenwert größer als 0 und kleiner als 100000 ein. test",
+        "amb_class": "Welcher Umweltklasse gehört Ihr Auto an?",
+        "but_descr": "Nutzen Sie ein anderes Verkehrsmittel? Fügen Sie es hinzu",
+        "type_auto": {
+          "Taxi": "Taxi",
+          "Personal": "Privat",
+          "Car pooling": "Car pooling",
+          "Car sharing": "Car sharing",
+          "company_car": "Firmenwagen"
+        },
+        "type_bike": {
+          "Personal": "Privat",
+          "Bike sharing": "Bike sharing"
+        },
+        "type_mono": {
+          "Personal": "Privat",
+          "Scooter sharing": "Scooter-Sharing"
+        },
+        "type_moto": {
+          "Personal": "Privat",
+          "Moto sharing": "Moto sharing"
+        },
+        "insert_Cap": "Geben Sie eine Postleitzahl ein, z. B. 10036",
+        "mean_label": "Verkehrsmittel",
+        "type_train": {
+          "Servizio ferroviario Trenitalia/GTT": "Bahnservice von Trenitalia/GTT",
+          "Servizio ferroviario altri vettori (Trenord, Italo, Alta Velocità, ...)": "Bahnservice anderer Anbieter (Trenord, Italo, Hochgeschwindigkeitszüge, ...)"
+        },
+        "which_cost": "Wie viel geben Sie monatlich aus (Hin- und Rückfahrt)?",
+        "car_fueling": "Welche Antriebsart hat Ihr Auto?",
+        "insert_city": "Geben Sie eine Stadt ein, z. B. Settimo Torinese",
+        "only_ci_pro": "nur Stadt und Provinz.",
+        "privacy_que": "Bedenken hinsichtlich des Datenschutzes? Sie geben keine vertraulichen Informationen preis. Die Adresse ist Ihrem Arbeitgeber bereits bekannt. Sie wird nur für Zwecke im Zusammenhang mit dem Arbeitsweg verwendet und nicht an Dritte weitergegeben, es sei denn in anonymer Form.",
+        "select_auto": "Welchen Autotyp wählen Sie?",
+        "stepStrings": [
+          "ERSTER",
+          "ZWEITER",
+          "DRITTER",
+          "VIERTER",
+          "FÜNFTER",
+          "SECHSTER",
+          "SIEBTER",
+          "ACHTER",
+          "NEUNTER",
+          "ZEHNTER"
+        ],
+        "which_modes": "Welche Verkehrsmittel nutzen Sie?",
+        "leavingpoint": "1. Von wo aus starten Sie, um zur Arbeit zu kommen?",
+        "moto_fueling": "Welche Antriebsart hat Ihr Motorrad oder Moped?",
+        "set_distance": "Geben Sie eine Distanz größer als 0 und kleiner als 1000 ein. test",
+        "next_continue": "Speichern und Fortfahren",
+        "sel_type_auto": "Welchen Autotyp wählen Sie?",
+        "sel_type_bike": "Welchen Fahrradtyp wählen Sie?",
+        "sel_type_mono": "Welchen Scooter-Typ wählen Sie?",
+        "sel_type_moto": "Welchen Motorradtyp wählen Sie?",
+        "type_Personal": {
+          "Conducive": "Privat als Fahrer",
+          "Passenger": "Privat als Beifahrer"
+        },
+        "Insert_address": "Geben Sie eine Adresse ein, z. B. Via Roma 20, Settimo Torinese",
+        "amb_class_moto": "Welcher Umweltklasse gehört Ihr Motorrad an?",
+        "insert_address": "Geben Sie die Adresse ein, von der aus Sie am häufigsten losfahren, auch wenn es sich nicht um Ihren Wohnsitz oder Aufenthaltsort handelt",
+        "sel_type_train": "Welchen Zugtyp wählen Sie?",
+        "which_distance": "Wie viel Strecke legen Sie mit diesem Verkehrsmittel zurück (Hin- und Rückfahrt)?",
+        "meansOfTransport": {
+          "Auto": "Auto",
+          "Bike": "Fahrrad",
+          "Moto": "Motorrad",
+          "Metro": "Metro",
+          "Train": "Zug",
+          "On_foot": "Zu Fuß",
+          "Scooter": "Scooter",
+          "Bus/Tram": "Bus/Tram"
+        },
+        "impossible_search": "Diese Adresse konnte nicht gefunden werden, versuchen Sie es mit ",
+        "sel_type_personal": "Wählen Sie, ob Sie Fahrer oder Beifahrer sind?",
+        "unavalible_adress": "Wenn die Adresse nicht korrekt erkannt wird, können Sie die Position durch Klicken auf die Karte anpassen.",
+        "Mandatory_question": "Pflichtfrage",
+        "step_which_company": "In welchem Büro/Unternehmen beginnen Sie am häufigsten mit der Arbeit?"
+      }
+    },
+    "1378": {
+      "mapqs_de": {
+        "do": "Klicken Sie auf das",
+        "Cap": "PLZ",
+        "del": "Dieses Verkehrsmittel löschen",
+        "back": "Zurück",
+        "city": "Stadt",
+        "mean": "Verkehrsmittel, das Sie beim Verlassen Ihres Hauses benutzen",
+        "next": "WEITER",
+        "click": "Klicken Sie hier, um sich auf der Karte zu lokalisieren",
+        "meters": "für mindestens 500 Meter",
+        "address": "Adresse",
+        "cc_auto": "Wie hoch ist der Hubraum Ihres Autos?",
+        "cc_moto": "Wie hoch ist der Hubraum Ihres Motorrads oder Mopeds?",
+        "province": "Provinz",
+        "research": "Suche läuft ...",
+        "set_cost": "Geben Sie einen Kostenwert größer als 0 und kleiner als 100000 ein.",
+        "amb_class": "Welcher Umweltklasse gehört Ihr Auto an?",
+        "but_descr": "Nutzen Sie ein anderes Verkehrsmittel? Fügen Sie es hinzu",
+        "type_auto": {
+          "Taxi": "Taxi",
+          "Personal": "Privat",
+          "Car pooling": "Car pooling",
+          "Car sharing": "Car sharing",
+          "company_car": "Firmenwagen"
+        },
+        "type_bike": {
+          "Personal": "Privat",
+          "Bike sharing": "Bike sharing"
+        },
+        "type_mono": {
+          "Personal": "Privat",
+          "Scooter sharing": "Scooter-Sharing"
+        },
+        "type_moto": {
+          "Personal": "Privat",
+          "Moto sharing": "Moto sharing"
+        },
+        "insert_Cap": "Geben Sie eine Postleitzahl ein, z. B. 10036",
+        "mean_label": "Verkehrsmittel",
+        "type_train": {
+          "Servizio ferroviario Trenitalia/GTT": "Bahnservice von Trenitalia/GTT",
+          "Servizio ferroviario altri vettori (Trenord, Italo, Alta Velocità, ...)": "Bahnservice anderer Anbieter (Trenord, Italo, Hochgeschwindigkeitszüge, ...)"
+        },
+        "which_cost": "Wie viel geben Sie monatlich aus (Hin- und Rückfahrt)?",
+        "car_fueling": "Welche Antriebsart hat Ihr Auto?",
+        "insert_city": "Geben Sie eine Stadt ein, z. B. Settimo Torinese",
+        "only_ci_pro": "nur Stadt und Provinz.",
+        "privacy_que": "Bedenken hinsichtlich des Datenschutzes? Sie geben keine vertraulichen Informationen preis. Die Adresse ist Ihrem Arbeitgeber bereits bekannt. Sie wird nur für Zwecke im Zusammenhang mit dem Arbeitsweg verwendet und nicht an Dritte weitergegeben, es sei denn in anonymer Form.",
+        "select_auto": "Welchen Autotyp wählen Sie?",
+        "stepStrings": [
+          "ERSTER",
+          "ZWEITER",
+          "DRITTER",
+          "VIERTER",
+          "FÜNFTER",
+          "SECHSTER",
+          "SIEBTER",
+          "ACHTER",
+          "NEUNTER",
+          "ZEHNTER"
+        ],
+        "which_modes": "Welche Verkehrsmittel nutzen Sie?",
+        "leavingpoint": "1. Von wo aus starten Sie, um zur Arbeit zu kommen?",
+        "moto_fueling": "Welche Antriebsart hat Ihr Motorrad oder Moped?",
+        "set_distance": "Geben Sie eine Distanz größer als 0 und kleiner als 100000 ein.",
+        "next_continue": "Speichern und Fortfahren",
+        "sel_type_auto": "Welchen Autotyp wählen Sie?",
+        "sel_type_bike": "Welchen Fahrradtyp wählen Sie?",
+        "sel_type_mono": "Welchen Scooter-Typ wählen Sie?",
+        "sel_type_moto": "Welchen Motorradtyp wählen Sie?",
+        "type_Personal": {
+          "Conducive": "Privat als Fahrer",
+          "Passenger": "Privat als Beifahrer"
+        },
+        "Insert_address": "Geben Sie eine Adresse ein, z. B. Via Roma 20, Settimo Torinese",
+        "amb_class_moto": "Welcher Umweltklasse gehört Ihr Motorrad an?",
+        "insert_address": "Geben Sie die Adresse ein, von der aus Sie am häufigsten losfahren, auch wenn es sich nicht um Ihren Wohnsitz oder Aufenthaltsort handelt",
+        "sel_type_train": "Welchen Zugtyp wählen Sie?",
+        "which_distance": "Wie viel Strecke legen Sie mit diesem Verkehrsmittel zurück (Hin- und Rückfahrt)?",
+        "meansOfTransport": {
+          "Auto": "Auto",
+          "Bike": "Fahrrad",
+          "Moto": "Motorrad",
+          "Metro": "Metro",
+          "Train": "Zug",
+          "On_foot": "Zu Fuß",
+          "Scooter": "Scooter",
+          "Bus/Tram": "Bus/Tram"
+        },
+        "impossible_search": "Diese Adresse konnte nicht gefunden werden, versuchen Sie es mit ",
+        "sel_type_personal": "Wählen Sie, ob Sie Fahrer oder Beifahrer sind?",
+        "unavalible_adress": "Wenn die Adresse nicht korrekt erkannt wird, können Sie die Position durch Klicken auf die Karte anpassen.",
+        "Mandatory_question": "Pflichtfrage",
+        "step_which_company": "In welchem Büro/Unternehmen beginnen Sie am häufigsten mit der Arbeit?"
+      }
+    },
+    "1548": {
+      "mapqs_de": {
+        "do": "Klicken Sie auf das",
+        "Cap": "PLZ",
+        "del": "Dieses Verkehrsmittel löschen",
+        "back": "Zurück",
+        "city": "Stadt",
+        "mean": "Verkehrsmittel, das Sie beim Verlassen Ihres Hauses benutzen",
+        "next": "WEITER",
+        "click": "Klicken Sie hier, um sich auf der Karte zu lokalisieren",
+        "meters": "für mindestens 500 Meter",
+        "address": "Adresse",
+        "cc_auto": "Wie hoch ist der Hubraum Ihres Autos?",
+        "cc_moto": "Wie hoch ist der Hubraum Ihres Motorrads oder Mopeds?",
+        "province": "Provinz",
+        "research": "Suche läuft ...",
+        "set_cost": "Geben Sie einen Kostenwert größer als 0 und kleiner als 100000 ein. test",
+        "amb_class": "Welcher Umweltklasse gehört Ihr Auto an?",
+        "but_descr": "Nutzen Sie ein anderes Verkehrsmittel? Fügen Sie es hinzu",
+        "type_auto": {
+          "Taxi": "Taxi",
+          "Personal": "Privat",
+          "Car pooling": "Car pooling",
+          "Car sharing": "Car sharing",
+          "company_car": "Firmenwagen"
+        },
+        "type_bike": {
+          "Personal": "Privat",
+          "Bike sharing": "Bike sharing"
+        },
+        "type_mono": {
+          "Personal": "Privat",
+          "Scooter sharing": "Scooter-Sharing"
+        },
+        "type_moto": {
+          "Personal": "Privat",
+          "Moto sharing": "Moto sharing"
+        },
+        "insert_Cap": "Geben Sie eine Postleitzahl ein, z. B. 10036",
+        "mean_label": "Verkehrsmittel",
+        "type_train": {
+          "Servizio ferroviario Trenitalia/GTT": "Bahnservice von Trenitalia/GTT",
+          "Servizio ferroviario altri vettori (Trenord, Italo, Alta Velocità, ...)": "Bahnservice anderer Anbieter (Trenord, Italo, Hochgeschwindigkeitszüge, ...)"
+        },
+        "which_cost": "Wie viel geben Sie monatlich aus (Hin- und Rückfahrt)?",
+        "car_fueling": "Welche Antriebsart hat Ihr Auto?",
+        "insert_city": "Geben Sie eine Stadt ein, z. B. Settimo Torinese",
+        "only_ci_pro": "nur Stadt und Provinz.",
+        "privacy_que": "Bedenken hinsichtlich des Datenschutzes? Sie geben keine vertraulichen Informationen preis. Die Adresse ist Ihrem Arbeitgeber bereits bekannt. Sie wird nur für Zwecke im Zusammenhang mit dem Arbeitsweg verwendet und nicht an Dritte weitergegeben, es sei denn in anonymer Form.",
+        "select_auto": "Welchen Autotyp wählen Sie?",
+        "stepStrings": [
+          "ERSTER",
+          "ZWEITER",
+          "DRITTER",
+          "VIERTER",
+          "FÜNFTER",
+          "SECHSTER",
+          "SIEBTER",
+          "ACHTER",
+          "NEUNTER",
+          "ZEHNTER"
+        ],
+        "which_modes": "Welche Verkehrsmittel nutzen Sie?",
+        "leavingpoint": "1. Von wo aus starten Sie, um zur Arbeit zu kommen?",
+        "moto_fueling": "Welche Antriebsart hat Ihr Motorrad oder Moped?",
+        "set_distance": "Geben Sie eine Distanz größer als 0 und kleiner als 1000 ein. test",
+        "next_continue": "Speichern und Fortfahren",
+        "sel_type_auto": "Welchen Autotyp wählen Sie?",
+        "sel_type_bike": "Welchen Fahrradtyp wählen Sie?",
+        "sel_type_mono": "Welchen Scooter-Typ wählen Sie?",
+        "sel_type_moto": "Welchen Motorradtyp wählen Sie?",
+        "type_Personal": {
+          "Conducive": "Privat als Fahrer",
+          "Passenger": "Privat als Beifahrer"
+        },
+        "Insert_address": "Geben Sie eine Adresse ein, z. B. Via Roma 20, Settimo Torinese",
+        "amb_class_moto": "Welcher Umweltklasse gehört Ihr Motorrad an?",
+        "insert_address": "Geben Sie die Adresse ein, von der aus Sie am häufigsten losfahren, auch wenn es sich nicht um Ihren Wohnsitz oder Aufenthaltsort handelt",
+        "sel_type_train": "Welchen Zugtyp wählen Sie?",
+        "which_distance": "Wie viel Strecke legen Sie mit diesem Verkehrsmittel zurück (Hin- und Rückfahrt)?",
+        "meansOfTransport": {
+          "Auto": "Auto",
+          "Bike": "Fahrrad",
+          "Moto": "Motorrad",
+          "Metro": "Metro",
+          "Train": "Zug",
+          "On_foot": "Zu Fuß",
+          "Scooter": "Scooter",
+          "Bus/Tram": "Bus/Tram"
+        },
+        "impossible_search": "Diese Adresse konnte nicht gefunden werden, versuchen Sie es mit ",
+        "sel_type_personal": "Wählen Sie, ob Sie Fahrer oder Beifahrer sind?",
+        "unavalible_adress": "Wenn die Adresse nicht korrekt erkannt wird, können Sie die Position durch Klicken auf die Karte anpassen.",
+        "Mandatory_question": "Pflichtfrage",
+        "step_which_company": "In welchem Büro/Unternehmen beginnen Sie am häufigsten mit der Arbeit?"
+      }
+    },
+    "1820": {
+      "mapqs_de": {
+        "do": "Klicken Sie auf das",
+        "Cap": "PLZ",
+        "del": "Dieses Verkehrsmittel löschen",
+        "back": "Zurück",
+        "city": "Stadt",
+        "mean": "Verkehrsmittel, das Sie beim Verlassen Ihres Hauses benutzen",
+        "next": "WEITER",
+        "click": "Klicken Sie hier, um sich auf der Karte zu lokalisieren",
+        "meters": "für mindestens 500 Meter",
+        "address": "Adresse",
+        "cc_auto": "Wie hoch ist der Hubraum Ihres Autos?",
+        "cc_moto": "Wie hoch ist der Hubraum Ihres Motorrads oder Mopeds?",
+        "province": "Provinz",
+        "research": "Suche läuft ...",
+        "set_cost": "Geben Sie einen Kostenwert größer als 0 und kleiner als 100000 ein. test",
+        "amb_class": "Welcher Umweltklasse gehört Ihr Auto an?",
+        "but_descr": "Nutzen Sie ein anderes Verkehrsmittel? Fügen Sie es hinzu",
+        "type_auto": {
+          "Taxi": "Taxi",
+          "Personal": "Privat",
+          "Car pooling": "Car pooling",
+          "Car sharing": "Car sharing",
+          "company_car": "Firmenwagen"
+        },
+        "type_bike": {
+          "Personal": "Privat",
+          "Bike sharing": "Bike sharing"
+        },
+        "type_mono": {
+          "Personal": "Privat",
+          "Scooter sharing": "Scooter-Sharing"
+        },
+        "type_moto": {
+          "Personal": "Privat",
+          "Moto sharing": "Moto sharing"
+        },
+        "insert_Cap": "Geben Sie eine Postleitzahl ein, z. B. 10036",
+        "mean_label": "Verkehrsmittel",
+        "type_train": {
+          "Servizio ferroviario Trenitalia/GTT": "Bahnservice von Trenitalia/GTT",
+          "Servizio ferroviario altri vettori (Trenord, Italo, Alta Velocità, ...)": "Bahnservice anderer Anbieter (Trenord, Italo, Hochgeschwindigkeitszüge, ...)"
+        },
+        "which_cost": "Wie viel geben Sie monatlich aus (Hin- und Rückfahrt)?",
+        "car_fueling": "Welche Antriebsart hat Ihr Auto?",
+        "insert_city": "Geben Sie eine Stadt ein, z. B. Settimo Torinese",
+        "only_ci_pro": "nur Stadt und Provinz.",
+        "privacy_que": "Bedenken hinsichtlich des Datenschutzes? Sie geben keine vertraulichen Informationen preis. Die Adresse ist Ihrem Arbeitgeber bereits bekannt. Sie wird nur für Zwecke im Zusammenhang mit dem Arbeitsweg verwendet und nicht an Dritte weitergegeben, es sei denn in anonymer Form.",
+        "select_auto": "Welchen Autotyp wählen Sie?",
+        "stepStrings": [
+          "ERSTER",
+          "ZWEITER",
+          "DRITTER",
+          "VIERTER",
+          "FÜNFTER",
+          "SECHSTER",
+          "SIEBTER",
+          "ACHTER",
+          "NEUNTER",
+          "ZEHNTER"
+        ],
+        "which_modes": "Welche Verkehrsmittel nutzen Sie?",
+        "leavingpoint": "1. Von wo aus starten Sie, um zur Arbeit zu kommen?",
+        "moto_fueling": "Welche Antriebsart hat Ihr Motorrad oder Moped?",
+        "set_distance": "Geben Sie eine Distanz größer als 0 und kleiner als 1000 ein. test",
+        "next_continue": "Speichern und Fortfahren",
+        "sel_type_auto": "Welchen Autotyp wählen Sie?",
+        "sel_type_bike": "Welchen Fahrradtyp wählen Sie?",
+        "sel_type_mono": "Welchen Scooter-Typ wählen Sie?",
+        "sel_type_moto": "Welchen Motorradtyp wählen Sie?",
+        "type_Personal": {
+          "Conducive": "Privat als Fahrer",
+          "Passenger": "Privat als Beifahrer"
+        },
+        "Insert_address": "Geben Sie eine Adresse ein, z. B. Via Roma 20, Settimo Torinese",
+        "amb_class_moto": "Welcher Umweltklasse gehört Ihr Motorrad an?",
+        "insert_address": "Geben Sie die Adresse ein, von der aus Sie am häufigsten losfahren, auch wenn es sich nicht um Ihren Wohnsitz oder Aufenthaltsort handelt",
+        "sel_type_train": "Welchen Zugtyp wählen Sie?",
+        "which_distance": "Wie viel Strecke legen Sie mit diesem Verkehrsmittel zurück (Hin- und Rückfahrt)?",
+        "meansOfTransport": {
+          "Auto": "Auto",
+          "Bike": "Fahrrad",
+          "Moto": "Motorrad",
+          "Metro": "Metro",
+          "Train": "Zug",
+          "On_foot": "Zu Fuß",
+          "Scooter": "Scooter",
+          "Bus/Tram": "Bus/Tram"
+        },
+        "impossible_search": "Diese Adresse konnte nicht gefunden werden, versuchen Sie es mit ",
+        "sel_type_personal": "Wählen Sie, ob Sie Fahrer oder Beifahrer sind?",
+        "unavalible_adress": "Wenn die Adresse nicht korrekt erkannt wird, können Sie die Position durch Klicken auf die Karte anpassen.",
+        "Mandatory_question": "Pflichtfrage",
+        "step_which_company": "In welchem Büro/Unternehmen beginnen Sie am häufigsten mit der Arbeit?"
+      }
+    },
+    "1850": {
+      "mapqs_de": {
+        "do": "Klicken Sie auf das",
+        "Cap": "PLZ",
+        "del": "Dieses Verkehrsmittel löschen",
+        "back": "Zurück",
+        "city": "Stadt",
+        "mean": "Verkehrsmittel, das Sie beim Verlassen Ihres Hauses benutzen",
+        "next": "WEITER",
+        "click": "Klicken Sie hier, um sich auf der Karte zu lokalisieren",
+        "meters": "für mindestens 500 Meter",
+        "address": "Adresse",
+        "cc_auto": "Wie hoch ist der Hubraum Ihres Autos?",
+        "cc_moto": "Wie hoch ist der Hubraum Ihres Motorrads oder Mopeds?",
+        "province": "Provinz",
+        "research": "Suche läuft ...",
+        "set_cost": "Geben Sie einen Kostenwert größer als 0 und kleiner als 100000 ein. test",
+        "amb_class": "Welcher Umweltklasse gehört Ihr Auto an?",
+        "but_descr": "Nutzen Sie ein anderes Verkehrsmittel? Fügen Sie es hinzu",
+        "type_auto": {
+          "Taxi": "Taxi",
+          "Personal": "Privat",
+          "Car pooling": "Car pooling",
+          "Car sharing": "Car sharing",
+          "company_car": "Firmenwagen"
+        },
+        "type_bike": {
+          "Personal": "Privat",
+          "Bike sharing": "Bike sharing"
+        },
+        "type_mono": {
+          "Personal": "Privat",
+          "Scooter sharing": "Scooter-Sharing"
+        },
+        "type_moto": {
+          "Personal": "Privat",
+          "Moto sharing": "Moto sharing"
+        },
+        "insert_Cap": "Geben Sie eine Postleitzahl ein, z. B. 10036",
+        "mean_label": "Verkehrsmittel",
+        "type_train": {
+          "Servizio ferroviario Trenitalia/GTT": "Bahnservice von Trenitalia/GTT",
+          "Servizio ferroviario altri vettori (Trenord, Italo, Alta Velocità, ...)": "Bahnservice anderer Anbieter (Trenord, Italo, Hochgeschwindigkeitszüge, ...)"
+        },
+        "which_cost": "Wie viel geben Sie monatlich aus (Hin- und Rückfahrt)?",
+        "car_fueling": "Welche Antriebsart hat Ihr Auto?",
+        "insert_city": "Geben Sie eine Stadt ein, z. B. Settimo Torinese",
+        "only_ci_pro": "nur Stadt und Provinz.",
+        "privacy_que": "Bedenken hinsichtlich des Datenschutzes? Sie geben keine vertraulichen Informationen preis. Die Adresse ist Ihrem Arbeitgeber bereits bekannt. Sie wird nur für Zwecke im Zusammenhang mit dem Arbeitsweg verwendet und nicht an Dritte weitergegeben, es sei denn in anonymer Form.",
+        "select_auto": "Welchen Autotyp wählen Sie?",
+        "stepStrings": [
+          "ERSTER",
+          "ZWEITER",
+          "DRITTER",
+          "VIERTER",
+          "FÜNFTER",
+          "SECHSTER",
+          "SIEBTER",
+          "ACHTER",
+          "NEUNTER",
+          "ZEHNTER"
+        ],
+        "which_modes": "Welche Verkehrsmittel nutzen Sie?",
+        "leavingpoint": "1. Von wo aus starten Sie, um zur Arbeit zu kommen?",
+        "moto_fueling": "Welche Antriebsart hat Ihr Motorrad oder Moped?",
+        "set_distance": "Geben Sie eine Distanz größer als 0 und kleiner als 1000 ein. test",
+        "next_continue": "Speichern und Fortfahren",
+        "sel_type_auto": "Welchen Autotyp wählen Sie?",
+        "sel_type_bike": "Welchen Fahrradtyp wählen Sie?",
+        "sel_type_mono": "Welchen Scooter-Typ wählen Sie?",
+        "sel_type_moto": "Welchen Motorradtyp wählen Sie?",
+        "type_Personal": {
+          "Conducive": "Privat als Fahrer",
+          "Passenger": "Privat als Beifahrer"
+        },
+        "Insert_address": "Geben Sie eine Adresse ein, z. B. Via Roma 20, Settimo Torinese",
+        "amb_class_moto": "Welcher Umweltklasse gehört Ihr Motorrad an?",
+        "insert_address": "Geben Sie die Adresse ein, von der aus Sie am häufigsten losfahren, auch wenn es sich nicht um Ihren Wohnsitz oder Aufenthaltsort handelt",
+        "sel_type_train": "Welchen Zugtyp wählen Sie?",
+        "which_distance": "Wie viel Strecke legen Sie mit diesem Verkehrsmittel zurück (Hin- und Rückfahrt)?",
+        "meansOfTransport": {
+          "Auto": "Auto",
+          "Bike": "Fahrrad",
+          "Moto": "Motorrad",
+          "Metro": "Metro",
+          "Train": "Zug",
+          "On_foot": "Zu Fuß",
+          "Scooter": "Scooter",
+          "Bus/Tram": "Bus/Tram"
+        },
+        "impossible_search": "Diese Adresse konnte nicht gefunden werden, versuchen Sie es mit ",
+        "sel_type_personal": "Wählen Sie, ob Sie Fahrer oder Beifahrer sind?",
+        "unavalible_adress": "Wenn die Adresse nicht korrekt erkannt wird, können Sie die Position durch Klicken auf die Karte anpassen.",
+        "Mandatory_question": "Pflichtfrage",
+        "step_which_company": "In welchem Büro/Unternehmen beginnen Sie am häufigsten mit der Arbeit?"
+      }
+    },
+    "1880": {
+      "mapqs_de": {
+        "do": "Klicken Sie auf das",
+        "Cap": "PLZ",
+        "del": "Dieses Verkehrsmittel löschen",
+        "back": "Zurück",
+        "city": "Stadt",
+        "mean": "Verkehrsmittel, das Sie beim Verlassen Ihres Hauses benutzen",
+        "next": "WEITER",
+        "click": "Klicken Sie hier, um sich auf der Karte zu lokalisieren",
+        "meters": "für mindestens 500 Meter",
+        "address": "Adresse",
+        "cc_auto": "Wie hoch ist der Hubraum Ihres Autos?",
+        "cc_moto": "Wie hoch ist der Hubraum Ihres Motorrads oder Mopeds?",
+        "province": "Provinz",
+        "research": "Suche läuft ...",
+        "set_cost": "Geben Sie einen Kostenwert größer als 0 und kleiner als 100000 ein. test",
+        "amb_class": "Welcher Umweltklasse gehört Ihr Auto an?",
+        "but_descr": "Nutzen Sie ein anderes Verkehrsmittel? Fügen Sie es hinzu",
+        "type_auto": {
+          "Taxi": "Taxi",
+          "Personal": "Privat",
+          "Car pooling": "Car pooling",
+          "Car sharing": "Car sharing",
+          "company_car": "Firmenwagen"
+        },
+        "type_bike": {
+          "Personal": "Privat",
+          "Bike sharing": "Bike sharing"
+        },
+        "type_mono": {
+          "Personal": "Privat",
+          "Scooter sharing": "Scooter-Sharing"
+        },
+        "type_moto": {
+          "Personal": "Privat",
+          "Moto sharing": "Moto sharing"
+        },
+        "insert_Cap": "Geben Sie eine Postleitzahl ein, z. B. 10036",
+        "mean_label": "Verkehrsmittel",
+        "type_train": {
+          "Servizio ferroviario Trenitalia/GTT": "Bahnservice von Trenitalia/GTT",
+          "Servizio ferroviario altri vettori (Trenord, Italo, Alta Velocità, ...)": "Bahnservice anderer Anbieter (Trenord, Italo, Hochgeschwindigkeitszüge, ...)"
+        },
+        "which_cost": "Wie viel geben Sie monatlich aus (Hin- und Rückfahrt)?",
+        "car_fueling": "Welche Antriebsart hat Ihr Auto?",
+        "insert_city": "Geben Sie eine Stadt ein, z. B. Settimo Torinese",
+        "only_ci_pro": "nur Stadt und Provinz.",
+        "privacy_que": "Bedenken hinsichtlich des Datenschutzes? Sie geben keine vertraulichen Informationen preis. Die Adresse ist Ihrem Arbeitgeber bereits bekannt. Sie wird nur für Zwecke im Zusammenhang mit dem Arbeitsweg verwendet und nicht an Dritte weitergegeben, es sei denn in anonymer Form.",
+        "select_auto": "Welchen Autotyp wählen Sie?",
+        "stepStrings": [
+          "ERSTER",
+          "ZWEITER",
+          "DRITTER",
+          "VIERTER",
+          "FÜNFTER",
+          "SECHSTER",
+          "SIEBTER",
+          "ACHTER",
+          "NEUNTER",
+          "ZEHNTER"
+        ],
+        "which_modes": "Welche Verkehrsmittel nutzen Sie?",
+        "leavingpoint": "1. Von wo aus starten Sie, um zur Arbeit zu kommen?",
+        "moto_fueling": "Welche Antriebsart hat Ihr Motorrad oder Moped?",
+        "set_distance": "Geben Sie eine Distanz größer als 0 und kleiner als 1000 ein. test",
+        "next_continue": "Speichern und Fortfahren",
+        "sel_type_auto": "Welchen Autotyp wählen Sie?",
+        "sel_type_bike": "Welchen Fahrradtyp wählen Sie?",
+        "sel_type_mono": "Welchen Scooter-Typ wählen Sie?",
+        "sel_type_moto": "Welchen Motorradtyp wählen Sie?",
+        "type_Personal": {
+          "Conducive": "Privat als Fahrer",
+          "Passenger": "Privat als Beifahrer"
+        },
+        "Insert_address": "Geben Sie eine Adresse ein, z. B. Via Roma 20, Settimo Torinese",
+        "amb_class_moto": "Welcher Umweltklasse gehört Ihr Motorrad an?",
+        "insert_address": "Geben Sie die Adresse ein, von der aus Sie am häufigsten losfahren, auch wenn es sich nicht um Ihren Wohnsitz oder Aufenthaltsort handelt",
+        "sel_type_train": "Welchen Zugtyp wählen Sie?",
+        "which_distance": "Wie viel Strecke legen Sie mit diesem Verkehrsmittel zurück (Hin- und Rückfahrt)?",
+        "meansOfTransport": {
+          "Auto": "Auto",
+          "Bike": "Fahrrad",
+          "Moto": "Motorrad",
+          "Metro": "Metro",
+          "Train": "Zug",
+          "On_foot": "Zu Fuß",
+          "Scooter": "Scooter",
+          "Bus/Tram": "Bus/Tram"
+        },
+        "impossible_search": "Diese Adresse konnte nicht gefunden werden, versuchen Sie es mit ",
+        "sel_type_personal": "Wählen Sie, ob Sie Fahrer oder Beifahrer sind?",
+        "unavalible_adress": "Wenn die Adresse nicht korrekt erkannt wird, können Sie die Position durch Klicken auf die Karte anpassen.",
+        "Mandatory_question": "Pflichtfrage",
+        "step_which_company": "In welchem Büro/Unternehmen beginnen Sie am häufigsten mit der Arbeit?"
+      }
+    },
+    "1980": {
+      "mapqs_de": {
+        "do": "Klicken Sie auf das",
+        "Cap": "PLZ",
+        "del": "Dieses Verkehrsmittel löschen",
+        "back": "Zurück",
+        "city": "Stadt",
+        "mean": "Verkehrsmittel, das Sie beim Verlassen Ihres Hauses benutzen",
+        "next": "WEITER",
+        "click": "Klicken Sie hier, um sich auf der Karte zu lokalisieren",
+        "meters": "für mindestens 500 Meter",
+        "address": "Adresse",
+        "cc_auto": "Wie hoch ist der Hubraum Ihres Autos?",
+        "cc_moto": "Wie hoch ist der Hubraum Ihres Motorrads oder Mopeds?",
+        "province": "Provinz",
+        "research": "Suche läuft ...",
+        "set_cost": "Geben Sie einen Kostenwert größer als 0 und kleiner als 100000 ein. test",
+        "amb_class": "Welcher Umweltklasse gehört Ihr Auto an?",
+        "but_descr": "Nutzen Sie ein anderes Verkehrsmittel? Fügen Sie es hinzu",
+        "type_auto": {
+          "Taxi": "Taxi",
+          "Personal": "Privat",
+          "Car pooling": "Car pooling",
+          "Car sharing": "Car sharing",
+          "company_car": "Firmenwagen"
+        },
+        "type_bike": {
+          "Personal": "Privat",
+          "Bike sharing": "Bike sharing"
+        },
+        "type_mono": {
+          "Personal": "Privat",
+          "Scooter sharing": "Scooter-Sharing"
+        },
+        "type_moto": {
+          "Personal": "Privat",
+          "Moto sharing": "Moto sharing"
+        },
+        "insert_Cap": "Geben Sie eine Postleitzahl ein, z. B. 10036",
+        "mean_label": "Verkehrsmittel",
+        "type_train": {
+          "Servizio ferroviario Trenitalia/GTT": "Bahnservice von Trenitalia/GTT",
+          "Servizio ferroviario altri vettori (Trenord, Italo, Alta Velocità, ...)": "Bahnservice anderer Anbieter (Trenord, Italo, Hochgeschwindigkeitszüge, ...)"
+        },
+        "which_cost": "Wie viel geben Sie monatlich aus (Hin- und Rückfahrt)?",
+        "car_fueling": "Welche Antriebsart hat Ihr Auto?",
+        "insert_city": "Geben Sie eine Stadt ein, z. B. Settimo Torinese",
+        "only_ci_pro": "nur Stadt und Provinz.",
+        "privacy_que": "Bedenken hinsichtlich des Datenschutzes? Sie geben keine vertraulichen Informationen preis. Die Adresse ist Ihrem Arbeitgeber bereits bekannt. Sie wird nur für Zwecke im Zusammenhang mit dem Arbeitsweg verwendet und nicht an Dritte weitergegeben, es sei denn in anonymer Form.",
+        "select_auto": "Welchen Autotyp wählen Sie?",
+        "stepStrings": [
+          "ERSTER",
+          "ZWEITER",
+          "DRITTER",
+          "VIERTER",
+          "FÜNFTER",
+          "SECHSTER",
+          "SIEBTER",
+          "ACHTER",
+          "NEUNTER",
+          "ZEHNTER"
+        ],
+        "which_modes": "Welche Verkehrsmittel nutzen Sie?",
+        "leavingpoint": "1. Von wo aus starten Sie, um zur Arbeit zu kommen?",
+        "moto_fueling": "Welche Antriebsart hat Ihr Motorrad oder Moped?",
+        "set_distance": "Geben Sie eine Distanz größer als 0 und kleiner als 1000 ein. test",
+        "next_continue": "Speichern und Fortfahren",
+        "sel_type_auto": "Welchen Autotyp wählen Sie?",
+        "sel_type_bike": "Welchen Fahrradtyp wählen Sie?",
+        "sel_type_mono": "Welchen Scooter-Typ wählen Sie?",
+        "sel_type_moto": "Welchen Motorradtyp wählen Sie?",
+        "type_Personal": {
+          "Conducive": "Privat als Fahrer",
+          "Passenger": "Privat als Beifahrer"
+        },
+        "Insert_address": "Geben Sie eine Adresse ein, z. B. Via Roma 20, Settimo Torinese",
+        "amb_class_moto": "Welcher Umweltklasse gehört Ihr Motorrad an?",
+        "insert_address": "Geben Sie die Adresse ein, von der aus Sie am häufigsten losfahren, auch wenn es sich nicht um Ihren Wohnsitz oder Aufenthaltsort handelt",
+        "sel_type_train": "Welchen Zugtyp wählen Sie?",
+        "which_distance": "Wie viel Strecke legen Sie mit diesem Verkehrsmittel zurück (Hin- und Rückfahrt)?",
+        "meansOfTransport": {
+          "Auto": "Auto",
+          "Bike": "Fahrrad",
+          "Moto": "Motorrad",
+          "Metro": "Metro",
+          "Train": "Zug",
+          "On_foot": "Zu Fuß",
+          "Scooter": "Scooter",
+          "Bus/Tram": "Bus/Tram"
+        },
+        "impossible_search": "Diese Adresse konnte nicht gefunden werden, versuchen Sie es mit ",
+        "sel_type_personal": "Wählen Sie, ob Sie Fahrer oder Beifahrer sind?",
+        "unavalible_adress": "Wenn die Adresse nicht korrekt erkannt wird, können Sie die Position durch Klicken auf die Karte anpassen.",
+        "Mandatory_question": "Pflichtfrage",
+        "step_which_company": "In welchem Büro/Unternehmen beginnen Sie am häufigsten mit der Arbeit?"
+      }
+    }
+  }
+}

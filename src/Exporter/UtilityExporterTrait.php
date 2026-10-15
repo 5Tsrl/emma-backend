@@ -4,12 +4,32 @@ declare(strict_types=1);
 namespace App\Exporter;
 
 use Cake\Core\Configure;
+use Cake\Utility\Text;
 use QuickChart;
 
 trait UtilityExporterTrait
 {
     private $scala = 0.4;
     private $Companies;
+
+    //Assicura che i colori siano nel formato #RRGGBB oppure Gray, Red, Blue, etc.
+
+    private function chartColors(): array
+    {
+        $chartColors = Configure::read('chartColors');
+        $chartColors = array_map(
+            function ($color) {
+                if (preg_match('/^[0-9A-Fa-f]/', $color)) {
+                    return '#' . $color;
+                }
+
+                return $color;
+            },
+            $chartColors
+        );
+
+        return $chartColors;
+    }
 
     //Pulisce la stringa da caratteri speciali
 
@@ -25,6 +45,61 @@ trait UtilityExporterTrait
     //Prende l'array Json in input e la trasforma in un array associativa con le sole azioni attive
     // measure_id -> measure
 
+    /**
+     * Build pillar-like groups from the flat measures table.
+     *
+     * Pillars are no longer a separate model: an axis is a Measure with type=0,
+     * with child measures (type 1/2) following it by `weight`. This returns a
+     * list of stdClass groups shaped like the old Pillars->contain(['Measures'])
+     * result: each has `id`, `name`, `description` and a `measures` array. The
+     * group `id` is the original pillar id parsed from the axis slug
+     * ('pillar-<id>') so PSCL plan keys (pscl[pillar_id][measure_id]) still match.
+     *
+     * If the `measures` table is unavailable it returns an empty list.
+     *
+     * @return array<int,\stdClass>
+     */
+    protected function getPillarsFromMeasures(): array
+    {
+        $groups = [];
+        try {
+            $Measures = \Cake\ORM\TableRegistry::getTableLocator()->get('Measures');
+            $measures = $Measures->find('ordered')->toArray();
+        } catch (\Exception $e) {
+            return $groups;
+        }
+
+        $current = null;
+        foreach ($measures as $m) {
+            if ((int)$m->type === 0) {
+                if ($current !== null) {
+                    $groups[] = $current;
+                }
+                $current = new \stdClass();
+                // Derive the original pillar id from the slug 'pillar-<id>'.
+                $current->id = (int)str_replace('pillar-', '', (string)$m->slug);
+                $current->name = $m->name;
+                $current->description = $m->description;
+                $current->measures = [];
+                continue;
+            }
+            if ($current === null) {
+                // Measures before any axis: synthetic group keyed 0.
+                $current = new \stdClass();
+                $current->id = 0;
+                $current->name = '';
+                $current->description = '';
+                $current->measures = [];
+            }
+            $current->measures[] = $m;
+        }
+        if ($current !== null) {
+            $groups[] = $current;
+        }
+
+        return $groups;
+    }
+
     protected function reducePSCLToActive($pscl)
     {
         $result = [];
@@ -35,7 +110,7 @@ trait UtilityExporterTrait
         foreach ($pscl as $ms) {
             foreach ($ms as $m) {
                 if (isset($m['pillar_id']) && isset($m['measure_id'])) {
-                    if ($m['value']) {
+                    if ($m['value'] > 0) {
                         $result[$m['measure_id']] = $m;
                     }
                 }
@@ -99,19 +174,24 @@ trait UtilityExporterTrait
                     [
                         'label' => $title,
                         'data' => $series[0],
-                        'backgroundColor' => Configure::read('chartColors'),
+                        'backgroundColor' => $this->chartColors(),
                     ],
                 ],
             ],
         ];
 
-        $jres = json_encode($res, JSON_UNESCAPED_UNICODE);
+        $jres = json_encode($res, JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_IGNORE);
         if ($jres) {
             $jres = str_replace('"#!!', '', $jres);
             $jres = str_replace('!!#"', '', $jres);
             $jres = str_replace('\\', '', $jres);
             $qc->setConfig($jres);
             $qc->setBackgroundColor('white');
+        } else {
+            // Handle JSON encoding error
+            error_log('JSON encoding error: ' . json_last_error_msg());
+
+            return null;
         }
 
         //Se faccio così è troppo lento
@@ -140,17 +220,14 @@ trait UtilityExporterTrait
             $labels = array_slice($labels, 0, $zero);
         }
 
-        //Accorcio le etichette a 20 char
-        $labels = array_map(
-            function ($l) {
-                return substr((string)$l, 0, 20);
-            },
-            $labels
-        );
+        //Accorcio le etichette a 50 char
+        foreach ($labels as $i => $label) {
+            $labels[$i] = Text::truncate((string)$label, 50);
+        }
 
         $qc = new QuickChart([
-            'width' => 1024 * $this->scala * 2,
-            'height' => 768 * $this->scala * 2,
+            'width' => 600 * $this->scala * 2,
+            'height' => 568 * $this->scala * 2,
             'host' => Configure::read('Quickchart'),
         ]);
 
@@ -158,8 +235,12 @@ trait UtilityExporterTrait
             'type' => 'outlabeledDoughnut',
             //'type' => 'doughnut',
             'options' => [
-                'legend' => false,
-
+                'legend' => [
+                    'display' => true,
+                    'position' => 'bottom',
+                    'align' => 'center',
+                    'boxWidth' => 400,
+                    ],
                 'title' => [
                     'display' => false,
                     'text' => $title,
@@ -186,7 +267,7 @@ trait UtilityExporterTrait
                             'fontFamily' => 'Sofia Sans',
                         ],
                     ],*/
-                    'outlabels' => [
+                    'outlabels' => false, /* [
                         'text' => '%l (%p)',
                         'color' => 'white',
                         'stretch' => 35,
@@ -198,7 +279,7 @@ trait UtilityExporterTrait
                             'weight' => 'bold',
                             'fontFamily' => 'Sofia Sans',
                         ],
-                    ],
+                    ], */
                 ],
             ],
             'data' => [
@@ -206,7 +287,7 @@ trait UtilityExporterTrait
                 'datasets' => [
                     [
                         'data' => $series[0],
-                        'backgroundColor' => Configure::read('chartColors'),
+                        'backgroundColor' => $this->chartColors(),
                         'borderWidth' =>  0,
                     ],
                 ],

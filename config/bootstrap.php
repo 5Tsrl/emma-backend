@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
@@ -45,9 +46,23 @@ use Cake\Mailer\Mailer;
 use Cake\Mailer\TransportFactory;
 use Cake\Routing\Router;
 use Cake\Utility\Security;
+use Firebase\JWT\JWT;
 
 //use Cake\Utility\Inflector;
 
+/*** 
+ * Carico i file di configurazione specifici di questo dominio
+ * Come prima cosa individuo la cartella giusta per questo dominio
+ * La cartella viene definita in base al nome del dominio
+ * Se il dominio è ad esempio 5t.drupalvm.test la cartella sarà
+ * config/sites/5t.drupalvm.test
+ * Se la cartella non esiste allora viene usata la cartella di default
+ * config/sites/default
+ * */
+$path = conf_path(false);
+Configure::write('confPath', $path);
+
+/* Per prima cosa leggo il file .env specifico se c'è (oppure trovo le variabili d'ambiente) */
 
 /*
  * See https://github.com/josegonzalez/php-dotenv for API details.
@@ -63,8 +78,8 @@ use Cake\Utility\Security;
  * security risks. See https://github.com/josegonzalez/php-dotenv#general-security-information
  * for more information for recommended practices.
 */
-if (!env('APP_NAME') && file_exists(CONFIG . '.env')) {
-    $dotenv = new \josegonzalez\Dotenv\Loader([CONFIG . '.env']);
+if (!env('APP_NAME') && file_exists(CONFIG . $path . DS . '.env')) {
+    $dotenv = new \josegonzalez\Dotenv\Loader([CONFIG  . $path . DS . '.env']);
     $dotenv->parse()
         ->putenv()
         ->toEnv()
@@ -79,22 +94,23 @@ if (!env('APP_NAME') && file_exists(CONFIG . '.env')) {
  * idea to create multiple configuration files, and separate the configuration
  * that changes from configuration that does not. This makes deployment simpler.
  */
-/*Carico il file di configurazione specifico di questo dominio*/
-
-$path = conf_path();
-Configure::write('confPath', $path);
 try {
     Configure::config('default', new PhpConfig());
     Configure::load('app', 'default', false);
-    //echo  CONFIG . $path; die;
     Configure::config('special', new PhpConfig(CONFIG . $path . DS));
-
     // cerco tutti i file di condifgurazione nella cartella del sito
-    foreach (new GlobIterator(CONFIG  . conf_path() . '/*.php') as $fileInfo) {
-            //devo togliere l'estensione dal nome del file
-            Configure::load($fileInfo->getBasename('.php'), 'special');
+    foreach (new GlobIterator(CONFIG  . $path . '/*.php') as $fileInfo) {
+        //devo togliere l'estensione dal nome del file
+        Configure::load($fileInfo->getBasename('.php'), 'special');
     }
-
+    $sitedir = Configure::read('sitedir');
+    if (!empty($sitedir)) {
+        $configDir = WWW_ROOT . rtrim($sitedir, DS) . DS;
+        if (file_exists($configDir . 'company-survey-config.php')) {
+            Configure::config('webroot', new PhpConfig($configDir));
+            Configure::load('company-survey-config', 'webroot');
+        }
+    }
 } catch (\Exception $e) {
     error_log('Failed settings');
     exit($e->getMessage() . "\n");
@@ -138,7 +154,7 @@ ini_set('intl.default_locale', Configure::read('App.defaultLocale'));
 
 /*
  * Register application error and exception handlers.
- */ 
+ */
 (new ErrorTrap(Configure::read('Error')))->register();
 (new ExceptionTrap(Configure::read('Error')))->register();
 
@@ -175,7 +191,17 @@ ConnectionManager::setConfig(Configure::consume('Datasources'));
 TransportFactory::setConfig(Configure::consume('EmailTransport'));
 Mailer::setConfig(Configure::consume('Email'));
 Log::setConfig(Configure::consume('Log'));
+if (!Configure::read('Security.salt')) {
+    throw new \RuntimeException('SECURITY_SALT must be set (use a long random value, e.g. `openssl rand -hex 32`).');
+}
 Security::setSalt(Configure::consume('Security.salt'));
+
+/*
+ * firebase/php-jwt >=7.0 validates iat/nbf claims on decode; allow a small
+ * clock-skew leeway across servers/load balancers since all our encode call
+ * sites set iat = time().
+ */
+JWT::$leeway = 60;
 
 /*
  * Setup detectors for mobile and tablet.
@@ -243,10 +269,9 @@ if (isset($_SERVER['HTTP_ORIGIN']) && !empty($api_whitelist)) {
     }
 }
 header('Access-Control-Allow-Methods: POST, GET, PUT, PATCH, DELETE, OPTIONS');
-header('Access-Control-Allow-Headers: *');
-//header('Access-Control-Allow-Credentials: true');
-//header('Access-Control-Allow-Headers: Content-Type');
-header('Access-Control-Allow-Type: application/json');
+header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Api-Key');
+//Questo server per leggere i cookie httponly
+header('Access-Control-Allow-Credentials: true');
 
 if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit(0);

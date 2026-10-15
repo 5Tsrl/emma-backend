@@ -1,0 +1,230 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: EMMA 5t.api\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-29 00:00+0000\n"
+"PO-Revision-Date: 2026-06-29 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: French\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#
+# Messaggi di errore / autorizzazione (controllers + authenticator).
+# Il msgid è la stringa italiana sorgente passata a __(); i {0}/{1} sono i
+# placeholder ICU di CakePHP. Una chiave assente ricade sull'italiano.
+#
+
+msgid "Non sei autorizzato ad accedere alla risorsa richiesta"
+msgstr "Vous n'êtes pas autorisé à accéder à la ressource demandée"
+
+msgid "Token JWT non valido"
+msgstr "Jeton JWT non valide"
+
+msgid "La gestione delle password è disabilitata su questo sito"
+msgstr "La gestion des mots de passe est désactivée sur ce site"
+
+msgid "L'utente richiesto non esiste"
+msgstr "L'utilisateur demandé n'existe pas"
+
+msgid "Utente non attivo"
+msgstr "Utilisateur non actif"
+
+msgid "Utente non autenticato"
+msgstr "Utilisateur non authentifié"
+
+msgid "Utente non autenticato, puoi accedere di nuovo?"
+msgstr "Utilisateur non authentifié, pouvez-vous vous reconnecter ?"
+
+msgid "Utente non autorizzato"
+msgstr "Utilisateur non autorisé"
+
+msgid "Utente e/o password sbagliati: {0}"
+msgstr "Utilisateur et/ou mot de passe erronés : {0}"
+
+msgid "Ruolo non valido"
+msgstr "Rôle non valide"
+
+msgid "Non sei autorizzato ad assegnare il ruolo admin"
+msgstr "Vous n'êtes pas autorisé à attribuer le rôle administrateur"
+
+msgid "Token non valido"
+msgstr "Jeton non valide"
+
+msgid "Token non valido, richiedi un nuovo reset della password"
+msgstr "Jeton non valide, demandez une nouvelle réinitialisation du mot de passe"
+
+msgid "Token scaduto, richiedi un nuovo reset della password"
+msgstr "Jeton expiré, demandez une nouvelle réinitialisation du mot de passe"
+
+msgid "Token mancante"
+msgstr "Jeton manquant"
+
+msgid "Token non valido o utente non trovato"
+msgstr "Jeton non valide ou utilisateur introuvable"
+
+msgid "Token scaduto"
+msgstr "Jeton expiré"
+
+msgid "Impossibile salvare la nuova password"
+msgstr "Impossible d'enregistrer le nouveau mot de passe"
+
+msgid "Le password non corrispondono"
+msgstr "Les mots de passe ne correspondent pas"
+
+msgid "Nessun utente con la mail: {0}"
+msgstr "Aucun utilisateur avec l'e-mail : {0}"
+
+msgid "Impossibile salvare il token per il reset della password"
+msgstr "Impossible d'enregistrer le jeton de réinitialisation du mot de passe"
+
+msgid "Impossibile salvare il rinnovo dell'account"
+msgstr "Impossible d'enregistrer le renouvellement du compte"
+
+msgid "{0} ERRORE durante la creazione: {1}"
+msgstr "{0} ERREUR lors de la création : {1}"
+
+msgid "Errore di validazione"
+msgstr "Erreur de validation"
+
+#
+# Messaggi di validazione utente (UsersTable::validationDefault/buildRules):
+# mostrati nei form di creazione/modifica utente. 'Ruolo non valido' riusa la
+# chiave già definita sopra.
+#
+
+msgid "Indirizzo email non valido"
+msgstr "Adresse e-mail non valide"
+
+msgid "Email già in uso"
+msgstr "E-mail déjà utilisée"
+
+msgid "Il Codice Fiscale deve essere di 16 caratteri alfanumerici"
+msgstr "Le code fiscal doit comporter 16 caractères alphanumériques"
+
+msgid "Codice Fiscale già in uso"
+msgstr "Code fiscal déjà utilisé"
+
+msgid "Ruolo utente obbligatorio"
+msgstr "Rôle utilisateur obligatoire"
+
+msgid "Sede {0} non trovata"
+msgstr "Siège {0} introuvable"
+
+msgid "L'ufficio {0} non appartiene all'azienda {1}"
+msgstr "Le bureau {0} n'appartient pas à l'entreprise {1}"
+
+msgid "Il questionario {0} non esiste"
+msgstr "Le questionnaire {0} n'existe pas"
+
+msgid "Il questionario {0} non appartiene all'azienda {1}"
+msgstr "Le questionnaire {0} n'appartient pas à l'entreprise {1}"
+
+#
+# Nome sede predefinita creata alla creazione di una nuova azienda
+# (CompaniesController). Persistito nella lingua della richiesta.
+#
+
+msgid "Sede Principale"
+msgstr "Siège principal"
+
+#
+# Label indicatori (opzioni di questions.options) tradotte a runtime SOLO per
+# la visualizzazione in AnswersController::translateIndicatorLabels().
+# I valori canonici italiani restano quelli memorizzati nelle risposte: NON
+# tradurre questions.options via Translate behavior (romperebbe il conteggio).
+# Set iniziale: mezzi-usati / ripartizione_modale (estendibile agli altri).
+#
+
+msgid "Piedi"
+msgstr "À pied"
+
+msgid "Bus/Tram"
+msgstr "Bus/Tram"
+
+msgid "Metro"
+msgstr "Métro"
+
+msgid "Auto"
+msgstr "Voiture"
+
+msgid "Moto"
+msgstr "Moto"
+
+msgid "Bici"
+msgstr "Vélo"
+
+msgid "Monopattino"
+msgstr "Trottinette"
+
+msgid "Taxi"
+msgstr "Taxi"
+
+msgid "Treno"
+msgstr "Train"
+
+msgid "Servizio ferroviario altri vettori (Trenord, Italo, Alta Velocità...)"
+msgstr "Service ferroviaire autres transporteurs (Trenord, Italo, Grande Vitesse...)"
+
+msgid "Car sharing"
+msgstr "Autopartage"
+
+msgid "Bike sharing"
+msgstr "Vélopartage"
+
+msgid "Moto sharing"
+msgstr "Moto en partage"
+
+msgid "Monopattino sharing"
+msgstr "Trottinette en partage"
+
+msgid "Navetta aziendale"
+msgstr "Navette d'entreprise"
+
+msgid "Car pooling"
+msgstr "Covoiturage"
+
+msgid "altro"
+msgstr "autre"
+
+#
+# Messaggi di errore PsclController (gestione PSCL, template Excel,
+# upload/download file). Il msgid è la stringa italiana/inglese sorgente
+# passata a __(); i {0}/{1}/{2} sono i placeholder ICU di CakePHP.
+#
+
+msgid "PSCL of this Office Not found"
+msgstr "PSCL introuvable pour ce siège"
+
+msgid "PSCL Not found"
+msgstr "PSCL introuvable."
+
+msgid "Template non trovato."
+msgstr "Modèle introuvable."
+
+msgid "Impossibile salvare il template."
+msgstr "Impossible d'enregistrer le modèle."
+
+msgid "Impossibile eliminare il template."
+msgstr "Impossible de supprimer le modèle."
+
+msgid "Il file modello_misure_pscl.xlsx non esiste: {0}"
+msgstr "Le fichier modello_misure_pscl.xlsx n'existe pas : {0}"
+
+msgid "Nessun PSCL per azienda {0} / sede {1} / anno {2}"
+msgstr "Aucun PSCL pour l'entreprise {0} / siège {1} / année {2}"
+
+msgid "File {0} not found in {1}"
+msgstr "Fichier {0} introuvable dans {1}"
+
+msgid "Impossibile approvare: documenti obbligatori mancanti ({0})"
+msgstr "Impossible d'approuver : documents obligatoires manquants ({0})"
+
+msgid "Modulo di riepilogo firmato"
+msgstr "Formulaire récapitulatif signé"
+
+msgid "Modulo trattamento dati personali dei dipendenti"
+msgstr "Formulaire de traitement des données personnelles des employés"
