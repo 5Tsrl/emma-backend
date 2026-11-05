@@ -1,11 +1,17 @@
 # API of the EMMA Mobility Management Platform
 
 # Project Description
-EMMA is a web-based application designed and developed by 5T on behalf of Regione Piemonte: it helps the Mobility Manager to draw up the "Sustainable Mobility Plan" which aims to reduce the negative impacts of commuting trips.
-It is a web application, composed by a backend (this repository - written in PHP using the CakePHP frameworkd) and a frontend (EMMA-Vue, written in Vue.js 3).
-The backend is a REST API, which provides all the necessary functions to run the application.
-The frontend is a Single Page Application, which consumes the REST API.
+EMMA is a web-based application designed and developed by 5T on behalf of Regione Piemonte. It helps Mobility Managers draw up the "Sustainable Mobility Plan" (PSCL) aimed at reducing the negative impacts of employee commuting.
 
+It is composed of a backend (this repository — written in PHP using the CakePHP framework) and a frontend (written in Vue.js 3). The backend is a REST API providing all necessary application features, while the frontend is a Single Page Application that consumes it.
+
+The application consists of several modules, each hosted on its own repository:
+
+- **emma-backend** (**this repository**): Application backend exposing REST APIs (developed with PHP/CakePHP).
+- **[emma-frontend](https://github.com/5Tsrl/emma-frontend)**: Web frontend of the application (Single Page Application built with Vue.js).
+- **[emma-frontend-bilancio](https://github.com/5Tsrl/emma-frontend-bilancio)**: Frontend sub-module for calculating the benefits achievable through measures planned by the Mobility Manager.
+- **[emma-frontend-coworking](https://github.com/5Tsrl/emma-frontend-coworking)**: Frontend sub-module for identifying available coworking spaces within companies and public bodies.
+- **[emma-frontend-parking](https://github.com/5Tsrl/emma-frontend-parking)**: Frontend sub-module for managing corporate parking facilities.
 
 # Prerequisites
 You need a running LAMPP server with PHP 8.2+, MySQL or MariaDB, Apache or Nginx
@@ -39,17 +45,13 @@ You need a running LAMPP server with PHP 8.2+, MySQL or MariaDB, Apache or Nginx
 1.25.0729
 
 # Authors
-Regione Piemonte - Settore Mobilità  e Trasporti
+- Regione Piemonte - Settore Mobilità  e Trasporti
+- 5T - Settore Infomobilità e MaaS
 
-5T - Settore Mobilità Sostenibile 5T
-
-
-# Copyrights (Mandatory)
+# Copyrights
 © Copyright Regione Piemonte
 
 # License
 SPDX-License-Identifier: EUPL-1.2
-See the LICENSE.txt file for details
 
-# Community site
-https://github.com/5Tsrl/emma-backend.git
+See the LICENSE.txt file for details
