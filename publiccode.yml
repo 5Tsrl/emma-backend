@@ -1,0 +1,88 @@
+publiccodeYmlVersion: '0.2'
+categories:
+  - fleet-management
+dependsOn:
+  open:
+    - name: Apache httpd
+      optional: false
+      version: ''
+      versionMax: ''
+      versionMin: '2.2'
+    - name: PHP
+      optional: false
+      version: '7'
+      versionMax: ''
+      versionMin: '7.4'
+    - name: CakePHP
+      optional: false
+      version: '4'
+      versionMax: ''
+      versionMin: '4.0'
+description:
+  en:
+    features:
+      - Accessibility analysis of the company/school  
+      - Employees' travel survey (customisable)  
+      - Data analysis of mobility questionnaires (with graphs and statistics) 
+      - Calculation of impacts 
+      - Suggestions for sustainable mobility solutions 
+      - Draft and export of the Sustainable Mobility Plan
+    genericName: EMMA
+    localisedName: EMMA
+    longDescription: |
+      EMMA is a web-based application designed and developed by 5T on behalf of Regione Piemonte: it helps the Mobility Manager to draw up the “Sustainable Mobility Plan” which aims to reduce the negative impacts of commuting trips.
+      5T is an in-house company that designs, develops and manages mobility systems and services in Turin and Piedmont (Italy).
+      It is a web application, composed by a backend (this repository - written in PHP using the CakePHP frameworkd) and a frontend (EMMA-Vue, written in Vue.js 2.0).
+      The backend is a REST API, which provides all the necessary functions to run the application.
+      The frontend is a Single Page Application, which consumes the REST API. 
+    shortDescription: |
+      EMMA manages the entire flow involved in the drawing up the "Sustainable Mobility Plan", from the accessibility analysis to the complete drafting of the plan
+  it:
+    features:
+      - Questionario di accessibilità con le caratteristiche dell'azienda/ente/scuola  
+      - Questionario rivolto ai lavoratori (personalizzabile)  
+      - Analisi dati dei questionari (con grafici e statistiche) 
+      - Calcolo degli impatti 
+      - Suggerimenti per soluzioni di mobilità sostenibile 
+      - Redazione ed export del Piano Spostamenti
+    shortDescription: EMMA gestisce l'intero flusso utile alla redazione di un Piano Spostamenti, dal questionario di accessibilità con le caratteristiche dell'azienda/ente fino alla redazione completa del piano.
+    longDescription: |
+      EMMA è un applicativo web-based responsive, che semplifica il compito dei Mobility Manager
+      fornendo loro questionari strutturati (e personalizzabili) che agevolano la raccolta delle informazioni utili alla redazione di un Piano
+      Spostamento: la piattaforma fornisce inoltre suggerimenti e strumenti per la progettazione e realizzazione di soluzioni intese a
+      diminuire l'impatto della mobilità sistematica, rendendo così sempre più sostenibili gli spostamenti.
+     
+developmentStatus: stable
+it:
+  conforme:
+    gdpr: true
+    lineeGuidaDesign: false
+    misureMinimeSicurezza: true
+    modelloInteroperabilita: false
+  countryExtensionVersion: '0.2'
+  piattaforme:
+    anpr: false
+    cie: false
+    pagopa: false
+    spid: false
+  riuso:
+    codiceIPA: 85FQR8X2
+legal:
+  license: EUPL-1.2
+localisation:
+  availableLanguages:
+    - it
+  localisationReady: false
+maintenance:
+  contacts:
+    - email: info.emma@cinquet.it
+      name: Lucia Mercaldi
+
+  type: internal
+name: EMMA
+platforms:
+  - web
+releaseDate: '2024-02-01'
+softwareType: standalone/web
+softwareVersion: 1.24.02
+url: 'https://github.com/5Tsrl/emma-backend'
